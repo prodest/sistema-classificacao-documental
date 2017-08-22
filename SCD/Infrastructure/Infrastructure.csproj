@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>Prodest.Scd.Infrastructure</AssemblyName>
+    <RootNamespace>Prodest.Scd.Infrastructure</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

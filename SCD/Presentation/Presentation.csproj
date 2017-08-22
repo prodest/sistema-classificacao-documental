@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>Prodest.Scd.Presentation</AssemblyName>
+    <RootNamespace>Prodest.Scd.Presentation</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

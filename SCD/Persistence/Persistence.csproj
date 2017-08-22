@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>Prodest.Scd.Persistence</AssemblyName>
+    <RootNamespace>Prodest.Scd.Persistence</RootNamespace>
   </PropertyGroup>
 
 </Project>
