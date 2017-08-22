@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Prodest.Scd.Business</AssemblyName>
     <RootNamespace>Prodest.Scd.Business</RootNamespace>
   </PropertyGroup>
