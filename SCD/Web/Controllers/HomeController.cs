@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Prodest.Scd.Presentation.Base;
 
 namespace Web.Controllers
 {
     public class HomeController : Controller
     {
+        IPlanoClassificacaoService _service;
+
+        public HomeController(IPlanoClassificacaoService service)
+        {
+            _service = service;
+        }
+
         public IActionResult Index()
         {
+            _service.Listar();
+
             return View();
         }
 
