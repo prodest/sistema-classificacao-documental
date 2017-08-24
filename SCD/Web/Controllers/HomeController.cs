@@ -12,6 +12,11 @@ namespace Web.Controllers
             _service = service;
         }
 
+        public IActionResult TemplateMVC()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             _service.Listar();
