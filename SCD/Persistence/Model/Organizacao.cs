@@ -7,12 +7,12 @@ namespace Prodest.Scd.Persistence.Model
     {
         public Organizacao()
         {
-            PlanoClassificacao = new HashSet<PlanoClassificacao>();
+            PlanosClassificacao = new HashSet<PlanoClassificacao>();
         }
 
         public int Id { get; set; }
         public Guid GuidOrganizacao { get; set; }
 
-        public ICollection<PlanoClassificacao> PlanoClassificacao { get; set; }
+        public ICollection<PlanoClassificacao> PlanosClassificacao { get; set; }
     }
 }

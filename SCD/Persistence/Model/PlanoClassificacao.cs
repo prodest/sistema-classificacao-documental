@@ -7,7 +7,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public PlanoClassificacao()
         {
-            ItemPlanoClassificacao = new HashSet<ItemPlanoClassificacao>();
+            ItensPlanoClassificacao = new HashSet<ItemPlanoClassificacao>();
         }
 
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace Prodest.Scd.Persistence.Model
         public DateTime? InicioVigencia { get; set; }
         public DateTime? FimVigencia { get; set; }
 
-        public Organizacao IdOrganizacaoNavigation { get; set; }
-        public ICollection<ItemPlanoClassificacao> ItemPlanoClassificacao { get; set; }
+        public Organizacao Organizacao { get; set; }
+        public ICollection<ItemPlanoClassificacao> ItensPlanoClassificacao { get; set; }
     }
 }

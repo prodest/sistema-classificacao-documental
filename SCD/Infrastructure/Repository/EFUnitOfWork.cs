@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Persistence.Base;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Infrastructure.Repository
 {
@@ -23,7 +24,12 @@ namespace Prodest.Scd.Infrastructure.Repository
         {
             _context.SaveChanges();
         }
-        
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public void Attach(object entity)
         {
             _context.Attach(entity);

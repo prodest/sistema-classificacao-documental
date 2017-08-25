@@ -1,10 +1,20 @@
 ﻿using Prodest.Scd.Business.Model;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business.Base
 {
     public interface IPlanoClassificacaoCore
     {
-        List<PlanoClassificacaoModel> Listar();
+        Task<PlanoClassificacaoModel> InsertAsync(PlanoClassificacaoModel planoClassificacao);
+
+        Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao);
+
+        Task UpdateAsync(PlanoClassificacaoModel planoClassificacao);
+
+        Task UpdateFimVigenciaAsync(int id, DateTime fimVigencia);
+
+        Task DeleteAsync(int id);
     }
 }

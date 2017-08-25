@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,8 +25,11 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            services.Configure<AcessoCidadaoConfiguration>(Configuration.GetSection("AcessoCidadaoConfiguration"));
+
             services.AddMvc();
+
+            services.AddAutoMapper();
 
             Dependencies.AddDependencies(services);
         }

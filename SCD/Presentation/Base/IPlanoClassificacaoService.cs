@@ -5,6 +5,12 @@ namespace Prodest.Scd.Presentation.Base
 {
     public interface IPlanoClassificacaoService
     {
-        List<PlanoClassificacaoViewModel> Listar();
+        PlanoClassificacaoViewModel Insert(PlanoClassificacaoViewModel planoClassificacao);
+
+        List<PlanoClassificacaoViewModel> Search(string guidOrganizacao);
+
+        void Update(PlanoClassificacaoViewModel planoClassificacao);
+
+        void Delete(int id);
     }
 }

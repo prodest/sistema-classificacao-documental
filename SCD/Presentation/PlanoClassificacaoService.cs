@@ -14,11 +14,26 @@ namespace Prodest.Scd.Presentation
             _core = core;
         }
 
-        public List<PlanoClassificacaoViewModel> Listar()
+        public void Delete(int id)
         {
-            _core.Listar();
+        }
+
+        public PlanoClassificacaoViewModel Insert(PlanoClassificacaoViewModel planoClassificacao)
+        {
+            planoClassificacao.Id = 1;
+
+            return planoClassificacao;
+        }
+
+        public List<PlanoClassificacaoViewModel> Search(string guidOrganizacao)
+        {
+            _core.SearchAsync(null);
 
             return new List<PlanoClassificacaoViewModel>();
+        }
+
+        public void Update(PlanoClassificacaoViewModel planoClassificacao)
+        {
         }
     }
 }
