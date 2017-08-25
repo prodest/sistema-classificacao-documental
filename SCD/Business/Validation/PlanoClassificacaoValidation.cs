@@ -4,6 +4,7 @@ using Prodest.Scd.Infrastructure.Common.Exceptions;
 using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
 using System;
+using System.Collections.Generic;
 
 namespace Prodest.Scd.Business.Validation
 {

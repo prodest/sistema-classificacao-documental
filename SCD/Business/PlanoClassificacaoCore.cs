@@ -66,6 +66,7 @@ namespace Prodest.Scd.Business
 
         public async Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao)
         {
+            _validation.OrganizacaoFilled(guidOrganizacao);
             _validation.OrganizacaoValid(guidOrganizacao);
 
             Guid guid = new Guid(guidOrganizacao);
