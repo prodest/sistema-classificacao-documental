@@ -101,5 +101,11 @@ namespace Prodest.Scd.Business.Validation
             if (planoClassificacao == null)
                 throw new ScdExpection("Plano de Classificação não encontrado.");
         }
+
+        internal void CanUpDate(PlanoClassificacao planoClassificacaoModel)
+        {
+            if (planoClassificacaoModel.Publicacao.HasValue)
+                throw new ScdExpection("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
+        }
     }
 }

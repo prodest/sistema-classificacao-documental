@@ -10,13 +10,19 @@ namespace Prodest.Scd.Business.Configuration
         public ProfileAutoMapper()
         {
             #region Organização
-            CreateMap<Organizacao, OrganizacaoModel>()
-                .ReverseMap();
+            CreateMap<Organizacao, OrganizacaoModel>();
+
+            CreateMap<OrganizacaoModel, Organizacao>()
+                .ForMember(dest => dest.PlanosClassificacao, opt => opt.Ignore())
+                ;
             #endregion
 
             #region Plano de Classificação
-            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
-                .ReverseMap();
+            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>();
+
+            CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                ;
             #endregion
         }
     }

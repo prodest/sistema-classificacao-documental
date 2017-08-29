@@ -64,6 +64,15 @@ namespace Prodest.Scd.Business
             return planoClassificacaoModel;
         }
 
+        public async Task<PlanoClassificacaoModel> SearchAsync(int id)
+        {
+            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id);
+
+            PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
+
+            return planoClassificacaoModel;
+        }
+
         public async Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao)
         {
             _validation.OrganizacaoFilled(guidOrganizacao);
@@ -85,7 +94,19 @@ namespace Prodest.Scd.Business
 
             PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(planoClassificacaoModel.Id);
 
-            _mapper.Map(planoClassificacao, planoClassificacaoModel);
+            _validation.CanUpDate(planoClassificacao);
+
+            if (!planoClassificacaoModel.GuidOrganizacao.ToUpper().Equals(planoClassificacao.GuidOrganizacao.ToString().ToUpper()))
+            {
+                OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(planoClassificacaoModel.GuidOrganizacao);
+
+                OrganizacaoModel organizacaoPatriarca = await _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid.ToString());
+
+                if (planoClassificacao.IdOrganizacao != organizacaoPatriarca.Id)
+                    planoClassificacaoModel.Organizacao = organizacaoPatriarca;
+            }
+
+            _mapper.Map(planoClassificacaoModel, planoClassificacao);
 
             await _unitOfWork.SaveAsync();
         }
@@ -99,15 +120,6 @@ namespace Prodest.Scd.Business
             planoClassificacao.FimVigencia = fimVigencia;
 
             await _unitOfWork.SaveAsync();
-        }
-
-        private async Task<PlanoClassificacaoModel> SearchAsync(int id)
-        {
-            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id);
-
-            PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
-
-            return planoClassificacaoModel;
         }
 
         private async Task<PlanoClassificacao> SearchPersistenceAsync(int id)
