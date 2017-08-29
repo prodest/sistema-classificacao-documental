@@ -1,0 +1,64 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.PlanoClassificacaoViewModel
+<div class=" mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+    <div class="mdl-card TelaCheia">
+        <button title="Novo" class="mdl-button BotaoGrande mdl-js-button mdl-button--fab mdl-color--blue BotaoFlutuante BotaoAjax" data-url="/PlanoClassificacao/New">
+            <i class="material-icons">add</i>
+        </button>
+        <div class="mdl-card__actions ItemCardFormulario">
+            Planos de Classificação
+        </div>
+        <div class="mdl-card__actions ItemCardFormulario">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                <label class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--icon" for="search">
+                    <i class="material-icons mdl-color-text--grey ">search</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                    <input class="mdl-textfield__input" type="text" id="search">
+                    <label class="mdl-textfield__label" for="search">Digite seu filtro...</label>
+                </div>
+            </div>
+        </div>
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp TelaCheia">
+            <thead>
+                <tr>
+                    <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
+                    <th class="mdl-data-table__cell--non-numeric">Código</th>
+                    <th class="mdl-data-table__cell--non-numeric">Descrição</th>
+                    <th class="mdl-data-table__cell--non-numeric">Área</th>
+                    <th class="mdl-data-table__cell--non-numeric">Organização</th>
+                    <th class="mdl-data-table__cell--non-numeric">Início Vigência</th>
+                    <th class="mdl-data-table__cell--non-numeric">Fim Vigência</th>
+                    <th class="mdl-data-table__cell--non-numeric">Data Aprovação</th>
+                    <th class="mdl-data-table__cell--non-numeric">Data Publicação</th>
+                    <th class="mdl-data-table__cell--non-numeric">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.entidades)
+                {
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">@item.Codigo</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.Descricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.AreaFimDescricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.OrganizacaoDescricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.InicioVigenciaDescricao </td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.FimVigenciaDescricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.AprovacaoDescricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.PublicacaoDescricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <button title="Editar" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--grey BotaoAjax" data-url="/PlanoClassificacao/Edit/@item.Id">
+                                <i class="material-icons">edit</i>
+                            </button>
+                            <button title="Excluir" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--red BotaoAjax" data-url="/PlanoClassificacao/Delete/@item.Id">
+                                <i class="material-icons">delete</i>
+                            </button>
+                            <button title="Informar Data Fim Vigência" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--black BotaoAjax" data-url="/PlanoClassificacao/Encerrar/@item.Id">
+                                <i class="material-icons">flag</i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

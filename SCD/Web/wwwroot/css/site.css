@@ -1,7 +1,40 @@
-﻿#DivConteudo {
-    min-height: 870px;
+﻿.BotaoFlutuante {
+    position: fixed !important;
+    display: block !important;
+    right: 50px !important;
+    margin-left: calc(100%) !important;
+    margin-bottom: 40px !important;
+    z-index: 900 !important;
 }
 
+.mdl-button {
+    height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    width: 30px !important;
+    color: white !important;
+}
+
+    .mdl-button.BotaoGrande {
+        height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        width: 40px !important;
+        color: white !important;
+    }
+
+
+.mdl-button--mini-fab i.material-icons {
+    font-size: 16px !important;
+}
+
+#DivConteudo {
+    min-height: 400px;
+}
 
 .barraNavegacaoLateral {
     background-color: #0080a5 !important;
@@ -15,7 +48,25 @@
             color: #d8f6ff !important;
         }
 
-
 .barraNavegacaoLateralTopo {
     background-color: #006a88 !important;
+}
+
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.ItemCardFormulario {
+    padding: 0px !important;
+}
+
+.mdl-card {
+    width: auto !important;
+    overflow: auto !important;
+}
+
+.TelaCheia {
+    width: 100% !important;
 }

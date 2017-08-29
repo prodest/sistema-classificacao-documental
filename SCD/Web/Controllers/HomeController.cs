@@ -19,7 +19,7 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
-            _service.Listar();
+            _service.Search();
 
             return View();
         }

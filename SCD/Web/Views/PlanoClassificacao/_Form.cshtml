@@ -1,0 +1,76 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.PlanoClassificacaoViewModel
+<form asp-controller="PlanoClassificacao" asp-action="Create" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
+    <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+        <div class="mdl-card TelaCheia mdl-grid">
+            <div class="mdl-card__actions ItemCardFormulario">
+                <button title="Salvar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--grey BotaoGrande" type="submit">
+                    <i class="material-icons">save</i>
+                </button>
+                <button title="Cancelar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--red BotaoAjax BotaoGrande" data-url="/PlanoClassificacao/List">
+                    <i class="material-icons">cancel</i>
+                </button>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" asp-for="entidade.Codigo" />
+                    <label class="mdl-textfield__label" asp-for="entidade.Codigo">Código..</label>
+                    <span asp-validation-for="entidade.Codigo"  class="mdl-textfield__error">Digite um código</span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.Descricao" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="entidade.Descricao">Descrição..</label>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="entidade_AreaFim">
+                        <input type="checkbox" asp-for="entidade.AreaFim" class="mdl-checkbox__input">
+                        <span class="mdl-checkbox__label">Área Fim?</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+
+                <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+                    <select class="mdl-selectfield__select" asp-for="entidade.GuidOrganizacao">
+                        <option value=""></option>
+                        @foreach (var item in Model.organizacoes)
+                        {
+                            <option value="@item.guid">@item.sigla</option>
+
+                        }
+                    </select>
+                    <label class="mdl-selectfield__label" for="professsion2">Organização</label>
+                </div>
+
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" asp-for="entidade.InicioVigencia" />
+                    <label class="mdl-textfield__label" for="dataInicioVigencia">Data Início de Vigência..</label>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" asp-for="entidade.FimVigencia" />
+                    <label class="mdl-textfield__label" for="dataFimVigencia">Data Fim de Vigência..</label>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" asp-for="entidade.Aprovacao" />
+                    <label class="mdl-textfield__label" for="entidade.Aprovacao">Data Aprovação..</label>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" asp-for="entidade.Publicacao" />
+                    <label class="mdl-textfield__label" for="dataPublicacao">Data Publicação..</label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
