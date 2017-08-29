@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Prodest.Scd.Integration.Common.Base;
 using Prodest.Scd.Presentation;
 using Prodest.Scd.Presentation.Base;
 using System;
@@ -23,6 +24,8 @@ namespace Prodest.Scd.Web.Configuration
             Dictionary<Type, Type> dependencies = new Dictionary<Type, Type>();
 
             dependencies = Presentation.Configuration.Dependencies.GetDependencies();
+
+            dependencies.Add(typeof(IClientAccessTokenProvider), typeof(AcessoCidadaoClientAccessToken));
 
             dependencies.Add(typeof(IPlanoClassificacaoService), typeof(PlanoClassificacaoService));
 

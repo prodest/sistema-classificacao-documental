@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Infrastructure.Repository
 {
@@ -21,6 +22,13 @@ namespace Prodest.Scd.Infrastructure.Repository
         public TEntity Add(TEntity entity)
         {
             return _set.Add(entity).Entity;
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            var entityEntry = await _set.AddAsync(entity);
+
+            return  entityEntry.Entity;
         }
 
         public void AddRange(IEnumerable<TEntity> entities)

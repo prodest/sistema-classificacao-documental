@@ -1,4 +1,6 @@
-﻿using Prodest.Scd.Infrastructure.Repository;
+﻿using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Infrastructure.Repository;
+using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Persistence.Base;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,11 @@ namespace Prodest.Scd.Business.Configuration
             Dictionary<Type, Type> dependencies = new Dictionary<Type, Type>();
 
             dependencies.Add(typeof(IScdRepositories), typeof(ScdRepositories));
-            
+
+            dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
+
+            dependencies.Add(typeof(OrganogramaService), typeof(OrganogramaService));
+
             return dependencies;
         }
     }

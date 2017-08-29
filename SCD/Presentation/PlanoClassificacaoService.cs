@@ -84,5 +84,9 @@ namespace Prodest.Scd.Presentation
         {
             return new PlanoClassificacaoEntidade();
         }
+
+        public void Update(PlanoClassificacaoViewModel planoClassificacao)
+        {
+        }
     }
 }

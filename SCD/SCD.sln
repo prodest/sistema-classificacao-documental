@@ -1,19 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{3CEEA28F-68DC-480B-B5BA-24029E087EF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{9ABA99F0-8DBC-4D54-B7FE-4D719F77D6B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "Presentation\Presentation.csproj", "{9ABA99F0-8DBC-4D54-B7FE-4D719F77D6B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{75FF954A-CE06-48FC-A0A0-34E5A4B6BFEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{75FF954A-CE06-48FC-A0A0-34E5A4B6BFEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{E43B46AD-90F8-4B1E-871C-064E66DBC870}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{E43B46AD-90F8-4B1E-871C-064E66DBC870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{5CBBC1A7-F874-4FCB-A016-6D80027F7693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{5CBBC1A7-F874-4FCB-A016-6D80027F7693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{2ED425FF-6041-4F0C-938B-19E0C1D5FA0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{2ED425FF-6041-4F0C-938B-19E0C1D5FA0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestBusiness", "UnitTestBusiness\UnitTestBusiness.csproj", "{0D9D6539-50F7-48D6-9A23-17450205BF0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration", "Integration\Integration.csproj", "{B58467ED-33BA-493E-8749-0EFE9CF917C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +49,19 @@ Global
 		{2ED425FF-6041-4F0C-938B-19E0C1D5FA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ED425FF-6041-4F0C-938B-19E0C1D5FA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ED425FF-6041-4F0C-938B-19E0C1D5FA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D9D6539-50F7-48D6-9A23-17450205BF0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D9D6539-50F7-48D6-9A23-17450205BF0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D9D6539-50F7-48D6-9A23-17450205BF0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D9D6539-50F7-48D6-9A23-17450205BF0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B58467ED-33BA-493E-8749-0EFE9CF917C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B58467ED-33BA-493E-8749-0EFE9CF917C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B58467ED-33BA-493E-8749-0EFE9CF917C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B58467ED-33BA-493E-8749-0EFE9CF917C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C012C47-511B-410E-A8C1-F53E4CE362BB}
 	EndGlobalSection
 EndGlobal

@@ -50,19 +50,19 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdPlanoClassificacao).HasColumnName("idPlanoClassificacao");
 
-                entity.HasOne(d => d.IdItemPlanoClassificacaoPaiNavigation)
-                    .WithMany(p => p.InverseIdItemPlanoClassificacaoPaiNavigation)
+                entity.HasOne(d => d.ItemPlanoClassificacaoPai)
+                    .WithMany(p => p.ItensPlanoClassificacaoFilhos)
                     .HasForeignKey(d => d.IdItemPlanoClassificacaoPai)
                     .HasConstraintName("FK_ItemPlanoClassificacaoPai");
 
-                entity.HasOne(d => d.IdNivelClassificacaoNavigation)
-                    .WithMany(p => p.ItemPlanoClassificacao)
+                entity.HasOne(d => d.NivelClassificacao)
+                    .WithMany(p => p.ItensPlanoClassificacao)
                     .HasForeignKey(d => d.IdNivelClassificacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemPlanoClassificacao_NivelClassificacao");
 
-                entity.HasOne(d => d.IdPlanoClassificacaoNavigation)
-                    .WithMany(p => p.ItemPlanoClassificacao)
+                entity.HasOne(d => d.PlanoClassificacao)
+                    .WithMany(p => p.ItensPlanoClassificacao)
                     .HasForeignKey(d => d.IdPlanoClassificacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemPlanoClassificacao_PlanoClassificacao");
@@ -130,8 +130,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasColumnName("publicacao")
                     .HasColumnType("date");
 
-                entity.HasOne(d => d.IdOrganizacaoNavigation)
-                    .WithMany(p => p.PlanoClassificacao)
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.PlanosClassificacao)
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PlanoClassificacao_Organizacao");

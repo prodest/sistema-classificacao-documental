@@ -6,7 +6,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public ItemPlanoClassificacao()
         {
-            InverseIdItemPlanoClassificacaoPaiNavigation = new HashSet<ItemPlanoClassificacao>();
+            ItensPlanoClassificacaoFilhos = new HashSet<ItemPlanoClassificacao>();
         }
 
         public int Id { get; set; }
@@ -16,9 +16,9 @@ namespace Prodest.Scd.Persistence.Model
         public int IdNivelClassificacao { get; set; }
         public int? IdItemPlanoClassificacaoPai { get; set; }
 
-        public ItemPlanoClassificacao IdItemPlanoClassificacaoPaiNavigation { get; set; }
-        public NivelClassificacao IdNivelClassificacaoNavigation { get; set; }
-        public PlanoClassificacao IdPlanoClassificacaoNavigation { get; set; }
-        public ICollection<ItemPlanoClassificacao> InverseIdItemPlanoClassificacaoPaiNavigation { get; set; }
+        public ItemPlanoClassificacao ItemPlanoClassificacaoPai { get; set; }
+        public NivelClassificacao NivelClassificacao { get; set; }
+        public PlanoClassificacao PlanoClassificacao { get; set; }
+        public ICollection<ItemPlanoClassificacao> ItensPlanoClassificacaoFilhos { get; set; }
     }
 }
