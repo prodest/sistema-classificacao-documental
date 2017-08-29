@@ -102,6 +102,15 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdExpection("Plano de Classificação não encontrado.");
         }
 
+        internal void PaginationSearch(int page, int count)
+        {
+            if (page <= 0)
+                throw new ScdExpection("Página inválida.");
+
+            if (count <= 0)
+                throw new ScdExpection("Quantidade de rgistro por página inválida.");
+        }
+
         internal void CanUpDate(PlanoClassificacao planoClassificacaoModel)
         {
             if (planoClassificacaoModel.Publicacao.HasValue)

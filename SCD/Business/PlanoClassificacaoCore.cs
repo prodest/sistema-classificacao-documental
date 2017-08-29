@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Integration.Common.Base;
 using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Integration.Organograma.Model;
 using Prodest.Scd.Persistence.Base;
@@ -32,6 +31,19 @@ namespace Prodest.Scd.Business
             _mapper = mapper;
             _organogramaService = organogramaService;
             _organizacaoCore = organizacaoCore;
+        }
+
+        public async Task<int> CountAsync(string guidOrganizacao)
+        {
+            _validation.OrganizacaoFilled(guidOrganizacao);
+            _validation.OrganizacaoValid(guidOrganizacao);
+
+            Guid guid = new Guid(guidOrganizacao);
+
+            var count = await _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
+                                                  .CountAsync();
+
+            return count;
         }
 
         public async Task DeleteAsync(int id)
@@ -81,6 +93,34 @@ namespace Prodest.Scd.Business
             Guid guid = new Guid(guidOrganizacao);
 
             List<PlanoClassificacao> planosClassificacao = await _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
+                                                                                     .OrderBy(pc => pc.Codigo)
+                                                                                     .OrderBy(pc => pc.Descricao)
+                                                                                     .OrderBy(pc => pc.InicioVigencia)
+                                                                                     .OrderBy(pc => pc.FimVigencia)
+                                                                                     .ToListAsync();
+
+            List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
+
+            return planosClassificacaoModel;
+        }
+
+        public async Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao, int page, int count)
+        {
+            _validation.OrganizacaoFilled(guidOrganizacao);
+            _validation.OrganizacaoValid(guidOrganizacao);
+
+            _validation.PaginationSearch(page, count);
+
+            Guid guid = new Guid(guidOrganizacao);
+            int skip = page * count;
+
+            List<PlanoClassificacao> planosClassificacao = await _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
+                                                                                     .OrderBy(pc => pc.Codigo)
+                                                                                     .OrderBy(pc => pc.Descricao)
+                                                                                     .OrderBy(pc => pc.InicioVigencia)
+                                                                                     .OrderBy(pc => pc.FimVigencia)
+                                                                                     .Skip(skip)
+                                                                                     .Take(count)
                                                                                      .ToListAsync();
 
             List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
