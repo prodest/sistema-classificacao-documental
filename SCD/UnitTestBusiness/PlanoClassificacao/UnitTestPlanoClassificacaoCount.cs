@@ -10,7 +10,6 @@ using Prodest.Scd.Infrastructure.Repository;
 using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
