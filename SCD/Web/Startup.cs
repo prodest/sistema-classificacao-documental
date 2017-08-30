@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Prodest.Scd.Web.Configuration;
 
-namespace Web
+namespace Prodest.Scd.Web
 {
     public class Startup
     {
