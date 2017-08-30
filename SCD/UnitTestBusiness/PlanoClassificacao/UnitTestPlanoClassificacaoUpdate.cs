@@ -38,7 +38,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<ProfileAutoMapper>();
+                cfg.AddProfile<BusinessProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prodest.Scd.Presentation.Base;
+using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
@@ -12,9 +13,9 @@ namespace Web.Controllers
             _service = service;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            _service.Search(null);
+            await _service.Search(null);
 
             return View();
         }

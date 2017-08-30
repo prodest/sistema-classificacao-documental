@@ -1,5 +1,6 @@
 ﻿using Prodest.Scd.Presentation.ViewModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Presentation.Base
 {
@@ -7,7 +8,7 @@ namespace Prodest.Scd.Presentation.Base
     {
         PlanoClassificacaoViewModel Insert(PlanoClassificacaoViewModel planoClassificacao);
 
-        List<PlanoClassificacaoViewModel> Search(string guidOrganizacao);
+        Task<List<PlanoClassificacaoViewModel>> Search(string guidOrganizacao);
 
         void Update(PlanoClassificacaoViewModel planoClassificacao);
 

@@ -15,6 +15,8 @@ namespace Prodest.Scd.Business.Base
 
         Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao);
 
+        Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao, int page, int count);
+
         Task UpdateAsync(PlanoClassificacaoModel planoClassificacao);
 
         Task UpdateFimVigenciaAsync(int id, DateTime fimVigencia);

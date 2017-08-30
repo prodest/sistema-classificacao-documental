@@ -25,13 +25,13 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AcessoCidadaoConfiguration>(Configuration.GetSection("AcessoCidadaoConfiguration"));
-
             services.AddMvc();
+
+            Dependencies.AddDependencies(services);
 
             services.AddAutoMapper();
 
-            Dependencies.AddDependencies(services);
+            services.Configure<AcessoCidadaoConfiguration>(Configuration.GetSection("AcessoCidadaoConfiguration"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
