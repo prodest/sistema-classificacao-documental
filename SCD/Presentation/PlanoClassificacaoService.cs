@@ -47,7 +47,11 @@ namespace Prodest.Scd.Presentation
 
         public PlanoClassificacaoViewModel Search(Filtro filtro)
         {
-            _core.Listar();
+            
+            //prodest
+            var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
+            
+            //var retorno = _core.SearchAsync(guid,1,20).Result;
             var view = new PlanoClassificacaoViewModel();
             view.entidades = new List<PlanoClassificacaoEntidade>();
             view.entidades.Add(new PlanoClassificacaoEntidade

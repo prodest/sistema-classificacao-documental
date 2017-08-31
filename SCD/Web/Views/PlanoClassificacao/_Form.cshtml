@@ -1,4 +1,5 @@
 ﻿@model  Prodest.Scd.Presentation.ViewModel.PlanoClassificacaoViewModel
+
 <form asp-controller="PlanoClassificacao" asp-action="Create" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
     <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
         <div class="mdl-card TelaCheia mdl-grid">
@@ -14,13 +15,14 @@
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" asp-for="entidade.Codigo" />
                     <label class="mdl-textfield__label" asp-for="entidade.Codigo">Código..</label>
-                    <span asp-validation-for="entidade.Codigo"  class="mdl-textfield__error">Digite um código</span>
+                    <span asp-validation-for="entidade.Codigo" class=""></span>
                 </div>
             </div>
             <div class="mdl-cell mdl-cell--3-col">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input asp-for="entidade.Descricao" class="mdl-textfield__input" type="text" />
                     <label class="mdl-textfield__label" for="entidade.Descricao">Descrição..</label>
+                    <span asp-validation-for="entidade.Descricao" class=""></span>
                 </div>
             </div>
             <div class="mdl-cell mdl-cell--3-col">
@@ -42,7 +44,8 @@
 
                         }
                     </select>
-                    <label class="mdl-selectfield__label" for="professsion2">Organização</label>
+                    <label class="mdl-selectfield__label" for="entidade.GuidOrganizacao">Organização</label>
+                    <span asp-validation-for="entidade.GuidOrganizacao" class=""></span>
                 </div>
 
             </div>
@@ -74,3 +77,6 @@
         </div>
     </div>
 </form>
+<script>
+    _mensagemNotificacao = '@Model.mensagem';
+</script>

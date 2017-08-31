@@ -27,8 +27,24 @@ namespace Web
         {
             services.Configure<AcessoCidadaoConfiguration>(Configuration.GetSection("AcessoCidadaoConfiguration"));
 
-            services.AddMvc();
+            var builder = services.AddMvcCore();
 
+            builder.AddApiExplorer();
+            builder.AddAuthorization();
+            builder.AddFormatterMappings();
+            builder.AddViews(options =>
+            {
+                options.HtmlHelperOptions.ClientValidationEnabled = true;
+            });
+            builder.AddRazorViewEngine();
+            builder.AddCacheTagHelper();
+            builder.AddDataAnnotations(); 
+            builder.AddJsonFormatters();
+            builder.AddCors();
+             //builder.AddViewOptions(options =>
+             // {
+             //     options.HtmlHelperOptions.ClientValidationEnabled = false;
+             // });
             services.AddAutoMapper();
 
             Dependencies.AddDependencies(services);

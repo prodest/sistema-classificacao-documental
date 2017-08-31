@@ -17,6 +17,8 @@ namespace Prodest.Scd.Business.Configuration
 
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
 
+            dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
+
             dependencies.Add(typeof(OrganogramaService), typeof(OrganogramaService));
 
             return dependencies;

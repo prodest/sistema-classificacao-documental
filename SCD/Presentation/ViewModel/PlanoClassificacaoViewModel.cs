@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Prodest.Scd.Presentation.ViewModel.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Prodest.Scd.Presentation.ViewModel
 {
-    public class PlanoClassificacaoViewModel
+    public class PlanoClassificacaoViewModel : BaseViewModel
     {
         public List<PlanoClassificacaoEntidade> entidades { get; set; }
         public List<Organizacao> organizacoes = new List<Organizacao> {
@@ -12,7 +13,6 @@ namespace Prodest.Scd.Presentation.ViewModel
             new Organizacao{guid= Guid.NewGuid(), sigla= "Seger"}
         };
         public PlanoClassificacaoEntidade entidade { get; set; }
-        public string mensagem { get; set; }
         public Filtro filtro { get; set; }
     }
 
@@ -30,11 +30,11 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class PlanoClassificacaoEntidade
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Obrigatório")]
         public string Codigo { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Obrigatório")]
         public bool AreaFim { get; set; }
 
         public string AreaFimDescricao
@@ -44,7 +44,7 @@ namespace Prodest.Scd.Presentation.ViewModel
                 return AreaFim ? "Fim" : "Meio";
             }
         }
-        [Required]
+        [Required(ErrorMessage = "Obrigatório")]
         public Guid GuidOrganizacao { get; set; }
         public string OrganizacaoDescricao { get; set; }
 

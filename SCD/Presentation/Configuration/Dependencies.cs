@@ -13,6 +13,7 @@ namespace Prodest.Scd.Presentation.Configuration
 
             dependencies = Business.Configuration.Dependencies.GetDependencies();
             dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
 
             return dependencies;
         }
