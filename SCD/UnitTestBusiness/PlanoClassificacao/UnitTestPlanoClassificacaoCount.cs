@@ -2,15 +2,15 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
+using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
+using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
 using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
@@ -59,19 +59,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
         #region Guid Organização
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoNull()
+        public void TestCountWithGuidOrganizacaoNull()
         {
             bool ok = false;
 
             try
             {
-                await _core.CountAsync(null);
+                _core.Count(null);
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -81,19 +81,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoEmpty()
+        public void TestCountWithGuidOrganizacaoEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.CountAsync("");
+                _core.Count("");
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -103,19 +103,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoTrimEmpty()
+        public void TestCountWithGuidOrganizacaoTrimEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.CountAsync(" ");
+                _core.Count(" ");
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -125,19 +125,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoNotGuid()
+        public void TestCountWithGuidOrganizacaoNotGuid()
         {
             bool ok = false;
 
             try
             {
-                await _core.CountAsync("ABC");
+                _core.Count("ABC");
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -147,19 +147,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoGuidEmpty()
+        public void TestCountWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.CountAsync(new Guid().ToString());
+                _core.Count(new Guid().ToString());
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -170,16 +170,16 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #endregion
 
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoNonexistentOnDataBase()
+        public void TestCountWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            int count = await _core.CountAsync(Guid.NewGuid().ToString());
+            int count = _core.Count(Guid.NewGuid().ToString());
             Assert.IsTrue(count == 0);
         }
 
         [TestMethod]
-        public async Task TestCountWithGuidOrganizacaoCorrect()
+        public void TestCountWithGuidOrganizacaoCorrect()
         {
-            int count = await _core.CountAsync(_guidProdest);
+            int count = _core.Count(_guidProdest);
             Assert.IsTrue(count > 0);
         }
     }

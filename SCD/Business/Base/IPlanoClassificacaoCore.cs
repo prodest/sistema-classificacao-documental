@@ -7,13 +7,15 @@ namespace Prodest.Scd.Business.Base
 {
     public interface IPlanoClassificacaoCore
     {
-        Task<int> CountAsync(string guidOrganizacao);
+        int Count(string guidOrganizacao);
 
         Task<PlanoClassificacaoModel> InsertAsync(PlanoClassificacaoModel planoClassificacao);
 
-        Task<PlanoClassificacaoModel> SearchAsync(int id);
+        PlanoClassificacaoModel Search(int id);
 
-        Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao);
+        List<PlanoClassificacaoModel> Search(string guidOrganizacao);
+
+        List<PlanoClassificacaoModel> Search(string guidOrganizacao, int page, int count);
 
         Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao, int page, int count);
 

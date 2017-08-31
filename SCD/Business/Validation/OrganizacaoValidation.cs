@@ -1,9 +1,6 @@
-﻿using Prodest.Scd.Business.Validation.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Prodest.Scd.Business.Common.Exceptions;
+using Prodest.Scd.Business.Validation.Common;
 using Prodest.Scd.Persistence.Model;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
 
 namespace Prodest.Scd.Business.Validation
 {
@@ -13,7 +10,7 @@ namespace Prodest.Scd.Business.Validation
         internal void Found(Organizacao organizacao)
         {
             if (organizacao == null)
-                throw new ScdExpection("Organização não encontrada.");
+                throw new ScdException("Organização não encontrada.");
         }
     }
 }

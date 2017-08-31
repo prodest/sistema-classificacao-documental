@@ -21,8 +21,6 @@ namespace Prodest.Scd.Web.Configuration
 
         public AcessoCidadaoClientAccessToken(IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig)
         {
-            //_clientId = Environment.GetEnvironmentVariable("ProcessoEletronicoApiClientId");
-            //_secret = Environment.GetEnvironmentVariable("ProcessoEletronicoApiSecret");
             _clientId = Environment.GetEnvironmentVariable("ScdClientId");
             _secret = Environment.GetEnvironmentVariable("ScdSecret");
             _autenticacaoIdentityServerConfig = autenticacaoIdentityServerConfig;

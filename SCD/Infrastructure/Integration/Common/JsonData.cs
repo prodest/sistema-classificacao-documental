@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.Integration.Common
+namespace Prodest.Scd.Infrastructure.Integration.Common
 {
     public class JsonData
     {
@@ -30,7 +30,7 @@ namespace Prodest.Scd.Integration.Common
                 else
                 {
                     string mensagemErro = result.StatusCode + ": " + result.Content;
-                    throw new ScdExpection("Não foi possível obter os dados do serviço." + mensagemErro);
+                    throw new Exception("Não foi possível obter os dados do serviço." + mensagemErro);
                 }
             }
         }

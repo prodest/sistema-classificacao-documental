@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
@@ -26,15 +25,15 @@ namespace Prodest.Scd.Business
             _mapper = mapper;
         }
 
-        public async Task<OrganizacaoModel> SearchAsync(string guid)
+        public OrganizacaoModel SearchAsync(string guid)
         {
             _validation.OrganizacaoFilled(guid);
             _validation.OrganizacaoValid(guid);
 
             Guid g = new Guid(guid);
 
-            Organizacao organizacao = await _organizacoes.Where(o => o.GuidOrganizacao.Equals(g))
-                                                         .SingleOrDefaultAsync();
+            Organizacao organizacao = _organizacoes.Where(o => o.GuidOrganizacao.Equals(g))
+                                                         .SingleOrDefault();
 
             _validation.Found(organizacao);
 

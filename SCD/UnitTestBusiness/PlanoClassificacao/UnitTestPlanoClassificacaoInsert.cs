@@ -2,10 +2,11 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
+using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
+using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
 using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
@@ -60,7 +61,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "O Plano de Classificação não pode ser nulo.");
             }
@@ -85,7 +86,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "O código não pode ser vazio ou nulo.");
             }
@@ -109,7 +110,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "O código não pode ser vazio ou nulo.");
             }
@@ -133,7 +134,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "O código não pode ser vazio ou nulo.");
             }
@@ -159,7 +160,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
             }
@@ -183,7 +184,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
             }
@@ -207,7 +208,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
             }
@@ -233,7 +234,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -257,7 +258,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -281,7 +282,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -305,7 +306,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -329,7 +330,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -353,7 +354,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(Exception));
 
                 Assert.IsTrue(ex.Message.Contains("Não foi possível obter os dados do serviço."));
             }
@@ -381,7 +382,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A data de aprovação não pode ser vazia ou nula quando existe uma data de publicação.");
             }
@@ -407,7 +408,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A data de início de vigência não pode ser vazia ou nula quando existe uma data de publicação.");
             }
@@ -433,7 +434,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A data de publicação deve ser maior ou igual à data de aprovação.");
             }
@@ -461,7 +462,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A data de início de vigência não pode ser vazia ou nula quando existe uma data de fim de vigência.");
             }
@@ -487,7 +488,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A data de fim de vigência deve ser maior ou igual à data de início de vigência.");
             }

@@ -2,15 +2,15 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
+using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
+using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
 using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
@@ -62,7 +62,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "O id deve não pode ser nulo ou vazio.");
             }
@@ -85,7 +85,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Plano de Classificação não encontrado.");
             }
@@ -114,13 +114,13 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
             try
             {
-                await _core.SearchAsync(planoClassificacaoModel.Id);
+                _core.Search(planoClassificacaoModel.Id);
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Plano de Classificação não encontrado.");
             }

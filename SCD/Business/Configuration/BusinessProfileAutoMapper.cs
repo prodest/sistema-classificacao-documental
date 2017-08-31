@@ -17,11 +17,7 @@ namespace Prodest.Scd.Business.Configuration
             #endregion
 
             #region Plano de Classificação
-            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
-                //.ForMember(dest => dest.GuidOrganizacao, opt => opt.Ignore())
-                //.ForMember(dest => dest.Organizacao, opt => opt.Ignore())
-                //.ForMember(dest => dest.ItensPlanoClassificacao, opt => opt.Ignore())
-                ;
+            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>();
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());

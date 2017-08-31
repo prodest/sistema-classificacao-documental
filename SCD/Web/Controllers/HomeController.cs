@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prodest.Scd.Presentation.Base;
+using System.Threading.Tasks;
 
-namespace Web.Controllers
+namespace Prodest.Scd.Web.Controllers
 {
     public class HomeController : Controller
     {

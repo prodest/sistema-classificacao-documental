@@ -1,10 +1,9 @@
-﻿using Prodest.Scd.Business.Model;
+﻿using Prodest.Scd.Business.Common.Exceptions;
+using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation.Common;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
 using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
 using System;
-using System.Collections.Generic;
 
 namespace Prodest.Scd.Business.Validation
 {
@@ -28,7 +27,7 @@ namespace Prodest.Scd.Business.Validation
         internal void IdValid(int id)
         {
             if (id == default(int))
-                throw new ScdExpection("O id deve não pode ser nulo ou vazio.");
+                throw new ScdException("O id deve não pode ser nulo ou vazio.");
         }
         #endregion
 
@@ -49,7 +48,7 @@ namespace Prodest.Scd.Business.Validation
         private void NotNull(PlanoClassificacaoModel planoClassificacao)
         {
             if (planoClassificacao == null)
-                throw new ScdExpection("O Plano de Classificação não pode ser nulo.");
+                throw new ScdException("O Plano de Classificação não pode ser nulo.");
         }
 
         #region Filled
@@ -63,13 +62,13 @@ namespace Prodest.Scd.Business.Validation
         private void CodigoFilled(string codigo)
         {
             if (string.IsNullOrWhiteSpace(codigo) || string.IsNullOrWhiteSpace(codigo.Trim()))
-                throw new ScdExpection("O código não pode ser vazio ou nulo.");
+                throw new ScdException("O código não pode ser vazio ou nulo.");
         }
 
         private void DescricaoFilled(string descricao)
         {
             if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
-                throw new ScdExpection("A descrição não pode ser vazia ou nula.");
+                throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
 
         #endregion
@@ -77,44 +76,44 @@ namespace Prodest.Scd.Business.Validation
         private void PublicacaoValid(DateTime? publicacao, DateTime? aprovacao, DateTime? inicioVigencia)
         {
             if (publicacao.HasValue && !aprovacao.HasValue)
-                throw new ScdExpection("A data de aprovação não pode ser vazia ou nula quando existe uma data de publicação.");
+                throw new ScdException("A data de aprovação não pode ser vazia ou nula quando existe uma data de publicação.");
 
             if (publicacao.HasValue && !inicioVigencia.HasValue)
-                throw new ScdExpection("A data de início de vigência não pode ser vazia ou nula quando existe uma data de publicação.");
+                throw new ScdException("A data de início de vigência não pode ser vazia ou nula quando existe uma data de publicação.");
 
             if ((publicacao.HasValue && aprovacao.HasValue) && (publicacao.Value < aprovacao.Value))
-                throw new ScdExpection("A data de publicação deve ser maior ou igual à data de aprovação.");
+                throw new ScdException("A data de publicação deve ser maior ou igual à data de aprovação.");
         }
 
         internal void FimVigenciaValid(DateTime? fimVigencia, DateTime? inicioVigencia)
         {
             if (fimVigencia.HasValue && !inicioVigencia.HasValue)
-                throw new ScdExpection("A data de início de vigência não pode ser vazia ou nula quando existe uma data de fim de vigência.");
+                throw new ScdException("A data de início de vigência não pode ser vazia ou nula quando existe uma data de fim de vigência.");
 
             if ((fimVigencia.HasValue && inicioVigencia.HasValue) && (fimVigencia.Value < inicioVigencia.Value))
-                throw new ScdExpection("A data de fim de vigência deve ser maior ou igual à data de início de vigência.");
+                throw new ScdException("A data de fim de vigência deve ser maior ou igual à data de início de vigência.");
         }
         #endregion
 
         internal void Found(PlanoClassificacao planoClassificacao)
         {
             if (planoClassificacao == null)
-                throw new ScdExpection("Plano de Classificação não encontrado.");
+                throw new ScdException("Plano de Classificação não encontrado.");
         }
 
         internal void PaginationSearch(int page, int count)
         {
             if (page <= 0)
-                throw new ScdExpection("Página inválida.");
+                throw new ScdException("Página inválida.");
 
             if (count <= 0)
-                throw new ScdExpection("Quantidade de rgistro por página inválida.");
+                throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
         internal void CanUpDate(PlanoClassificacao planoClassificacaoModel)
         {
             if (planoClassificacaoModel.Publicacao.HasValue)
-                throw new ScdExpection("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
+                throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
         }
     }
 }
