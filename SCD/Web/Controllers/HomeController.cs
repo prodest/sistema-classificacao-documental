@@ -13,9 +13,9 @@ namespace Prodest.Scd.Web.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            await _service.Search(null);
+            _service.Search(null);
 
             return View();
         }

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Integration.Organograma;
+using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Integration.Organograma.Model;
 using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
@@ -20,10 +19,10 @@ namespace Prodest.Scd.Business
         private IGenericRepository<PlanoClassificacao> _planosClassificacao;
         private PlanoClassificacaoValidation _validation;
         private IMapper _mapper;
-        private OrganogramaService _organogramaService;
+        private IOrganogramaService _organogramaService;
         private IOrganizacaoCore _organizacaoCore;
 
-        public PlanoClassificacaoCore(IScdRepositories repositories, PlanoClassificacaoValidation validation, IMapper mapper, OrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
+        public PlanoClassificacaoCore(IScdRepositories repositories, PlanoClassificacaoValidation validation, IMapper mapper, IOrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
         {
             _unitOfWork = repositories.UnitOfWork;
             _planosClassificacao = repositories.PlanosClassificacao;
@@ -33,22 +32,22 @@ namespace Prodest.Scd.Business
             _organizacaoCore = organizacaoCore;
         }
 
-        public async Task<int> CountAsync(string guidOrganizacao)
+        public int Count(string guidOrganizacao)
         {
             _validation.OrganizacaoFilled(guidOrganizacao);
             _validation.OrganizacaoValid(guidOrganizacao);
 
             Guid guid = new Guid(guidOrganizacao);
 
-            var count = await _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
-                                                  .CountAsync();
+            var count = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
+                                                  .Count();
 
             return count;
         }
 
         public async Task DeleteAsync(int id)
         {
-            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id);
+            PlanoClassificacao planoClassificacao = SearchPersistence(id);
 
             _planosClassificacao.Remove(planoClassificacao);
 
@@ -61,7 +60,7 @@ namespace Prodest.Scd.Business
 
             OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(planoClassificacaoModel.GuidOrganizacao);
 
-            OrganizacaoModel organizacaoPatriarca = await _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid.ToString());
+            OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid.ToString());
 
             planoClassificacaoModel.Organizacao = organizacaoPatriarca;
 
@@ -76,35 +75,35 @@ namespace Prodest.Scd.Business
             return planoClassificacaoModel;
         }
 
-        public async Task<PlanoClassificacaoModel> SearchAsync(int id)
+        public PlanoClassificacaoModel Search(int id)
         {
-            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id);
+            PlanoClassificacao planoClassificacao = SearchPersistence(id);
 
             PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
 
             return planoClassificacaoModel;
         }
 
-        public async Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao)
+        public List<PlanoClassificacaoModel> Search(string guidOrganizacao)
         {
             _validation.OrganizacaoFilled(guidOrganizacao);
             _validation.OrganizacaoValid(guidOrganizacao);
 
             Guid guid = new Guid(guidOrganizacao);
 
-            List<PlanoClassificacao> planosClassificacao = await _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
+            List<PlanoClassificacao> planosClassificacao = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
                                                                                      .OrderBy(pc => pc.Codigo)
                                                                                      .OrderBy(pc => pc.Descricao)
                                                                                      .OrderBy(pc => pc.InicioVigencia)
                                                                                      .OrderBy(pc => pc.FimVigencia)
-                                                                                     .ToListAsync();
+                                                                                     .ToList();
 
             List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
 
             return planosClassificacaoModel;
         }
 
-        public async Task<List<PlanoClassificacaoModel>> SearchAsync(string guidOrganizacao, int page, int count)
+        public List<PlanoClassificacaoModel> Search(string guidOrganizacao, int page, int count)
         {
             _validation.OrganizacaoFilled(guidOrganizacao);
             _validation.OrganizacaoValid(guidOrganizacao);
@@ -114,14 +113,14 @@ namespace Prodest.Scd.Business
             Guid guid = new Guid(guidOrganizacao);
             int skip = page * count;
 
-            List<PlanoClassificacao> planosClassificacao = await _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
+            List<PlanoClassificacao> planosClassificacao = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
                                                                                      .OrderBy(pc => pc.Codigo)
                                                                                      .OrderBy(pc => pc.Descricao)
                                                                                      .OrderBy(pc => pc.InicioVigencia)
                                                                                      .OrderBy(pc => pc.FimVigencia)
                                                                                      .Skip(skip)
                                                                                      .Take(count)
-                                                                                     .ToListAsync();
+                                                                                     .ToList();
 
             List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
 
@@ -132,7 +131,7 @@ namespace Prodest.Scd.Business
         {
             _validation.Valid(planoClassificacaoModel);
 
-            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(planoClassificacaoModel.Id);
+            PlanoClassificacao planoClassificacao = SearchPersistence(planoClassificacaoModel.Id);
 
             _validation.CanUpDate(planoClassificacao);
 
@@ -140,7 +139,7 @@ namespace Prodest.Scd.Business
             {
                 OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(planoClassificacaoModel.GuidOrganizacao);
 
-                OrganizacaoModel organizacaoPatriarca = await _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid.ToString());
+                OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid.ToString());
 
                 if (planoClassificacao.IdOrganizacao != organizacaoPatriarca.Id)
                     planoClassificacaoModel.Organizacao = organizacaoPatriarca;
@@ -153,7 +152,7 @@ namespace Prodest.Scd.Business
 
         public async Task UpdateFimVigenciaAsync(int id, DateTime fimVigencia)
         {
-            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id);
+            PlanoClassificacao planoClassificacao = SearchPersistence(id);
 
             _validation.FimVigenciaValid(fimVigencia, planoClassificacao.InicioVigencia);
 
@@ -162,12 +161,12 @@ namespace Prodest.Scd.Business
             await _unitOfWork.SaveAsync();
         }
 
-        private async Task<PlanoClassificacao> SearchPersistenceAsync(int id)
+        private PlanoClassificacao SearchPersistence(int id)
         {
             _validation.IdValid(id);
 
-            PlanoClassificacao planoClassificacao = await _planosClassificacao.Where(pc => pc.Id == id)
-                                                                              .SingleOrDefaultAsync();
+            PlanoClassificacao planoClassificacao = _planosClassificacao.Where(pc => pc.Id == id)
+                                                                              .SingleOrDefault();
 
             _validation.Found(planoClassificacao);
 

@@ -2,10 +2,11 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
+using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Common.Exceptions;
+using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
 using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
@@ -60,19 +61,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #region Search by Id
         #region Id
         [TestMethod]
-        public async Task TestSearchWithInvalidId()
+        public void TestSearchWithInvalidId()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(default(int));
+                _core.Search(default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "O id deve não pode ser nulo ou vazio.");
             }
@@ -83,19 +84,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #endregion
 
         [TestMethod]
-        public async Task TestSearchWithIdNonexistentOnDataBase()
+        public void TestSearchWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(-1);
+                _core.Search(-1);
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Plano de Classificação não encontrado.");
             }
@@ -117,7 +118,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
 
-            PlanoClassificacaoModel planoClassificacaoModelSearched = await _core.SearchAsync(planoClassificacaoModel.Id);
+            PlanoClassificacaoModel planoClassificacaoModelSearched = _core.Search(planoClassificacaoModel.Id);
 
             Assert.AreEqual(planoClassificacaoModel.Id, planoClassificacaoModelSearched.Id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, planoClassificacaoModelSearched.Codigo);
@@ -134,19 +135,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #region Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoNull()
+        public void TestSearchWithGuidOrganizacaoNull()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(null);
+                _core.Search(null);
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -156,19 +157,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoEmpty()
+        public void TestSearchWithGuidOrganizacaoEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync("");
+                _core.Search("");
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -178,19 +179,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoTrimEmpty()
+        public void TestSearchWithGuidOrganizacaoTrimEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(" ");
+                _core.Search(" ");
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -200,19 +201,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoNotGuid()
+        public void TestSearchWithGuidOrganizacaoNotGuid()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync("ABC");
+                _core.Search("ABC");
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -222,19 +223,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoGuidEmpty()
+        public void TestSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(new Guid().ToString());
+                _core.Search(new Guid().ToString());
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -245,17 +246,17 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #endregion
 
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public void TestSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<PlanoClassificacaoModel> planosClassificacaoModel = await _core.SearchAsync(Guid.NewGuid().ToString());
+            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(Guid.NewGuid().ToString());
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == 0);
         }
 
         [TestMethod]
-        public async Task TestSearchWithGuidOrganizacaoCorrect()
+        public void TestSearchWithGuidOrganizacaoCorrect()
         {
-            List<PlanoClassificacaoModel> planosClassificacaoModel = await _core.SearchAsync(_guidProdest);
+            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(_guidProdest);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count > 0);
 
@@ -271,19 +272,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #region Pagination Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public async Task TestPaginationSearchWithGuidOrganizacaoNull()
+        public void TestPaginationSearchWithGuidOrganizacaoNull()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(null, default(int), default(int));
+                _core.Search(null, default(int), default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -293,19 +294,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestPaginationSearchWithGuidOrganizacaoEmpty()
+        public void TestPaginationSearchWithGuidOrganizacaoEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync("", default(int), default(int));
+                _core.Search("", default(int), default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -315,19 +316,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestPaginationSearchWithGuidOrganizacaoTrimEmpty()
+        public void TestPaginationSearchWithGuidOrganizacaoTrimEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(" ", default(int), default(int));
+                _core.Search(" ", default(int), default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
             }
@@ -337,19 +338,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestPaginationSearchWithGuidOrganizacaoNotGuid()
+        public void TestPaginationSearchWithGuidOrganizacaoNotGuid()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync("ABC", default(int), default(int));
+                _core.Search("ABC", default(int), default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -359,19 +360,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestPaginationSearchWithGuidOrganizacaoGuidEmpty()
+        public void TestPaginationSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(new Guid().ToString(), default(int), default(int));
+                _core.Search(new Guid().ToString(), default(int), default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Guid da organização inválido.");
             }
@@ -383,19 +384,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
         #region Page
         [TestMethod]
-        public async Task TestPaginationSearchWithInvalidPage()
+        public void TestPaginationSearchWithInvalidPage()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(_guidProdest, default(int), default(int));
+                _core.Search(_guidProdest, default(int), default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Página inválida.");
             }
@@ -407,19 +408,19 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
         #region Count
         [TestMethod]
-        public async Task TestPaginationSearchWithInvalidCount()
+        public void TestPaginationSearchWithInvalidCount()
         {
             bool ok = false;
 
             try
             {
-                await _core.SearchAsync(_guidProdest, 1, default(int));
+                _core.Search(_guidProdest, 1, default(int));
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdExpection));
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
                 Assert.AreEqual(ex.Message, "Quantidade de rgistro por página inválida.");
             }
@@ -430,9 +431,9 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #endregion
 
         [TestMethod]
-        public async Task TestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public void TestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<PlanoClassificacaoModel> planosClassificacaoModel = await _core.SearchAsync(Guid.NewGuid().ToString(), 1, 1);
+            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(Guid.NewGuid().ToString(), 1, 1);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == 0);
         }
@@ -445,7 +446,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
             await InsertPlanosClassificacao(page * count);
 
-            List<PlanoClassificacaoModel> planosClassificacaoModel = await _core.SearchAsync(_guidProdest, page, count);
+            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(_guidProdest, page, count);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == count);
 

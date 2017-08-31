@@ -27,7 +27,7 @@ namespace Prodest.Scd.Web
         {
             services.AddMvc();
 
-            Dependencies.AddDependencies(services);
+            WebDependencies.AddDependencies(services);
 
             services.AddAutoMapper();
 

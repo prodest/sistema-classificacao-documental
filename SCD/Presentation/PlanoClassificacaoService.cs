@@ -31,9 +31,9 @@ namespace Prodest.Scd.Presentation
             return planoClassificacao;
         }
 
-        public async Task<List<PlanoClassificacaoViewModel>> Search(string guidOrganizacao)
+        public List<PlanoClassificacaoViewModel> Search(string guidOrganizacao)
         {
-            List<PlanoClassificacaoModel> planosClassificacao = await _core.SearchAsync(Environment.GetEnvironmentVariable("GuidProdest"), 1, 20);
+            List<PlanoClassificacaoModel> planosClassificacao = _core.Search(Environment.GetEnvironmentVariable("GuidProdest"), 1, 20);
 
             List<PlanoClassificacaoViewModel> planosClassificacaoViewModel = _mapper.Map<List<PlanoClassificacaoViewModel>>(planosClassificacao);
 

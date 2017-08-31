@@ -1,11 +1,12 @@
-﻿using Prodest.Scd.Integration.Common;
+﻿using Prodest.Scd.Infrastructure.Integration.Common;
 using Prodest.Scd.Integration.Common.Base;
+using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Integration.Organograma.Model;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.Integration.Organograma
+namespace Prodest.Scd.Infrastructure.Integration
 {
-    public class OrganogramaService
+    public class OrganogramaService : IOrganogramaService
     {
         private IClientAccessTokenProvider _clientAccessToken;
 

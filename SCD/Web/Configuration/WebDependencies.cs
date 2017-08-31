@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Prodest.Scd.Dependency;
 using Prodest.Scd.Integration.Common.Base;
-using Prodest.Scd.Presentation;
-using Prodest.Scd.Presentation.Base;
 using System;
 using System.Collections.Generic;
 
 namespace Prodest.Scd.Web.Configuration
 {
-    public static class Dependencies
+    public static class WebDependencies
     {
         public static void AddDependencies (IServiceCollection services)
         {
@@ -19,18 +18,16 @@ namespace Prodest.Scd.Web.Configuration
                 services.AddScoped(dep.Key, dep.Value);
             }
         }
+
         public static Dictionary<Type, Type> GetDependencies()
         {
             Dictionary<Type, Type> dependencies = new Dictionary<Type, Type>();
 
-            dependencies = Presentation.Configuration.Dependencies.GetDependencies();
+            dependencies = ProjectsDependencies.GetDependencies();
 
             dependencies.Add(typeof(IClientAccessTokenProvider), typeof(AcessoCidadaoClientAccessToken));
 
-            dependencies.Add(typeof(IPlanoClassificacaoService), typeof(PlanoClassificacaoService));
-
             return dependencies;
         }
-
     }
 }

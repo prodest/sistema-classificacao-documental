@@ -8,7 +8,7 @@ namespace Prodest.Scd.Presentation.Base
     {
         PlanoClassificacaoViewModel Insert(PlanoClassificacaoViewModel planoClassificacao);
 
-        Task<List<PlanoClassificacaoViewModel>> Search(string guidOrganizacao);
+        List<PlanoClassificacaoViewModel> Search(string guidOrganizacao);
 
         void Update(PlanoClassificacaoViewModel planoClassificacao);
 
