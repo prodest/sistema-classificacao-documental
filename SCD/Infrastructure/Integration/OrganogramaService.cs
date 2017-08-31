@@ -19,7 +19,7 @@ namespace Prodest.Scd.Infrastructure.Integration
 
         public async Task<List<OrganogramaOrganizacao>> SearchAsync()
         {
-            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{Environment.GetEnvironmentVariable("GuidProdest")}/filhas";
+            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{Environment.GetEnvironmentVariable("GuidGEES")}/filhas";
 
             List<OrganogramaOrganizacao> organizacoes = await JsonData.DownloadAsync<List<OrganogramaOrganizacao>>(url, _clientAccessToken.AccessToken);
 
