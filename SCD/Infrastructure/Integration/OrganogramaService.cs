@@ -2,6 +2,8 @@
 using Prodest.Scd.Integration.Common.Base;
 using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Integration.Organograma.Model;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Infrastructure.Integration
@@ -13,6 +15,15 @@ namespace Prodest.Scd.Infrastructure.Integration
         public OrganogramaService(IClientAccessTokenProvider clientAccessToken)
         {
             _clientAccessToken = clientAccessToken;
+        }
+
+        public async Task<List<OrganogramaOrganizacao>> SearchAsync()
+        {
+            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{Environment.GetEnvironmentVariable("GuidGEES")}/filhas";
+
+            List<OrganogramaOrganizacao> organizacoes = await JsonData.DownloadAsync<List<OrganogramaOrganizacao>>(url, _clientAccessToken.AccessToken);
+
+            return organizacoes;
         }
 
         public async Task<OrganogramaOrganizacao> SearchAsync(string guid)

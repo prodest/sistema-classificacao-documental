@@ -58,6 +58,8 @@ namespace Prodest.Scd.Business
         {
             _validation.BasicValid(planoClassificacaoModel);
 
+            _validation.IdInsertValid(planoClassificacaoModel.Id);
+
             OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(planoClassificacaoModel.GuidOrganizacao);
 
             OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid.ToString());
