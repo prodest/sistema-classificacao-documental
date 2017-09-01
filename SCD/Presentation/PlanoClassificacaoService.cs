@@ -1,12 +1,14 @@
-﻿using System;
+﻿using AutoMapper;
 using Prodest.Scd.Business.Base;
+using Prodest.Scd.Business.Common.Exceptions;
+using Prodest.Scd.Business.Model;
+using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Presentation.Base;
 using Prodest.Scd.Presentation.ViewModel;
+using Prodest.Scd.Presentation.ViewModel.Base;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Prodest.Scd.Business.Model;
-using AutoMapper;
 
 namespace Prodest.Scd.Presentation
 {
@@ -14,89 +16,131 @@ namespace Prodest.Scd.Presentation
     {
         private IPlanoClassificacaoCore _core;
         private IMapper _mapper;
-
-        public PlanoClassificacaoService(IPlanoClassificacaoCore core, IMapper mapper)
+        private IOrganogramaService _organogramaService;
+        public PlanoClassificacaoService(IPlanoClassificacaoCore core, IMapper mapper, IOrganogramaService organogramaService)
         {
             _core = core;
             _mapper = mapper;
+            _organogramaService = organogramaService;
         }
 
-        public void Delete(int id)
+        public async Task<PlanoClassificacaoViewModel> Delete(int id)
         {
-
-        }
-
-        public PlanoClassificacaoEntidade Search(int id)
-        {
-            return new PlanoClassificacaoEntidade
+            var model = new PlanoClassificacaoViewModel();
+            try
             {
-                Descricao = "aaaa",
-                AreaFim = true,
-                Aprovacao = DateTime.Now,
-                FimVigencia = DateTime.Now
-            };
+                await _core.DeleteAsync(id);
+                model.Result = new ResultViewModel
+                {
+                    Ok = true,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = "Item removido com sucesso!",
+                            Type = TypeMessageViewModel.Sucess
+                        }
+                    }
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
         }
 
-        public void Update(PlanoClassificacaoEntidade entidade)
+        public async Task<PlanoClassificacaoViewModel> Edit(int id)
         {
-
+            return null;
         }
-        public PlanoClassificacaoEntidade Create(PlanoClassificacaoEntidade entidade) {
-            return new PlanoClassificacaoEntidade();
 
-        }
-        public PlanoClassificacaoViewModel Search()
+        public async Task<PlanoClassificacaoViewModel> Update(PlanoClassificacaoEntidade entidade)
         {
-            return this.Search(null);
-
+            return null;
+        }
+        public async Task<PlanoClassificacaoViewModel> Create(PlanoClassificacaoEntidade entidade)
+        {
+            var model = new PlanoClassificacaoViewModel();
+            try
+            {
+                await _core.InsertAsync(_mapper.Map<PlanoClassificacaoModel>(entidade));
+                model.Result = new ResultViewModel
+                {
+                    Ok = true,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = "Item criado com sucesso!",
+                            Type = TypeMessageViewModel.Sucess
+                        }
+                    }
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
         }
 
-        public PlanoClassificacaoViewModel Search(Filtro filtro)
+          public async Task<PlanoClassificacaoViewModel> Search(Filtro filtro)
         {
-            
             //prodest
             var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
-            
-            //var retorno = _core.SearchAsync(guid,1,20).Result;
-            var view = new PlanoClassificacaoViewModel();
-            view.entidades = new List<PlanoClassificacaoEntidade>();
-            view.entidades.Add(new PlanoClassificacaoEntidade
+            var entidades = _core.Search(guid, 1, 20);
+            var model = new PlanoClassificacaoViewModel();
+            model.entidades = _mapper.Map<List<PlanoClassificacaoEntidade>>(entidades);
+            model.Result = new ResultViewModel
             {
-                Descricao = "aaaa",
-                AreaFim = true,
-                Aprovacao = DateTime.Now,
-                FimVigencia = DateTime.Now
-            }
-            );
-            view.entidades.Add(new PlanoClassificacaoEntidade
-            {
-                Descricao = "bbbb",
-                AreaFim = false,
-                Aprovacao = DateTime.Now,
-                FimVigencia = DateTime.Now
-            }
-            );
-            view.entidades.Add(new PlanoClassificacaoEntidade
-            {
-                Descricao = "cccc",
-                AreaFim = true,
-                Aprovacao = DateTime.Now,
-                FimVigencia = DateTime.Now
-            }
-            );
-            return view;
+                Ok = true
+            };
+            return model;
         }
 
 
 
 
-        public PlanoClassificacaoEntidade Insert(PlanoClassificacaoEntidade entidade)
+        public async Task<PlanoClassificacaoViewModel> Insert(PlanoClassificacaoEntidade entidade)
         {
-            return new PlanoClassificacaoEntidade();
+            return new PlanoClassificacaoViewModel();
         }
 
-        public void Update(PlanoClassificacaoViewModel planoClassificacao)
+        public async Task<PlanoClassificacaoViewModel> New()
         {
+            var model = new PlanoClassificacaoViewModel
+            {
+                Action = "Create",
+                entidade = new PlanoClassificacaoEntidade(),
+                //organizacoes = _organogramaService.SearchAsync();
+                organizacoes = new List<Organizacao>
+                {
+                        new Organizacao{guid=Guid.NewGuid(),sigla="Prodest" },
+                        new Organizacao{guid= Guid.NewGuid(), sigla= "Seger"}
+                }
+            };
+            return model;
         }
+
+
     }
 }

@@ -1,8 +1,4 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
-@{
-    ViewBag.Mensagem = "";
-}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -131,7 +127,7 @@
 
 
     <script>
-        _mensagemNotificacao = '';
+        _messages = [];
 
         $(document).ajaxStart(function () {
             $("#DivConteudo").hide();
@@ -147,10 +143,10 @@
         $(document).ajaxComplete(function () {
             componentHandler.upgradeDom();  
             $.validator.unobtrusive.parse($('form'));
-            ExibirMensagem(_mensagemNotificacao);
+            _messages.forEach(ShowMessage);
         });
         
-
+        
 
     </script>
     @RenderSection("Scripts", required: false)

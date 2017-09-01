@@ -8,10 +8,7 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class PlanoClassificacaoViewModel : BaseViewModel
     {
         public List<PlanoClassificacaoEntidade> entidades { get; set; }
-        public List<Organizacao> organizacoes = new List<Organizacao> {
-            new Organizacao{guid=Guid.NewGuid(),sigla="Prodest" },
-            new Organizacao{guid= Guid.NewGuid(), sigla= "Seger"}
-        };
+        public List<Organizacao> organizacoes { get; set; }
         public PlanoClassificacaoEntidade entidade { get; set; }
         public Filtro filtro { get; set; }
     }
@@ -30,7 +27,7 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class PlanoClassificacaoEntidade
     {
         public int Id { get; set; }
-        [Required(ErrorMessage ="Obrigatório")]
+        [Required(ErrorMessage = "Obrigatório")]
         public string Codigo { get; set; }
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }

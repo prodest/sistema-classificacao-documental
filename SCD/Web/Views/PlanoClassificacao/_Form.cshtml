@@ -1,6 +1,6 @@
 ﻿@model  Prodest.Scd.Presentation.ViewModel.PlanoClassificacaoViewModel
 
-<form asp-controller="PlanoClassificacao" asp-action="Create" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
+<form asp-controller="PlanoClassificacao" asp-action="@Model.Action" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
     <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
         <div class="mdl-card TelaCheia mdl-grid">
             <div class="mdl-card__actions ItemCardFormulario">
@@ -78,5 +78,5 @@
     </div>
 </form>
 <script>
-    _mensagemNotificacao = '@Model.mensagem';
+    @*_mensagemNotificacao = '@Model.mensagem';*@
 </script>

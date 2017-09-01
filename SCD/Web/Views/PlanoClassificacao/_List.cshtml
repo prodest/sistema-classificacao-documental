@@ -63,5 +63,6 @@
     </div>
 </div>
 <script>
-    _mensagemNotificacao = '@Model.mensagem';
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+    
 </script>

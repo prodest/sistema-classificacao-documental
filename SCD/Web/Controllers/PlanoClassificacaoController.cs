@@ -1,87 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prodest.Scd.Presentation.Base;
 using Prodest.Scd.Presentation.ViewModel;
+using Prodest.Scd.Web.Controllers.Base;
+using Prodest.Scd.Web.Filters;
 using System;
+using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
-    public class PlanoClassificacao : Controller
+    [MessageFilterAttribute]
+    public class PlanoClassificacao : BaseController
     {
         IPlanoClassificacaoService _service;
+        //public MensagemViewModel mensagens { get; set; }
 
         public PlanoClassificacao(IPlanoClassificacaoService service)
         {
             _service = service;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = _service.Search();
+            var model = await _service.Search(null);
             return View(model);
         }
 
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            var model = _service.Search();
+            var model = await _service.Search(null);
             return PartialView("_List", model);
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _service.Delete(id);
-
-            var model = _service.Search();
-
-            return PartialView("_List", model);
-        }
-
-        public IActionResult Read(int id)
-        {
-            var model = _service.Search(id);
-
-            return PartialView("_Form", model);
-        }
-        public IActionResult New()
-        {
-            var model = new PlanoClassificacaoViewModel()
+            var model = await _service.Delete(id);
+            AddHttpContextMessages(model.Result.Messages);
+            if (model.Result.Ok)
             {
-                entidade = new PlanoClassificacaoEntidade()
-            };
+                return await List();
+            }
+            else
+            {
+                //Neste cenário a chamada é a mesma independente do resultado do delete
+                return await List();
+            }
+        }
+
+        public async Task<IActionResult> Read(int id)
+        {
+            var model = await _service.Edit(id);
+
             return PartialView("_Form", model);
         }
 
-        //[Route("{model}")]
-        public IActionResult Create(PlanoClassificacaoViewModel model)
+        public async Task<IActionResult> New()
         {
+            var model = await _service.New();
+            return PartialView("_Form", model);
+        }
 
+        public async Task<IActionResult> Create(PlanoClassificacaoViewModel model)
+        {
             var modelForm = model;
-            try
+            if (model != null && model.entidade != null)
             {
-
-                if (model != null && model.entidade != null)
+                model = await _service.Create(model.entidade);
+                AddHttpContextMessages(model.Result.Messages);
+                if (model.Result.Ok)
                 {
-                    if (model.entidade.Id == 0)
-                    {
-                        model.entidade = _service.Create(model.entidade);
-                    }
-                    model = _service.Search();
-                    model.mensagem = "Registro salvo com sucesso! ";
-                    return PartialView("_List", model);
+                    return await List();
                 }
             }
-            catch (Exception e) {
-                modelForm.mensagem = "Não foi possível salvar o registro. " + e.Message;
-            }
+            //Se de tudo der errado, volta para o formulário
             return PartialView("_Form", modelForm);
         }
 
-        public IActionResult Update(PlanoClassificacaoViewModel model)
+        public async Task<IActionResult> Update(PlanoClassificacaoViewModel model)
         {
             if (model != null && model.entidade != null)
             {
                 if (model.entidade.Id != 0)
                 {
-                    _service.Update(model.entidade);
+                    await _service.Update(model.entidade);
                 }
             }
             return PartialView("_Form", model.entidade);

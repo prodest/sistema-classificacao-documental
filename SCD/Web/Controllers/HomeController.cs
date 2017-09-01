@@ -20,7 +20,6 @@ namespace Prodest.Scd.Web.Controllers
 
         public IActionResult Index()
         {
-            _service.Search();
 
             return View();
         }

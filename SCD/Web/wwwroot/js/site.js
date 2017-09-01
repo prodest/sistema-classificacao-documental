@@ -19,11 +19,13 @@ $('#DivConteudo').on('click', 'button.BotaoAjax', function (e) {
     });
 });
 
-function ExibirMensagem(mensagem) {
-    if (mensagem !== null && mensagem !== '') {
+function ShowMessage(item, index) {
+    message = item.message;
+    tipo = item.type; //para uso futuro
+    if (message !== null && message !== '') {
         var snackbarContainer = document.querySelector('#notificacao');
         var data = {
-            message: mensagem,
+            message: message,
             timeout: 4000
         };
         snackbarContainer.MaterialSnackbar.showSnackbar(data);
