@@ -144,6 +144,8 @@
             componentHandler.upgradeDom();  
             $.validator.unobtrusive.parse($('form'));
             _messages.forEach(ShowMessage);
+            //limpa as mensagens já notificadas
+            _messages = [];
         });
         
         
