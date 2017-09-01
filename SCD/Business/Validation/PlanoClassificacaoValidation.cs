@@ -27,8 +27,15 @@ namespace Prodest.Scd.Business.Validation
         internal void IdValid(int id)
         {
             if (id == default(int))
-                throw new ScdException("O id deve não pode ser nulo ou vazio.");
+                throw new ScdException("O id não pode ser nulo ou vazio.");
         }
+
+        internal void IdInsertValid(int id)
+        {
+            if (id != default(int))
+                throw new ScdException("O id não deve ser preenchido.");
+        }
+
         #endregion
 
         #region Basic Valid

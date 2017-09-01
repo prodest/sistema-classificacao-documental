@@ -75,7 +75,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             {
                 Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-                Assert.AreEqual(ex.Message, "O id deve não pode ser nulo ou vazio.");
+                Assert.AreEqual(ex.Message, "O id não pode ser nulo ou vazio.");
             }
 
             if (ok)

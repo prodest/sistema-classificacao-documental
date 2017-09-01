@@ -498,6 +498,36 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         }
         #endregion
 
+        #region Id
+        public async Task TestInsertWithInvalidInsertId()
+        {
+            string codigo = "01";
+            string descricao = "Descrição Teste";
+            bool areaFim = true;
+            string guidOrganizacao = _guidProdest;
+
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Id = 1, Codigo = codigo, Descricao = descricao, AreaFim = areaFim, GuidOrganizacao = guidOrganizacao };
+
+            bool ok = false;
+
+            try
+            {
+                await _core.InsertAsync(planoClassificacaoModel);
+
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
+
+                Assert.AreEqual(ex.Message, "O id não deve ser preenchido.");
+            }
+
+            if (ok)
+                Assert.Fail("Não deveria ter inserido com o id inválido para inserção.");
+        }
+        #endregion
+
         [TestMethod]
         public async Task TestInsertWithBasicsFields()
         {
