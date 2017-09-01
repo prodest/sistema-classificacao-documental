@@ -1,4 +1,5 @@
-﻿using Prodest.Scd.Presentation.ViewModel.Base;
+﻿using Prodest.Scd.Integration.Organograma.Model;
+using Prodest.Scd.Presentation.ViewModel.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class PlanoClassificacaoViewModel : BaseViewModel
     {
         public List<PlanoClassificacaoEntidade> entidades { get; set; }
-        public List<Organizacao> organizacoes { get; set; }
+        public List<OrganogramaOrganizacao> organizacoes { get; set; }
         public PlanoClassificacaoEntidade entidade { get; set; }
         public Filtro filtro { get; set; }
     }

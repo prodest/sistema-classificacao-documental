@@ -12,6 +12,7 @@
                 </button>
             </div>
             <div class="mdl-cell mdl-cell--3-col">
+                <input hidden asp-for="entidade.Id" />
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" asp-for="entidade.Codigo" />
                     <label class="mdl-textfield__label" asp-for="entidade.Codigo">Código..</label>
@@ -40,7 +41,7 @@
                         <option value=""></option>
                         @foreach (var item in Model.organizacoes)
                         {
-                            <option value="@item.guid">@item.sigla</option>
+                            <option value="@item.Guid">@item.Sigla</option>
 
                         }
                     </select>

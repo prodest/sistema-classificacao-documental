@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Web.Controllers.Base
 {
-    public class BaseController : Controller 
+    public class BaseController : Controller
     {
         protected void AddHttpContextMessages(List<MessageViewModel> messages)
         {
-            var _messages = HttpContext.Items["messages"] as List<MessageViewModel>;
-            _messages = _messages ?? new List<MessageViewModel>();
-            _messages.AddRange(messages);
-            HttpContext.Items["messages"] = _messages;
+            if (messages != null)
+            {
+                var _messages = HttpContext.Items["messages"] as List<MessageViewModel>;
+                _messages = _messages ?? new List<MessageViewModel>();
+                _messages.AddRange(messages);
+                HttpContext.Items["messages"] = _messages;
+            }
         }
     }
 }

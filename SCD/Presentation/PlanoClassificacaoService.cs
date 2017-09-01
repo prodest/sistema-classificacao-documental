@@ -61,12 +61,68 @@ namespace Prodest.Scd.Presentation
 
         public async Task<PlanoClassificacaoViewModel> Edit(int id)
         {
-            return null;
+            var model = new PlanoClassificacaoViewModel();
+            try
+            {
+                model.Action = "Update";
+                model.entidade = _mapper.Map<PlanoClassificacaoEntidade>(_core.Search(id));
+                model.organizacoes = await _organogramaService.SearchAsync();
+                model.Result = new ResultViewModel
+                {
+                    Ok = true
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
         }
 
         public async Task<PlanoClassificacaoViewModel> Update(PlanoClassificacaoEntidade entidade)
         {
-            return null;
+            var model = new PlanoClassificacaoViewModel();
+            model.entidade = entidade;
+            try
+            {
+                await _core.UpdateAsync(_mapper.Map<PlanoClassificacaoModel>(entidade));
+                model.Result = new ResultViewModel
+                {
+                    Ok = true,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = "Item alterado com sucesso!",
+                            Type = TypeMessageViewModel.Sucess
+                        }
+                    }
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
         }
         public async Task<PlanoClassificacaoViewModel> Create(PlanoClassificacaoEntidade entidade)
         {
@@ -103,7 +159,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-          public async Task<PlanoClassificacaoViewModel> Search(Filtro filtro)
+        public async Task<PlanoClassificacaoViewModel> Search(Filtro filtro)
         {
             //prodest
             var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
@@ -131,12 +187,7 @@ namespace Prodest.Scd.Presentation
             {
                 Action = "Create",
                 entidade = new PlanoClassificacaoEntidade(),
-                //organizacoes = _organogramaService.SearchAsync();
-                organizacoes = new List<Organizacao>
-                {
-                        new Organizacao{guid=Guid.NewGuid(),sigla="Prodest" },
-                        new Organizacao{guid= Guid.NewGuid(), sigla= "Seger"}
-                }
+                organizacoes = await _organogramaService.SearchAsync()
             };
             return model;
         }

@@ -51,7 +51,6 @@ namespace Prodest.Scd.Web
             }
 
             app.UseStaticFiles();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

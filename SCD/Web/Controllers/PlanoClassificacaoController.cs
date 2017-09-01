@@ -18,13 +18,12 @@ namespace Web.Controllers
         {
             _service = service;
         }
-
         public async Task<IActionResult> Index()
         {
             var model = await _service.Search(null);
             return View(model);
         }
-
+        //[ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> List()
         {
             var model = await _service.Search(null);
@@ -46,11 +45,17 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<IActionResult> Read(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var model = await _service.Edit(id);
-
-            return PartialView("_Form", model);
+            AddHttpContextMessages(model.Result.Messages);
+            if (model.Result.Ok)
+            {
+                return PartialView("_Form", model);
+            } else
+            {
+                return await List();
+            }
         }
 
         public async Task<IActionResult> New()
@@ -74,17 +79,19 @@ namespace Web.Controllers
             //Se de tudo der errado, volta para o formulário
             return PartialView("_Form", modelForm);
         }
-
+        
         public async Task<IActionResult> Update(PlanoClassificacaoViewModel model)
         {
             if (model != null && model.entidade != null)
             {
-                if (model.entidade.Id != 0)
+                model = await _service.Update(model.entidade);
+                AddHttpContextMessages(model.Result.Messages);
+                if (model.Result.Ok)
                 {
-                    await _service.Update(model.entidade);
+                    return await List();
                 }
             }
-            return PartialView("_Form", model.entidade);
+            return await Edit(model.entidade.Id);
         }
 
     }

@@ -116,10 +116,11 @@ namespace Prodest.Scd.Business
             int skip = page * count;
 
             List<PlanoClassificacao> planosClassificacao = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
-                                                                                     .OrderBy(pc => pc.Codigo)
-                                                                                     .OrderBy(pc => pc.Descricao)
-                                                                                     .OrderBy(pc => pc.InicioVigencia)
-                                                                                     .OrderBy(pc => pc.FimVigencia)
+                                                                                     //.OrderBy(pc => pc.Codigo)
+                                                                                     //.OrderBy(pc => pc.Descricao)
+                                                                                     .OrderByDescending(pc => pc.InicioVigencia)
+                                                                                     .OrderByDescending(pc => pc.FimVigencia)
+                                                                                     .OrderByDescending(pc => pc.Id)
                                                                                      .Skip(skip)
                                                                                      .Take(count)
                                                                                      .ToList();

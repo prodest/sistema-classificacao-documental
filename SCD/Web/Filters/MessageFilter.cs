@@ -22,18 +22,14 @@ namespace Prodest.Scd.Web.Filters
         {
             var messages = filterContext.HttpContext.Items["messages"] as List<MessageViewModel>;
             var result = filterContext.Result as ActionResult;
-            var model = (result is PartialViewResult ? ((PartialViewResult)result).Model : ((ViewResult)result).Model) as BaseViewModel;
-            if (model.Result!=null && messages!=null )
+            var model = result == null ? new BaseViewModel() : (result is PartialViewResult ? ((PartialViewResult)result).Model : ((ViewResult)result).Model) as BaseViewModel;
+            model.Result = model.Result ?? new ResultViewModel();
+            model.Result.Messages = model.Result.Messages ?? new List<MessageViewModel>();
+            if (messages != null)
             {
-                model.Result.Messages = model.Result.Messages ?? new List<MessageViewModel>();
                 model.Result.Messages.AddRange(messages);
-            } else
-            {
-                model.Result = new ResultViewModel
-                {
-                    Messages = new List<MessageViewModel>()
-                };
             }
+
             base.OnActionExecuted(filterContext);
         }
     }
