@@ -8,7 +8,7 @@ namespace Prodest.Scd.Presentation.Configuration
     {
         public PresentationProfileAutoMapper()
         {
-            CreateMap<PlanoClassificacaoModel, PlanoClassificacaoViewModel>().ReverseMap();
+            CreateMap<PlanoClassificacaoModel, PlanoClassificacaoEntidade>().ReverseMap();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
         public ILogger CreateLogger(string categoryName)
         {
-            if (categoryName == "Microsoft.EntityFrameworkCore.Storage.IRelationalCommandBuilderFactory")
+            if (categoryName == "Microsoft.EntityFrameworkCore.Database.Command")
             {
                 return new ProcessoEletronicoLogger(categoryName);
             }

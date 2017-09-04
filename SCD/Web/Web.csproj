@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\template.html" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Dependency\Dependency.csproj" />
     <ProjectReference Include="..\Integration\Integration.csproj" />
     <ProjectReference Include="..\Presentation\Presentation.csproj" />

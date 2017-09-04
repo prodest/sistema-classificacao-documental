@@ -1,37 +1,72 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿.BotaoFlutuante {
+    position: fixed !important;
+    display: block !important;
+    right: 50px !important;
+    margin-left: calc(100%) !important;
+    margin-bottom: 40px !important;
+    z-index: 900 !important;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.mdl-button {
+    height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    width: 30px !important;
+    color: white !important;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
-}
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
+    .mdl-button.BotaoGrande {
+        height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        width: 40px !important;
+        color: white !important;
     }
+
+
+.mdl-button--mini-fab i.material-icons {
+    font-size: 16px !important;
+}
+
+#DivConteudo {
+    min-height: 400px;
+}
+
+.barraNavegacaoLateral {
+    background-color: #0080a5 !important;
+}
+
+    .barraNavegacaoLateral a {
+        color: #d8f6ff !important;
+    }
+
+        .barraNavegacaoLateral a i {
+            color: #d8f6ff !important;
+        }
+
+.barraNavegacaoLateralTopo {
+    background-color: #006a88 !important;
+}
+
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.ItemCardFormulario {
+    padding: 0px !important;
+}
+
+.mdl-card {
+    width: auto !important;
+    overflow: auto !important;
+}
+
+.TelaCheia {
+    width: 100% !important;
 }

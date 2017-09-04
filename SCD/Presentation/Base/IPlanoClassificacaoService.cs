@@ -1,17 +1,15 @@
 ﻿using Prodest.Scd.Presentation.ViewModel;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Presentation.Base
 {
     public interface IPlanoClassificacaoService
     {
-        PlanoClassificacaoViewModel Insert(PlanoClassificacaoViewModel planoClassificacao);
-
-        List<PlanoClassificacaoViewModel> Search(string guidOrganizacao);
-
-        void Update(PlanoClassificacaoViewModel planoClassificacao);
-
-        void Delete(int id);
+        Task<PlanoClassificacaoViewModel> Search(Filtro filtro);
+        Task<PlanoClassificacaoViewModel> Delete(int id);
+        Task<PlanoClassificacaoViewModel> Edit(int id);
+        Task<PlanoClassificacaoViewModel> Update(PlanoClassificacaoEntidade entidade);
+        Task<PlanoClassificacaoViewModel> Create(PlanoClassificacaoEntidade entidade);
+        Task<PlanoClassificacaoViewModel> New();
     }
 }
