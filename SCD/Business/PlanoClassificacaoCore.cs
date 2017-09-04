@@ -49,6 +49,8 @@ namespace Prodest.Scd.Business
         {
             PlanoClassificacao planoClassificacao = SearchPersistence(id);
 
+            _validation.CanDelete(planoClassificacao);
+
             _planosClassificacao.Remove(planoClassificacao);
 
             await _unitOfWork.SaveAsync();
@@ -136,7 +138,7 @@ namespace Prodest.Scd.Business
 
             PlanoClassificacao planoClassificacao = SearchPersistence(planoClassificacaoModel.Id);
 
-            _validation.CanUpDate(planoClassificacao);
+            _validation.CanUpdate(planoClassificacao);
 
             if (!planoClassificacaoModel.GuidOrganizacao.ToUpper().Equals(planoClassificacao.GuidOrganizacao.ToString().ToUpper()))
             {
