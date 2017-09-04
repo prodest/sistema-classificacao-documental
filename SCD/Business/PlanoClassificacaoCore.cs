@@ -88,25 +88,6 @@ namespace Prodest.Scd.Business
             return planoClassificacaoModel;
         }
 
-        public List<PlanoClassificacaoModel> Search(string guidOrganizacao)
-        {
-            _validation.OrganizacaoFilled(guidOrganizacao);
-            _validation.OrganizacaoValid(guidOrganizacao);
-
-            Guid guid = new Guid(guidOrganizacao);
-
-            List<PlanoClassificacao> planosClassificacao = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
-                                                                                     .OrderBy(pc => pc.Codigo)
-                                                                                     .OrderBy(pc => pc.Descricao)
-                                                                                     .OrderBy(pc => pc.InicioVigencia)
-                                                                                     .OrderBy(pc => pc.FimVigencia)
-                                                                                     .ToList();
-
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
-
-            return planosClassificacaoModel;
-        }
-
         public List<PlanoClassificacaoModel> Search(string guidOrganizacao, int page, int count)
         {
             _validation.OrganizacaoFilled(guidOrganizacao);
@@ -115,18 +96,16 @@ namespace Prodest.Scd.Business
             _validation.PaginationSearch(page, count);
 
             Guid guid = new Guid(guidOrganizacao);
-            int skip = page * count;
+            int skip = (page - 1) * count;
 
             List<PlanoClassificacao> planosClassificacao = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guid))
-                                                                                     //.OrderBy(pc => pc.Codigo)
-                                                                                     //.OrderBy(pc => pc.Descricao)
-                                                                                     .OrderByDescending(pc => pc.InicioVigencia)
-                                                                                     .OrderByDescending(pc => pc.FimVigencia)
-                                                                                     .OrderByDescending(pc => pc.Id)
-                                                                                     .Skip(skip)
-                                                                                     .Take(count)
-                                                                                     .ToList();
-
+                                                                               .OrderBy(pc => pc.InicioVigencia.HasValue)
+                                                                               .ThenByDescending(pc => pc.InicioVigencia)
+                                                                               .ThenByDescending(pc => pc.Codigo)
+                                                                               .Skip(skip)
+                                                                               .Take(count)
+                                                                               .ToList()
+                                                                               ;
             List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
 
             return planosClassificacaoModel;

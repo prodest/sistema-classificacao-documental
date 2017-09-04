@@ -13,8 +13,6 @@ namespace Prodest.Scd.Business.Base
 
         PlanoClassificacaoModel Search(int id);
 
-        List<PlanoClassificacaoModel> Search(string guidOrganizacao);
-
         List<PlanoClassificacaoModel> Search(string guidOrganizacao, int page, int count);
 
         Task UpdateAsync(PlanoClassificacaoModel planoClassificacao);

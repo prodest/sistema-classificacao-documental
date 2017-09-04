@@ -6,7 +6,6 @@ using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Presentation.Base;
 using Prodest.Scd.Presentation.ViewModel;
 using Prodest.Scd.Presentation.ViewModel.Base;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -162,8 +161,10 @@ namespace Prodest.Scd.Presentation
         public async Task<PlanoClassificacaoViewModel> Search(Filtro filtro)
         {
             //prodest
-            var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
-            var entidades = _core.Search(guid, 1, 20);
+            //var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
+            //GEES
+            var guid = "fe88eb2a-a1f3-4cb1-a684-87317baf5a57";
+            var entidades = _core.Search(guid, 1, 1000);
             var model = new PlanoClassificacaoViewModel();
             model.entidades = _mapper.Map<List<PlanoClassificacaoEntidade>>(entidades);
             model.Result = new ResultViewModel
