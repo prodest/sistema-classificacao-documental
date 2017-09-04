@@ -117,10 +117,20 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
-        internal void CanUpDate(PlanoClassificacao planoClassificacaoModel)
+        internal void CanUpdate(PlanoClassificacao planoClassificacao)
         {
-            if (planoClassificacaoModel.Publicacao.HasValue)
+            if (planoClassificacao.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
         }
+
+        internal void CanDelete(PlanoClassificacao planoClassificacao)
+        {
+            if (planoClassificacao.Publicacao.HasValue)
+                throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser excluído.");
+
+            if (planoClassificacao.ItensPlanoClassificacao != null && planoClassificacao.ItensPlanoClassificacao.Count > 0)
+                throw new ScdException("O Plano de Classificação possui itens e não pode ser excluído.");
+        }
+
     }
 }

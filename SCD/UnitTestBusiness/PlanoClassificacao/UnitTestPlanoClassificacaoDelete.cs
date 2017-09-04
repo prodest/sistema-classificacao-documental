@@ -96,7 +96,45 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
 
         [TestMethod]
-        public async Task TestSearchWithIdCorrect()
+        public async Task TestDeletePlanoClassificacaoPublicado()
+        {
+            DateTime now = DateTime.Now;
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
+            {
+                Codigo = "01",
+                Descricao = "Descrição Teste",
+                AreaFim = true,
+                GuidOrganizacao = _guidProdest,
+                Aprovacao = now,
+                Publicacao = now,
+                InicioVigencia = now
+            };
+
+            planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
+
+            bool ok = false;
+
+            try
+            {
+                await _core.DeleteAsync(planoClassificacaoModel.Id);
+
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
+
+                Assert.AreEqual(ex.Message, "O Plano de Classificação possui data de publicação e não pode ser excluído.");
+            }
+
+            if (ok)
+                Assert.Fail("Não deveria ter excluiído com data de publicação.");
+        }
+
+        //TODO: Após a implementação dos CRUDs de Itens de Plnao de Classificacação fazer os testes de remoção de plano de classificação com itens associados
+
+        [TestMethod]
+        public async Task TestDeletehWithIdCorrect()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
             {
