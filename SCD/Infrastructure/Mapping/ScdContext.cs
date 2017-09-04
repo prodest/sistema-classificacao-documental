@@ -79,11 +79,23 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasColumnName("descricao")
                     .HasMaxLength(200)
                     .IsUnicode(false);
+
+                entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
+
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.NiveisClassificacao)
+                    .HasForeignKey(d => d.IdOrganizacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NivelClassificacao_Organizacao");
             });
 
             modelBuilder.Entity<Organizacao>(entity =>
             {
                 entity.ToTable("Organizacao");
+
+                entity.HasIndex(e => e.GuidOrganizacao)
+                    .HasName("UK_GuidOrganizacao")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
