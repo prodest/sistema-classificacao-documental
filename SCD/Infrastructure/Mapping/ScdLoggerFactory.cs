@@ -35,11 +35,12 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine(formatter(state, exception));
-                Console.WriteLine();
-                Console.WriteLine();
+                if (eventId.Name.Equals("Microsoft.EntityFrameworkCore.Database.Command.CommandExecuting"))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(formatter(state, exception));
+                    Console.WriteLine();
+                }
             }
 
             public IDisposable BeginScope<TState>(TState state)
