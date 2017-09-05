@@ -11,7 +11,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public List<PlanoClassificacaoEntidade> entidades { get; set; }
         public List<OrganogramaOrganizacao> organizacoes { get; set; }
         public PlanoClassificacaoEntidade entidade { get; set; }
-        public Filtro filtro { get; set; }
+        public FiltroPlanoClassificacao filtro { get; set; }
     }
 
     public class Organizacao
@@ -20,7 +20,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string sigla { get; set; }
     }
 
-    public class Filtro
+    public class FiltroPlanoClassificacao
     {
         public string pesquisa { get; set; }
     }

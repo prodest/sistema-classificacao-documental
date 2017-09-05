@@ -5,7 +5,7 @@ namespace Prodest.Scd.Presentation.Base
 {
     public interface IPlanoClassificacaoService
     {
-        Task<PlanoClassificacaoViewModel> Search(Filtro filtro);
+        Task<PlanoClassificacaoViewModel> Search(FiltroPlanoClassificacao filtro);
         Task<PlanoClassificacaoViewModel> Delete(int id);
         Task<PlanoClassificacaoViewModel> Edit(int id);
         Task<PlanoClassificacaoViewModel> Update(PlanoClassificacaoEntidade entidade);

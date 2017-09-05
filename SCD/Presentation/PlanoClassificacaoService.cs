@@ -158,7 +158,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<PlanoClassificacaoViewModel> Search(Filtro filtro)
+        public async Task<PlanoClassificacaoViewModel> Search(FiltroPlanoClassificacao filtro)
         {
             //prodest
             //var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
