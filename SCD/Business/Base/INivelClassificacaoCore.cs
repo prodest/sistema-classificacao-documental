@@ -8,6 +8,8 @@ namespace Prodest.Scd.Business.Base
     {
         int Count(string guidOrganizacao);
 
+        Task DeleteAsync(int id);
+
         Task<NivelClassificacaoModel> InsertAsync(NivelClassificacaoModel nivelClassificacao);
 
         NivelClassificacaoModel Search(int id);
@@ -15,7 +17,5 @@ namespace Prodest.Scd.Business.Base
         List<NivelClassificacaoModel> Search(string guidOrganizacao, int page, int count);
 
         Task UpdateAsync(NivelClassificacaoModel nivelClassificacao);
-
-        Task DeleteAsync(int id);
     }
 }

@@ -45,11 +45,7 @@ namespace Prodest.Scd.Business.Validation
 
             Filled(nivelClassificacao);
 
-            OrganizacaoValid(nivelClassificacao.GuidOrganizacao);
-
-            PublicacaoValid(nivelClassificacao.Publicacao, nivelClassificacao.Aprovacao, nivelClassificacao.InicioVigencia);
-
-            FimVigenciaValid(nivelClassificacao.FimVigencia, nivelClassificacao.InicioVigencia);
+            OrganizacaoNotNull(nivelClassificacao.Organizacao);
         }
 
         private void NotNull(NivelClassificacaoModel nivelClassificacao)
@@ -61,15 +57,7 @@ namespace Prodest.Scd.Business.Validation
         #region Filled
         internal void Filled(NivelClassificacaoModel nivelClassificacao)
         {
-            CodigoFilled(nivelClassificacao.Codigo);
             DescricaoFilled(nivelClassificacao.Descricao);
-            OrganizacaoFilled(nivelClassificacao.GuidOrganizacao);
-        }
-
-        private void CodigoFilled(string codigo)
-        {
-            if (string.IsNullOrWhiteSpace(codigo) || string.IsNullOrWhiteSpace(codigo.Trim()))
-                throw new ScdException("O código não pode ser vazio ou nulo.");
         }
 
         private void DescricaoFilled(string descricao)
@@ -78,28 +66,15 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
 
+        private void OrganizacaoNotNull(OrganizacaoModel organizacao)
+        {
+            if (organizacao == null)
+                throw new ScdException("A organização não pode ser nula.");
+
+            if (organizacao.GuidOrganizacao == null)
+                throw new ScdException("O guid da organização não pode ser nulo.");
+        }
         #endregion
-
-        private void PublicacaoValid(DateTime? publicacao, DateTime? aprovacao, DateTime? inicioVigencia)
-        {
-            if (publicacao.HasValue && !aprovacao.HasValue)
-                throw new ScdException("A data de aprovação não pode ser vazia ou nula quando existe uma data de publicação.");
-
-            if (publicacao.HasValue && !inicioVigencia.HasValue)
-                throw new ScdException("A data de início de vigência não pode ser vazia ou nula quando existe uma data de publicação.");
-
-            if ((publicacao.HasValue && aprovacao.HasValue) && (publicacao.Value < aprovacao.Value))
-                throw new ScdException("A data de publicação deve ser maior ou igual à data de aprovação.");
-        }
-
-        internal void FimVigenciaValid(DateTime? fimVigencia, DateTime? inicioVigencia)
-        {
-            if (fimVigencia.HasValue && !inicioVigencia.HasValue)
-                throw new ScdException("A data de início de vigência não pode ser vazia ou nula quando existe uma data de fim de vigência.");
-
-            if ((fimVigencia.HasValue && inicioVigencia.HasValue) && (fimVigencia.Value < inicioVigencia.Value))
-                throw new ScdException("A data de fim de vigência deve ser maior ou igual à data de início de vigência.");
-        }
         #endregion
 
         internal void Found(NivelClassificacao nivelClassificacao)
@@ -117,18 +92,9 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
-        internal void CanUpdate(NivelClassificacao nivelClassificacao)
-        {
-            if (nivelClassificacao.Publicacao.HasValue)
-                throw new ScdException("O Nivel de Classificação possui data de publicação e não pode ser atualizado.");
-        }
-
         internal void CanDelete(NivelClassificacao nivelClassificacao)
         {
-            if (nivelClassificacao.Publicacao.HasValue)
-                throw new ScdException("O Nivel de Classificação possui data de publicação e não pode ser excluído.");
-
-            if (nivelClassificacao.ItensNivelClassificacao != null && nivelClassificacao.ItensNivelClassificacao.Count > 0)
+            if (nivelClassificacao.ItensPlanoClassificacao != null && nivelClassificacao.ItensPlanoClassificacao.Count > 0)
                 throw new ScdException("O Nivel de Classificação possui itens e não pode ser excluído.");
         }
 

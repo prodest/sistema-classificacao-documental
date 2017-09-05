@@ -21,5 +21,17 @@ namespace Prodest.Scd.Business.Validation.Common
             else if (result.Equals(Guid.Empty))
                 throw new ScdException("Guid da organização inválido.");
         }
+
+        internal void OrganizacaoFilled(Guid guidOrganizacao)
+        {
+            if (guidOrganizacao == null)
+                throw new ScdException("O guid da organização não pode ser nulo.");
+        }
+
+        internal void OrganizacaoValid(Guid guidOrganizacao)
+        {
+            if (guidOrganizacao.Equals(Guid.Empty))
+                throw new ScdException("Guid da organização inválido.");
+        }
     }
 }

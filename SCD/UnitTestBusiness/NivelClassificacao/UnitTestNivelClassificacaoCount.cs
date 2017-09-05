@@ -1,38 +1,28 @@
 using AutoMapper;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
-using Prodest.Scd.Integration.Organograma;
-using Prodest.Scd.Web.Configuration;
 using System;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
+namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
 {
     [TestClass]
-    public class UnitTestPlanoClassificacaoCount
+    public class UnitTestNivelClassificacaoCount
     {
-        private string _guidProdest = Environment.GetEnvironmentVariable("GuidProdest");
-        private PlanoClassificacaoCore _core;
+        private string _guidGees = Environment.GetEnvironmentVariable("guidGEES");
+        private NivelClassificacaoCore _core;
 
         [TestInitialize]
         public async Task Setup()
         {
             ScdRepositories repositories = new ScdRepositories();
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
-
-            IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
-
-            AcessoCidadaoClientAccessToken acessoCidadaoClientAccessToken = new AcessoCidadaoClientAccessToken(autenticacaoIdentityServerConfig);
-
-            OrganogramaService organogramaService = new OrganogramaService(acessoCidadaoClientAccessToken);
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
 
             Mapper.Initialize(cfg =>
             {
@@ -45,16 +35,11 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
 
-            _core = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
+            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
 
-            string codigo = "01";
-            string descricao = "Descrição Teste";
-            bool areaFim = true;
-            string guidOrganizacao = _guidProdest;
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = new Guid(_guidGees) } };
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim, GuidOrganizacao = guidOrganizacao };
-
-            await _core.InsertAsync(planoClassificacaoModel);
+            await _core.InsertAsync(nivelClassificacaoModel);
         }
 
         #region Guid Organização
@@ -165,7 +150,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter contado com o guid da organização sendo um guid vazio.");
+                Assert.Fail("Não deveria ter pesquido com o guid da organização sendo um guid vazio.");
         }
         #endregion
 
@@ -179,7 +164,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         [TestMethod]
         public void TestCountWithGuidOrganizacaoCorrect()
         {
-            int count = _core.Count(_guidProdest);
+            int count = _core.Count(_guidGees);
             Assert.IsTrue(count > 0);
         }
     }
