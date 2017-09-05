@@ -33,7 +33,7 @@ namespace Prodest.Scd.Business
             Guid g = new Guid(guid);
 
             Organizacao organizacao = _organizacoes.Where(o => o.GuidOrganizacao.Equals(g))
-                                                         .SingleOrDefault();
+                                                   .SingleOrDefault();
 
             _validation.Found(organizacao);
 
