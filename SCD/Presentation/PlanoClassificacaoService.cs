@@ -17,6 +17,7 @@ namespace Prodest.Scd.Presentation
         private IPlanoClassificacaoCore _core;
         private IMapper _mapper;
         private IOrganogramaService _organogramaService;
+
         public PlanoClassificacaoService(IPlanoClassificacaoCore core, IMapper mapper, IOrganogramaService organogramaService)
         {
             _core = core;
@@ -124,6 +125,7 @@ namespace Prodest.Scd.Presentation
             }
             return model;
         }
+
         public async Task<PlanoClassificacaoViewModel> Create(PlanoClassificacaoEntidade entidade)
         {
             var model = new PlanoClassificacaoViewModel();
@@ -159,7 +161,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<PlanoClassificacaoViewModel> Search(Filtro filtro)
+        public async Task<PlanoClassificacaoViewModel> Search(FiltroPlanoClassificacao filtro)
         {
             //prodest
             //var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
@@ -175,14 +177,6 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-
-
-
-        public async Task<PlanoClassificacaoViewModel> Insert(PlanoClassificacaoEntidade entidade)
-        {
-            return new PlanoClassificacaoViewModel();
-        }
-
         public async Task<PlanoClassificacaoViewModel> New()
         {
             var model = new PlanoClassificacaoViewModel
@@ -194,6 +188,73 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
+        #region Fim Vigência
+            public async Task<PlanoClassificacaoViewModel> EncerrarVigencia(int id)
+        {
+            var model = new PlanoClassificacaoViewModel();
+            try
+            {
+                model.Action = "UpdateVigencia";
+                model.entidade = _mapper.Map<PlanoClassificacaoEntidade>(_core.Search(id));
+                model.organizacoes = await _organogramaService.SearchAsync();
+                model.Result = new ResultViewModel
+                {
+                    Ok = true
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
+        }
+            public async Task<PlanoClassificacaoViewModel> UpdateVigencia(PlanoClassificacaoEntidade entidade)
+        {
+            var model = new PlanoClassificacaoViewModel();
+            model.entidade = entidade;
+            try
+            {
+                await _core.UpdateFimVigenciaAsync(entidade.Id, entidade.FimVigencia.Value);
+                model.Result = new ResultViewModel
+                {
+                    Ok = true,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = "Data Fim de Vigência informada com sucesso!",
+                            Type = TypeMessageViewModel.Sucess
+                        }
+                    }
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
+        }
+        #endregion
+       
 
     }
 }

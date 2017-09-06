@@ -1,0 +1,52 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.NivelClassificacaoViewModel
+<div class=" mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+    <div class="mdl-card TelaCheia">
+        <button title="Novo" class="mdl-button BotaoGrande mdl-js-button mdl-button--fab mdl-color--blue BotaoFlutuante BotaoAjax" data-url="/NivelClassificacao/New">
+            <i class="material-icons">add</i>
+        </button>
+        <div class="mdl-card__actions ItemCardFormulario">
+            Níveis de Classificação
+        </div>
+        <div class="mdl-card__actions ItemCardFormulario">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                <label class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--icon" for="search">
+                    <i class="material-icons mdl-color-text--grey ">search</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                    <input class="mdl-textfield__input" type="text" id="search">
+                    <label class="mdl-textfield__label" for="search">Digite seu filtro...</label>
+                </div>
+            </div>
+        </div>
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp TelaCheia">
+            <thead>
+                <tr>
+                    <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
+                    <th class="mdl-data-table__cell--non-numeric">Descrição</th>
+                    <th class="mdl-data-table__cell--non-numeric">Ativo</th>
+                    <th class="mdl-data-table__cell--non-numeric">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.entidades)
+                {
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">@item.Descricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">@item.AtivoDescricao</td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <button title="Editar" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--grey BotaoAjax" data-url="/NivelClassificacao/Edit/@item.Id">
+                                <i class="material-icons">edit</i>
+                            </button>
+                            <button title="Excluir" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--red BotaoAjax" data-url="/NivelClassificacao/Delete/@item.Id">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+</script>

@@ -21,12 +21,14 @@ namespace Prodest.Scd.Dependency
             #region Business
             #region Core
             dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
             dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
             #endregion
 
             #region Validation
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
+            dependencies.Add(typeof(NivelClassificacaoValidation), typeof(NivelClassificacaoValidation));
             #endregion
             #endregion
 
@@ -40,6 +42,7 @@ namespace Prodest.Scd.Dependency
 
             #region Presentation
             dependencies.Add(typeof(IPlanoClassificacaoService), typeof(PlanoClassificacaoService));
+            dependencies.Add(typeof(INivelClassificacaoService), typeof(NivelClassificacaoService));
             #endregion
 
             return dependencies;

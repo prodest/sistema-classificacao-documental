@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 namespace Web.Controllers
 {
     [MessageFilterAttribute]
-    public class PlanoClassificacao : BaseController
+    public class NivelClassificacao : BaseController
     {
-        IPlanoClassificacaoService _service;
-        //public MensagemViewModel mensagens { get; set; }
+        INivelClassificacaoService _service;
 
-        public PlanoClassificacao(IPlanoClassificacaoService service)
+        public NivelClassificacao(INivelClassificacaoService service)
         {
             _service = service;
         }
@@ -23,6 +22,7 @@ namespace Web.Controllers
             var model = await _service.Search(null);
             return View(model);
         }
+        
         public async Task<IActionResult> List()
         {
             var model = await _service.Search(null);
@@ -51,8 +51,7 @@ namespace Web.Controllers
             if (model.Result.Ok)
             {
                 return PartialView("_Form", model);
-            }
-            else
+            } else
             {
                 return await List();
             }
@@ -64,7 +63,7 @@ namespace Web.Controllers
             return PartialView("_Form", model);
         }
 
-        public async Task<IActionResult> Create(PlanoClassificacaoViewModel model)
+        public async Task<IActionResult> Create(NivelClassificacaoViewModel model)
         {
             var modelForm = model;
             if (model != null && model.entidade != null)
@@ -79,8 +78,8 @@ namespace Web.Controllers
             //Se de tudo der errado, volta para o formulário
             return PartialView("_Form", modelForm);
         }
-
-        public async Task<IActionResult> Update(PlanoClassificacaoViewModel model)
+        
+        public async Task<IActionResult> Update(NivelClassificacaoViewModel model)
         {
             if (model != null && model.entidade != null)
             {
@@ -93,33 +92,6 @@ namespace Web.Controllers
             }
             return await Edit(model.entidade.Id);
         }
-        #region Fim Vigência
-        public async Task<IActionResult> UpdateVigencia(PlanoClassificacaoViewModel model)
-        {
-            if (model != null && model.entidade != null)
-            {
-                model = await _service.UpdateVigencia(model.entidade);
-                AddHttpContextMessages(model.Result.Messages);
-                if (model.Result.Ok)
-                {
-                    return await List();
-                }
-            }
-            return await Edit(model.entidade.Id);
-        }
-        public async Task<IActionResult> EncerrarVigencia(int id)
-        {
-            var model = await _service.EncerrarVigencia(id);
-            AddHttpContextMessages(model.Result.Messages);
-            if (model.Result.Ok)
-            {
-                return PartialView("_Form", model);
-            }
-            else
-            {
-                return await List();
-            }
-        }
-        #endregion
+
     }
 }

@@ -25,7 +25,6 @@
                     <th class="mdl-data-table__cell--non-numeric">Código</th>
                     <th class="mdl-data-table__cell--non-numeric">Descrição</th>
                     <th class="mdl-data-table__cell--non-numeric">Área</th>
-                    <th class="mdl-data-table__cell--non-numeric">Organização</th>
                     <th class="mdl-data-table__cell--non-numeric">Início Vigência</th>
                     <th class="mdl-data-table__cell--non-numeric">Fim Vigência</th>
                     <th class="mdl-data-table__cell--non-numeric">Data Aprovação</th>
@@ -40,7 +39,6 @@
                         <td class="mdl-data-table__cell--non-numeric">@item.Codigo</td>
                         <td class="mdl-data-table__cell--non-numeric">@item.Descricao</td>
                         <td class="mdl-data-table__cell--non-numeric">@item.AreaFimDescricao</td>
-                        <td class="mdl-data-table__cell--non-numeric">@item.OrganizacaoDescricao</td>
                         <td class="mdl-data-table__cell--non-numeric">@item.InicioVigenciaDescricao </td>
                         <td class="mdl-data-table__cell--non-numeric">@item.FimVigenciaDescricao</td>
                         <td class="mdl-data-table__cell--non-numeric">@item.AprovacaoDescricao</td>
@@ -52,9 +50,12 @@
                             <button title="Excluir" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--red BotaoAjax" data-url="/PlanoClassificacao/Delete/@item.Id">
                                 <i class="material-icons">delete</i>
                             </button>
-                            <button title="Informar Data Fim Vigência" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--black BotaoAjax" data-url="/PlanoClassificacao/Encerrar/@item.Id">
-                                <i class="material-icons">flag</i>
-                            </button>
+                            @if (item.Publicacao.HasValue)
+                            {
+                                <button title="Informar Data Fim Vigência" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--black BotaoAjax" data-url="/PlanoClassificacao/EncerrarVigencia/@item.Id">
+                                    <i class="material-icons">flag</i>
+                                </button>
+                            }
                         </td>
                     </tr>
                 }

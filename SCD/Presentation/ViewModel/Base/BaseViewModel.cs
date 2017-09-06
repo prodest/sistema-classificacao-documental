@@ -8,6 +8,7 @@ namespace Prodest.Scd.Presentation.ViewModel.Base
     {
         public ResultViewModel Result { get; set; }
         public string Action { get; set; }
+        
     }
     public class ResultViewModel
     {
