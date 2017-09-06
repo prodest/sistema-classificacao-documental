@@ -28,14 +28,11 @@ namespace Prodest.Scd.Business
             _organizacaoCore = organizacaoCore;
         }
 
-        public int Count(string guidOrganizacao)
+        public int Count(Guid guidOrganizacao)
         {
-            _validation.OrganizacaoFilled(guidOrganizacao);
             _validation.OrganizacaoValid(guidOrganizacao);
 
-            Guid guid = new Guid(guidOrganizacao);
-
-            var count = _niveisClassificacao.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guid))
+            var count = _niveisClassificacao.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
                                             .Count();
 
             return count;
@@ -58,7 +55,7 @@ namespace Prodest.Scd.Business
 
             _validation.IdInsertValid(nivelClassificacaoModel.Id);
 
-            OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(nivelClassificacaoModel.Organizacao.GuidOrganizacao.ToString());
+            OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(nivelClassificacaoModel.Organizacao.GuidOrganizacao);
 
             nivelClassificacaoModel.Organizacao = organizacao;
 
@@ -83,17 +80,15 @@ namespace Prodest.Scd.Business
             return nivelClassificacaoModel;
         }
 
-        public List<NivelClassificacaoModel> Search(string guidOrganizacao, int page, int count)
+        public List<NivelClassificacaoModel> Search(Guid guidOrganizacao, int page, int count)
         {
-            _validation.OrganizacaoFilled(guidOrganizacao);
             _validation.OrganizacaoValid(guidOrganizacao);
 
             _validation.PaginationSearch(page, count);
 
-            Guid guid = new Guid(guidOrganizacao);
             int skip = (page - 1) * count;
 
-            List<NivelClassificacao> nivelsClassificacao = _niveisClassificacao.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guid))
+            List<NivelClassificacao> nivelsClassificacao = _niveisClassificacao.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
                                                                                .OrderBy(pc => pc.Ativo)
                                                                                .ThenBy(pc => pc.Descricao)
                                                                                .Skip(skip)
@@ -111,6 +106,12 @@ namespace Prodest.Scd.Business
 
             NivelClassificacao nivelClassificacao = SearchPersistence(nivelClassificacaoModel.Id);
 
+            if (nivelClassificacao.Organizacao.Id != nivelClassificacaoModel.Organizacao.Id || !nivelClassificacao.Organizacao.GuidOrganizacao.Equals(nivelClassificacaoModel.Organizacao.GuidOrganizacao))
+            {
+                OrganizacaoModel organizacaoModel = _organizacaoCore.SearchAsync(nivelClassificacao.Id, nivelClassificacaoModel.Organizacao.GuidOrganizacao);
+                nivelClassificacaoModel.Organizacao = organizacaoModel;
+            }
+
             _mapper.Map(nivelClassificacaoModel, nivelClassificacao);
 
             await _unitOfWork.SaveAsync();
@@ -121,7 +122,7 @@ namespace Prodest.Scd.Business
             _validation.IdValid(id);
 
             NivelClassificacao nivelClassificacao = _niveisClassificacao.Where(pc => pc.Id == id)
-                                                                              .SingleOrDefault();
+                                                                        .SingleOrDefault();
 
             _validation.Found(nivelClassificacao);
 

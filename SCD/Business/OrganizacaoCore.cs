@@ -6,7 +6,6 @@ using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
 {
@@ -25,14 +24,27 @@ namespace Prodest.Scd.Business
             _mapper = mapper;
         }
 
-        public OrganizacaoModel SearchAsync(string guid)
+        public OrganizacaoModel SearchAsync(Guid guidOrganizacao)
         {
-            _validation.OrganizacaoFilled(guid);
-            _validation.OrganizacaoValid(guid);
+            _validation.OrganizacaoValid(guidOrganizacao);
 
-            Guid g = new Guid(guid);
+            Organizacao organizacao = _organizacoes.Where(o => o.GuidOrganizacao.Equals(guidOrganizacao))
+                                                   .SingleOrDefault();
 
-            Organizacao organizacao = _organizacoes.Where(o => o.GuidOrganizacao.Equals(g))
+            _validation.Found(organizacao);
+
+            OrganizacaoModel organizacaoModel = _mapper.Map<OrganizacaoModel>(organizacao);
+
+            return organizacaoModel;
+        }
+
+        public OrganizacaoModel SearchAsync(int id, Guid guidOrganizacao)
+        {
+            _validation.IdValid(id);
+            _validation.OrganizacaoValid(guidOrganizacao);
+
+            Organizacao organizacao = _organizacoes.Where(o => o.Id == id
+                                                            && o.GuidOrganizacao.Equals(guidOrganizacao))
                                                    .SingleOrDefault();
 
             _validation.Found(organizacao);

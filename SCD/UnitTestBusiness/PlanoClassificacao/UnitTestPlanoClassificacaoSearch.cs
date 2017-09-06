@@ -14,12 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
+namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 {
     [TestClass]
     public class UnitTestPlanoClassificacaoSearch
     {
-        private string _guidProdest = Environment.GetEnvironmentVariable("GuidProdest");
+        private Guid _guidProdest = new Guid(Environment.GetEnvironmentVariable("GuidProdest"));
         private PlanoClassificacaoCore _core;
 
         [TestInitialize]
@@ -51,7 +51,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidProdest;
+            Guid guidOrganizacao = _guidProdest;
 
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim, GuidOrganizacao = guidOrganizacao };
 
@@ -135,101 +135,13 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #region Pagination Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public void TestPaginationSearchWithGuidOrganizacaoNull()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Search(null, default(int), default(int));
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter pesquisado com guid da organização nulo.");
-        }
-
-        [TestMethod]
-        public void TestPaginationSearchWithGuidOrganizacaoEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Search("", default(int), default(int));
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter pesquisado com guid da organização vazio.");
-        }
-
-        [TestMethod]
-        public void TestPaginationSearchWithGuidOrganizacaoTrimEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Search(" ", default(int), default(int));
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter pesquisado com o guid da organização sendo um guid vazio.");
-        }
-
-        [TestMethod]
-        public void TestPaginationSearchWithGuidOrganizacaoNotGuid()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Search("ABC", default(int), default(int));
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "Guid da organização inválido.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter pesquisado com o guid da organização não válido.");
-        }
-
-        [TestMethod]
         public void TestPaginationSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(new Guid().ToString(), default(int), default(int));
+                _core.Search(Guid.Empty, default(int), default(int));
 
                 ok = true;
             }
@@ -296,7 +208,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         [TestMethod]
         public void TestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(Guid.NewGuid().ToString(), 1, 1);
+            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(Guid.NewGuid(), 1, 1);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == 0);
         }
@@ -317,7 +229,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             {
                 Assert.IsFalse(string.IsNullOrWhiteSpace(pcm.Codigo));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(pcm.Descricao));
-                Assert.IsFalse(string.IsNullOrWhiteSpace(pcm.GuidOrganizacao));
+                Assert.IsFalse(Guid.Empty.Equals(pcm.GuidOrganizacao));
             }
         }
         #endregion
@@ -329,7 +241,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
                 string codigo = "01";
                 string descricao = "Descrição Teste";
                 bool areaFim = true;
-                string guidOrganizacao = _guidProdest;
+                Guid guidOrganizacao = _guidProdest;
 
                 PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
                 {

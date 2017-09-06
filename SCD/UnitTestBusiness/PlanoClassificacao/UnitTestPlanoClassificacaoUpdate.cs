@@ -13,13 +13,13 @@ using Prodest.Scd.Web.Configuration;
 using System;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
+namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 {
     [TestClass]
     public class UnitTestPlanoClassificacaoUpdate
     {
-        private string _guidProdest = Environment.GetEnvironmentVariable("GuidProdest");
-        private string _guidSeger = Environment.GetEnvironmentVariable("GuidSeger");
+        private Guid _guidProdest = new Guid(Environment.GetEnvironmentVariable("GuidProdest"));
+        private Guid _guidSeger = new Guid(Environment.GetEnvironmentVariable("GuidSeger"));
         private PlanoClassificacaoCore _core;
         private PlanoClassificacaoModel _planoClassificacaoModel;
         private PlanoClassificacaoModel _planoClassificacaoPublicadoModel;
@@ -53,7 +53,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidProdest;
+            Guid guidOrganizacao = _guidProdest;
 
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim, GuidOrganizacao = guidOrganizacao };
 
@@ -235,108 +235,13 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
         #region Guid Organização
         [TestMethod]
-        public async Task TestUpdateWithGuidOrganizacaoNull()
-        {
-            bool ok = false;
-            try
-            {
-                _planoClassificacaoModel.GuidOrganizacao = null;
-
-                await _core.UpdateAsync(_planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter atualizado com guid da organização nulo.");
-        }
-
-        [TestMethod]
-        public async Task TestUpdateWithGuidOrganizacaoEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _planoClassificacaoModel.GuidOrganizacao = "";
-
-                await _core.UpdateAsync(_planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter atualizado com guid da organização vazio.");
-        }
-
-        [TestMethod]
-        public async Task TestUpdateWithGuidOrganizacaoTrimEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _planoClassificacaoModel.GuidOrganizacao = " ";
-
-                await _core.UpdateAsync(_planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter atualizado com guid da organização somente com espaço.");
-        }
-
-        [TestMethod]
-        public async Task TestUpdateWithGuidOrganizacaoNotGuid()
-        {
-            bool ok = false;
-
-            try
-            {
-                _planoClassificacaoModel.GuidOrganizacao = "ABC";
-
-                await _core.UpdateAsync(_planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "Guid da organização inválido.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter atualizado com guid da organização inválido.");
-        }
-
-        [TestMethod]
         public async Task TestUpdateWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _planoClassificacaoModel.GuidOrganizacao = new Guid().ToString();
+                _planoClassificacaoModel.GuidOrganizacao = Guid.Empty;
 
                 await _core.UpdateAsync(_planoClassificacaoModel);
 
@@ -360,7 +265,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
             try
             {
-                _planoClassificacaoModel.GuidOrganizacao = Guid.NewGuid().ToString();
+                _planoClassificacaoModel.GuidOrganizacao = Guid.NewGuid();
 
                 await _core.UpdateAsync(_planoClassificacaoModel);
 
@@ -523,7 +428,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "TestUpdateWithPublicacao" + "01";
             string descricao = "TestUpdateWithPublicacao" + "Descrição Teste";
             bool areaFim = false;
-            string guidOrganizacao = null;
+            Guid guidOrganizacao;
             if (_planoClassificacaoModel.GuidOrganizacao.Equals(_guidProdest))
                 guidOrganizacao = _guidSeger;
             else
@@ -570,7 +475,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "TestUpdateWithBasicsFields01";
             string descricao = "TestUpdateWithBasicsFieldsDescrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidSeger;
+            Guid guidOrganizacao = _guidSeger;
 
             planoClassificacaoModel.Codigo = codigo;
             planoClassificacaoModel.Descricao = descricao;
@@ -611,7 +516,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "TestUpdateWithBasicsFields01";
             string descricao = "TestUpdateWithBasicsFieldsDescrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidSeger;
+            Guid guidOrganizacao = _guidSeger;
             DateTime aprovacao = now;
 
             planoClassificacaoModel.Codigo = codigo;
@@ -654,7 +559,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "TestUpdateWithoutFimVigencia01";
             string descricao = "TestUpdateWithoutFimVigenciaDescrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidSeger;
+            Guid guidOrganizacao = _guidSeger;
             DateTime aprovacao = now;
             DateTime publicacao = now.AddDays(1);
             DateTime inicioVigencia = now.AddDays(2);
@@ -701,7 +606,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "TestUpdateWithCompleteFields01";
             string descricao = "TestUpdateWithCompleteFieldsDescrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidSeger;
+            Guid guidOrganizacao = _guidSeger;
             DateTime aprovacao = now;
             DateTime publicacao = now.AddDays(1);
             DateTime inicioVigencia = now.AddDays(2);
@@ -817,7 +722,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            string guidOrganizacao = _guidProdest;
+            Guid guidOrganizacao = _guidProdest;
             DateTime aprovacao = now;
             DateTime publicacao = now.AddDays(1);
             DateTime inicioVigencia = now.AddDays(2);

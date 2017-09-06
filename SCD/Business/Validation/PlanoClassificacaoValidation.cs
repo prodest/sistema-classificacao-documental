@@ -24,12 +24,6 @@ namespace Prodest.Scd.Business.Validation
             IdValid(planoClassificacao.Id);
         }
 
-        internal void IdValid(int id)
-        {
-            if (id == default(int))
-                throw new ScdException("O id não pode ser nulo ou vazio.");
-        }
-
         internal void IdInsertValid(int id)
         {
             if (id != default(int))
@@ -63,7 +57,6 @@ namespace Prodest.Scd.Business.Validation
         {
             CodigoFilled(planoClassificacao.Codigo);
             DescricaoFilled(planoClassificacao.Descricao);
-            OrganizacaoFilled(planoClassificacao.GuidOrganizacao);
         }
 
         private void CodigoFilled(string codigo)
@@ -77,7 +70,6 @@ namespace Prodest.Scd.Business.Validation
             if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
-
         #endregion
 
         private void PublicacaoValid(DateTime? publicacao, DateTime? aprovacao, DateTime? inicioVigencia)

@@ -9,7 +9,7 @@ using Prodest.Scd.Infrastructure.Repository;
 using System;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
+namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 {
     [TestClass]
     public class UnitTestNivelClassificacaoInsert
@@ -39,7 +39,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestInsertNull()
+        public async Task NivelClassificacaoTestInsertNull()
         {
             bool ok = false;
 
@@ -62,7 +62,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
 
         #region Descrição
         [TestMethod]
-        public async Task TestInsertWithDescricaoNull()
+        public async Task NivelClassificacaoTestInsertWithDescricaoNull()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel();
 
@@ -86,7 +86,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestInsertWithDescricaoEmpty()
+        public async Task NivelClassificacaoTestInsertWithDescricaoEmpty()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "" };
 
@@ -110,7 +110,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestInsertWithDescricaoTrimEmpty()
+        public async Task NivelClassificacaoTestInsertWithDescricaoTrimEmpty()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = " " };
 
@@ -134,34 +134,9 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
         #endregion
 
-        #region Id
-        public async Task TestInsertWithInvalidInsertId()
-        {
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Id = 1, Descricao = "Teste"};
-
-            bool ok = false;
-
-            try
-            {
-                await _core.InsertAsync(nivelClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "O id não deve ser preenchido.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter inserido com o id inválido para inserção.");
-        }
-        #endregion
-
         #region Organização
         [TestMethod]
-        public async Task TestInsertWithOrganizacaoNull()
+        public async Task NivelClassificacaoTestInsertWithOrganizacaoNull()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste" };
 
@@ -185,7 +160,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestInsertWithGuidOrganizacaoNull()
+        public async Task NivelClassificacaoTestInsertWithGuidOrganizacaoNull()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel() };
 
@@ -209,7 +184,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestInsertWithGuidOrganizacaoGuidEmpty()
+        public async Task NivelClassificacaoTestInsertWithGuidOrganizacaoGuidEmpty()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = Guid.Empty } };
 
@@ -233,7 +208,7 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
 
         [TestMethod]
-        public async Task TestInsertWithGuidOrganizacaoNonexistent()
+        public async Task NivelClassificacaoTestInsertWithGuidOrganizacaoNonexistent()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = Guid.NewGuid() } };
 
@@ -257,8 +232,34 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         }
         #endregion
 
+        #region Id
         [TestMethod]
-        public async Task TestInsert()
+        public async Task NivelClassificacaoTestInsertWithInvalidInsertId()
+        {
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Id = 1, Descricao = "Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = new Guid(_guidGees) } };
+
+            bool ok = false;
+
+            try
+            {
+                await _core.InsertAsync(nivelClassificacaoModel);
+
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
+
+                Assert.AreEqual(ex.Message, "O id não deve ser preenchido.");
+            }
+
+            if (ok)
+                Assert.Fail("Não deveria ter inserido com o id inválido para inserção.");
+        }
+        #endregion
+
+        [TestMethod]
+        public async Task NivelClassificacaoTestInsert()
         {
             string descricao = "Descrição Teste";
             Guid guidOrganizacao = new Guid(_guidGees);
