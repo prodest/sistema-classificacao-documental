@@ -48,7 +48,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertNull()
+        public async Task PlanoClassificacaoTestInsertNull()
         {
             bool ok = false;
 
@@ -71,7 +71,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Código
         [TestMethod]
-        public async Task TestInsertWithCodigoNull()
+        public async Task PlanoClassificacaoTestInsertWithCodigoNull()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel();
 
@@ -95,7 +95,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithCodigoEmpty()
+        public async Task PlanoClassificacaoTestInsertWithCodigoEmpty()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "" };
 
@@ -119,7 +119,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithCodigoTrimEmpty()
+        public async Task PlanoClassificacaoTestInsertWithCodigoTrimEmpty()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = " " };
 
@@ -145,7 +145,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Descrição
         [TestMethod]
-        public async Task TestInsertWithDescricaoNull()
+        public async Task PlanoClassificacaoTestInsertWithDescricaoNull()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01" };
 
@@ -169,7 +169,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithDescricaoEmpty()
+        public async Task PlanoClassificacaoTestInsertWithDescricaoEmpty()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "" };
 
@@ -193,7 +193,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithDescricaoTrimEmpty()
+        public async Task PlanoClassificacaoTestInsertWithDescricaoTrimEmpty()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = " " };
 
@@ -217,87 +217,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
         #endregion
 
-        #region Guid Organização
-        [TestMethod]
-        public async Task TestInsertWithGuidOrganizacaoNull()
-        {
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste" };
-
-            bool ok = false;
-
-            try
-            {
-                await _core.InsertAsync(planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter inserido com guid da organização nulo.");
-        }
-
-        [TestMethod]
-        public async Task TestInsertWithGuidOrganizacaoGuidEmpty()
-        {
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.Empty };
-
-            bool ok = false;
-
-            try
-            {
-                await _core.InsertAsync(planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "Guid da organização inválido.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter inserido com o guid da organização sendo um guid vazio.");
-        }
-
-        [TestMethod]
-        public async Task TestInsertWithGuidOrganizacaoNonexistentOnOrganograma()
-        {
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.NewGuid() };
-
-            bool ok = false;
-
-            try
-            {
-                await _core.InsertAsync(planoClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(Exception));
-
-                Assert.IsTrue(ex.Message.Contains("Não foi possível obter os dados do serviço."));
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter inserido com o guid da organização não existindo no sistema de organograma.");
-        }
-        #endregion
-
         #region Publicação
         [TestMethod]
-        public async Task TestInsertWithPublicacaoWithoutAprovacao()
+        public async Task PlanoClassificacaoTestInsertWithPublicacaoWithoutAprovacao()
         {
             DateTime now = DateTime.Now;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.NewGuid(), Publicacao = now };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", Publicacao = now };
 
             bool ok = false;
 
@@ -319,11 +245,11 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithPublicacaoWithoutInicioVigencia()
+        public async Task PlanoClassificacaoTestInsertWithPublicacaoWithoutInicioVigencia()
         {
             DateTime now = DateTime.Now;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.NewGuid(), Aprovacao = now, Publicacao = now };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", Aprovacao = now, Publicacao = now };
 
             bool ok = false;
 
@@ -345,11 +271,11 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithPublicacaoBeforeAprovacao()
+        public async Task PlanoClassificacaoTestInsertWithPublicacaoBeforeAprovacao()
         {
             DateTime now = DateTime.Now;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.NewGuid(), Aprovacao = now, Publicacao = now.AddDays(-1), InicioVigencia = now };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", Aprovacao = now, Publicacao = now.AddDays(-1), InicioVigencia = now };
 
             bool ok = false;
 
@@ -373,11 +299,11 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Fim de Vigência
         [TestMethod]
-        public async Task TestInsertWithFimVigenciaWithoutInicioVigencia()
+        public async Task PlanoClassificacaoTestInsertWithFimVigenciaWithoutInicioVigencia()
         {
             DateTime now = DateTime.Now;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.NewGuid(), FimVigencia = now };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", FimVigencia = now };
 
             bool ok = false;
 
@@ -399,11 +325,11 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task TestInsertWithFimVigenciaBeforeInicioVigencia()
+        public async Task PlanoClassificacaoTestInsertWithFimVigenciaBeforeInicioVigencia()
         {
             DateTime now = DateTime.Now;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", GuidOrganizacao = Guid.NewGuid(), InicioVigencia = now, FimVigencia = now.AddDays(-1) };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Descrição Teste", InicioVigencia = now, FimVigencia = now.AddDays(-1) };
 
             bool ok = false;
 
@@ -426,7 +352,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #endregion
 
         #region Id
-        public async Task TestInsertWithInvalidInsertId()
+        public async Task PlanoClassificacaoTestInsertWithInvalidInsertId()
         {
             string codigo = "01";
             string descricao = "Descrição Teste";
@@ -456,32 +382,31 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #endregion
 
         [TestMethod]
-        public async Task TestInsertWithBasicsFields()
+        public async Task PlanoClassificacaoTestInsertWithBasicsFields()
         {
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
             Guid guidOrganizacao = _guidProdest;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim, GuidOrganizacao = guidOrganizacao };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim };
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
 
             Assert.IsTrue(planoClassificacaoModel.Id > 0);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
             Assert.AreEqual(planoClassificacaoModel.Descricao, descricao);
-            Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
+            //Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
         }
 
         [TestMethod]
-        public async Task TestInsertWithAprovacao()
+        public async Task PlanoClassificacaoTestInsertWithAprovacao()
         {
             DateTime now = DateTime.Now;
 
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            Guid guidOrganizacao = _guidProdest;
             DateTime aprovacao = now;
 
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
@@ -489,7 +414,6 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
                 Codigo = codigo,
                 Descricao = descricao,
                 AreaFim = areaFim,
-                GuidOrganizacao = guidOrganizacao,
                 Aprovacao = aprovacao
             };
 
@@ -498,19 +422,18 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             Assert.IsTrue(planoClassificacaoModel.Id > 0);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
             Assert.AreEqual(planoClassificacaoModel.Descricao, descricao);
-            Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
+            //Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
             Assert.AreEqual(planoClassificacaoModel.Aprovacao, aprovacao);
         }
 
         [TestMethod]
-        public async Task TestInsertWithoutFimVigencia()
+        public async Task PlanoClassificacaoTestInsertWithoutFimVigencia()
         {
             DateTime now = DateTime.Now;
 
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            Guid guidOrganizacao = _guidProdest;
             DateTime aprovacao = now;
             DateTime publicacao = now;
             DateTime inicioVigecia = now;
@@ -521,7 +444,6 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
                 Codigo = codigo,
                 Descricao = descricao,
                 AreaFim = areaFim,
-                GuidOrganizacao = guidOrganizacao,
                 Aprovacao = aprovacao,
                 Publicacao = publicacao,
                 InicioVigencia = inicioVigecia
@@ -532,21 +454,20 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             Assert.IsTrue(planoClassificacaoModel.Id > 0);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
             Assert.AreEqual(planoClassificacaoModel.Descricao, descricao);
-            Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
+            //Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
             Assert.AreEqual(planoClassificacaoModel.Aprovacao, aprovacao);
             Assert.AreEqual(planoClassificacaoModel.Publicacao, publicacao);
             Assert.AreEqual(planoClassificacaoModel.InicioVigencia, inicioVigecia);
         }
 
         [TestMethod]
-        public async Task TestInsertWithCompleteFields()
+        public async Task PlanoClassificacaoTestInsertWithCompleteFields()
         {
             DateTime now = DateTime.Now;
 
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            Guid guidOrganizacao = _guidProdest;
             DateTime aprovacao = now;
             DateTime publicacao = now;
             DateTime inicioVigecia = now;
@@ -558,7 +479,6 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
                 Codigo = codigo,
                 Descricao = descricao,
                 AreaFim = areaFim,
-                GuidOrganizacao = guidOrganizacao,
                 Aprovacao = aprovacao,
                 Publicacao = publicacao,
                 InicioVigencia = inicioVigecia,
@@ -570,7 +490,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             Assert.IsTrue(planoClassificacaoModel.Id > 0);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
             Assert.AreEqual(planoClassificacaoModel.Descricao, descricao);
-            Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
+            //Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, guidOrganizacao);
             Assert.AreEqual(planoClassificacaoModel.Aprovacao, aprovacao);
             Assert.AreEqual(planoClassificacaoModel.Publicacao, publicacao);
             Assert.AreEqual(planoClassificacaoModel.InicioVigencia, inicioVigecia);

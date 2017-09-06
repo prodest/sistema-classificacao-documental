@@ -103,7 +103,6 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
                 Codigo = "01",
                 Descricao = "Descrição Teste",
                 AreaFim = true,
-                GuidOrganizacao = _guidProdest,
                 Aprovacao = now,
                 Publicacao = now,
                 InicioVigencia = now
@@ -139,8 +138,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             {
                 Codigo = "01",
                 Descricao = "Descrição Teste",
-                AreaFim = true,
-                GuidOrganizacao = _guidProdest
+                AreaFim = true
             };
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);

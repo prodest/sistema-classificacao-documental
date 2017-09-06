@@ -49,9 +49,8 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             string codigo = "01";
             string descricao = "Descrição Teste";
             bool areaFim = true;
-            Guid guidOrganizacao = _guidProdest;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim, GuidOrganizacao = guidOrganizacao };
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim };
 
             await _core.InsertAsync(planoClassificacaoModel);
         }

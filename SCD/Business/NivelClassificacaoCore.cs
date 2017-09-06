@@ -106,11 +106,7 @@ namespace Prodest.Scd.Business
 
             NivelClassificacao nivelClassificacao = SearchPersistence(nivelClassificacaoModel.Id);
 
-            if (nivelClassificacao.Organizacao.Id != nivelClassificacaoModel.Organizacao.Id || !nivelClassificacao.Organizacao.GuidOrganizacao.Equals(nivelClassificacaoModel.Organizacao.GuidOrganizacao))
-            {
-                OrganizacaoModel organizacaoModel = _organizacaoCore.SearchAsync(nivelClassificacao.Id, nivelClassificacaoModel.Organizacao.GuidOrganizacao);
-                nivelClassificacaoModel.Organizacao = organizacaoModel;
-            }
+            _validation.CanUpdate(nivelClassificacaoModel, nivelClassificacao);
 
             _mapper.Map(nivelClassificacaoModel, nivelClassificacao);
 

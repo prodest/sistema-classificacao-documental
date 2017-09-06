@@ -39,7 +39,7 @@ namespace Prodest.Scd.Business.Validation
 
             Filled(planoClassificacao);
 
-            OrganizacaoValid(planoClassificacao.GuidOrganizacao);
+            OrganizacaoNull(planoClassificacao);
 
             PublicacaoValid(planoClassificacao.Publicacao, planoClassificacao.Aprovacao, planoClassificacao.InicioVigencia);
 
@@ -70,6 +70,15 @@ namespace Prodest.Scd.Business.Validation
             if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
+
+        private void OrganizacaoNull(PlanoClassificacaoModel planoClassificacao)
+        {
+            if (!planoClassificacao.GuidOrganizacao.Equals(Guid.Empty))
+                throw new ScdException("Não é possível editar a Organização do Plano de Classificação.");
+            if (planoClassificacao.Organizacao != null)
+                throw new ScdException("Não é possível editar a Organização do Plano de Classificação.");
+        }
+
         #endregion
 
         private void PublicacaoValid(DateTime? publicacao, DateTime? aprovacao, DateTime? inicioVigencia)
@@ -109,19 +118,21 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
-        internal void CanUpdate(PlanoClassificacao planoClassificacao)
+        internal void CanUpdate(PlanoClassificacaoModel newPlanoClassificacaoModel, PlanoClassificacao oldPlanoClassificacao)
         {
-            if (planoClassificacao.Publicacao.HasValue)
+            if (oldPlanoClassificacao.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
+
+            if (newPlanoClassificacaoModel.Organizacao != null)
+            {
+                throw new ScdException("Não é possível atualizar a Organização do Plano de Classificação.");
+            }
         }
 
         internal void CanDelete(PlanoClassificacao planoClassificacao)
         {
             if (planoClassificacao.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser excluído.");
-
-            if (planoClassificacao.ItensPlanoClassificacao != null && planoClassificacao.ItensPlanoClassificacao.Count > 0)
-                throw new ScdException("O Plano de Classificação possui itens e não pode ser excluído.");
         }
 
     }

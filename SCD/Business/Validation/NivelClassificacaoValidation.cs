@@ -89,5 +89,12 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O Nivel de Classificação possui itens e não pode ser excluído.");
         }
 
+        internal void CanUpdate(NivelClassificacaoModel newNivelClassificacaoModel, NivelClassificacao oldNivelClassificacao)
+        {
+            if (oldNivelClassificacao.Organizacao.Id != newNivelClassificacaoModel.Organizacao.Id || !oldNivelClassificacao.Organizacao.GuidOrganizacao.Equals(newNivelClassificacaoModel.Organizacao.GuidOrganizacao))
+            {
+                throw new ScdException("Não é possível atualizar a Organização do Nível de Classificação.");
+            }
+        }
     }
 }

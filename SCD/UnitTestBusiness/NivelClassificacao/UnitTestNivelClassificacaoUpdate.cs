@@ -14,7 +14,7 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
     [TestClass]
     public class UnitTestNivelClassificacaoUpdate
     {
-        private string _guidGees = Environment.GetEnvironmentVariable("GuidGEES");
+        private Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
         private NivelClassificacaoCore _core;
         private NivelClassificacaoModel _nivelClassificacaoModel;
 
@@ -38,7 +38,7 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
             _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
 
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = new Guid(_guidGees) } };
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees } };
 
             _nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
         }
@@ -161,13 +161,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         }
 
         [TestMethod]
-        public async Task NivelClassificacaoTestUpdateWithGuidOrganizacaoGuidEmpty()
+        public async Task NivelClassificacaoTestUpdateGuidOrganizacao()
         {
             bool ok = false;
 
             try
             {
-                _nivelClassificacaoModel.Organizacao.GuidOrganizacao = Guid.Empty;
+                _nivelClassificacaoModel.Organizacao.GuidOrganizacao = Guid.NewGuid();
 
                 await _core.UpdateAsync(_nivelClassificacaoModel);
 
@@ -175,126 +175,42 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
+                Assert.IsInstanceOfType(ex, typeof(Exception));
 
-                Assert.AreEqual(ex.Message, "Guid da organização inválido.");
+                Assert.AreEqual(ex.Message, "Não é possível atualizar a Organização do Nível de Classificação.");
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter atualizado com guid da organização sendo um guid vazio.");
+                Assert.Fail("Não deveria ter atualizado com o guid da organização não existindo no sistema.");
         }
-
-        //[TestMethod]
-        //public async Task TestUpdateWithGuidOrganizacaoNonexistentOnOrganograma()
-        //{
-        //    bool ok = false;
-
-        //    try
-        //    {
-        //        _nivelClassificacaoModel.GuidOrganizacao = Guid.NewGuid().ToString();
-
-        //        await _core.UpdateAsync(_nivelClassificacaoModel);
-
-        //        ok = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOfType(ex, typeof(Exception));
-
-        //        Assert.IsTrue(ex.Message.Contains("Não foi possível obter os dados do serviço."));
-        //    }
-
-        //    if (ok)
-        //        Assert.Fail("Não deveria ter atualizado com o guid da organização não existindo no sistema de organograma.");
-        //}
         #endregion
 
-        //[TestMethod]
-        //public async Task TestUpdateWithBasicsFields()
-        //{
-        //    NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
-        //    {
-        //        Codigo = "01",
-        //        Descricao = "Descrição Teste",
-        //        AreaFim = false,
-        //        GuidOrganizacao = _guidGees
-        //    };
+        [TestMethod]
+        public async Task NivelClassificacaoTestUpdate()
+        {
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
+            {
+                Descricao = "Descrição Teste",
+                Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees }
+            };
 
-        //    nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
+            nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
 
-        //    int id = nivelClassificacaoModel.Id;
-        //    string codigo = "TestUpdateWithBasicsFields01";
-        //    string descricao = "TestUpdateWithBasicsFieldsDescrição Teste";
-        //    bool areaFim = true;
-        //    string guidOrganizacao = _guidSeger;
+            int id = nivelClassificacaoModel.Id;
+            string descricao = "TestUpdateWithBasicsFieldsDescrição Teste";
+            bool ativo = false;
 
-        //    nivelClassificacaoModel.Codigo = codigo;
-        //    nivelClassificacaoModel.Descricao = descricao;
-        //    nivelClassificacaoModel.AreaFim = areaFim;
-        //    nivelClassificacaoModel.GuidOrganizacao = guidOrganizacao;
+            nivelClassificacaoModel.Descricao = descricao;
+            nivelClassificacaoModel.Ativo = ativo;
 
-        //    await _core.UpdateAsync(nivelClassificacaoModel);
+            await _core.UpdateAsync(nivelClassificacaoModel);
 
-        //    nivelClassificacaoModel = _core.Search(nivelClassificacaoModel.Id);
+            nivelClassificacaoModel = _core.Search(nivelClassificacaoModel.Id);
 
-        //    Assert.IsTrue(nivelClassificacaoModel.Id == id);
-        //    Assert.AreEqual(nivelClassificacaoModel.Codigo, codigo);
-        //    Assert.AreEqual(nivelClassificacaoModel.Descricao, descricao);
-        //    Assert.AreEqual(nivelClassificacaoModel.AreaFim, areaFim);
-        //    Assert.AreEqual(nivelClassificacaoModel.GuidOrganizacao, guidOrganizacao);
-        //    Assert.IsFalse(nivelClassificacaoModel.Aprovacao.HasValue);
-        //    Assert.IsFalse(nivelClassificacaoModel.Publicacao.HasValue);
-        //    Assert.IsFalse(nivelClassificacaoModel.InicioVigencia.HasValue);
-        //    Assert.IsFalse(nivelClassificacaoModel.FimVigencia.HasValue);
-        //}
-
-        //[TestMethod]
-        //public async Task TestUpdateWithCompleteFields()
-        //{
-        //    NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
-        //    {
-        //        Codigo = "01",
-        //        Descricao = "Descrição Teste",
-        //        AreaFim = false,
-        //        GuidOrganizacao = _guidGees
-        //    };
-
-        //    nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
-
-        //    DateTime now = DateTime.Now;
-
-        //    int id = nivelClassificacaoModel.Id;
-        //    string codigo = "TestUpdateWithCompleteFields01";
-        //    string descricao = "TestUpdateWithCompleteFieldsDescrição Teste";
-        //    bool areaFim = true;
-        //    string guidOrganizacao = _guidSeger;
-        //    DateTime aprovacao = now;
-        //    DateTime publicacao = now.AddDays(1);
-        //    DateTime inicioVigencia = now.AddDays(2);
-        //    DateTime fimVigencia = now.AddDays(3);
-
-        //    nivelClassificacaoModel.Codigo = codigo;
-        //    nivelClassificacaoModel.Descricao = descricao;
-        //    nivelClassificacaoModel.AreaFim = areaFim;
-        //    nivelClassificacaoModel.GuidOrganizacao = guidOrganizacao;
-        //    nivelClassificacaoModel.Aprovacao = aprovacao;
-        //    nivelClassificacaoModel.Publicacao = publicacao;
-        //    nivelClassificacaoModel.InicioVigencia = inicioVigencia;
-        //    nivelClassificacaoModel.FimVigencia = fimVigencia;
-
-        //    await _core.UpdateAsync(nivelClassificacaoModel);
-
-        //    nivelClassificacaoModel = _core.Search(nivelClassificacaoModel.Id);
-
-        //    Assert.IsTrue(nivelClassificacaoModel.Id == id);
-        //    Assert.AreEqual(nivelClassificacaoModel.Codigo, codigo);
-        //    Assert.AreEqual(nivelClassificacaoModel.Descricao, descricao);
-        //    Assert.AreEqual(nivelClassificacaoModel.AreaFim, areaFim);
-        //    Assert.AreEqual(nivelClassificacaoModel.GuidOrganizacao, guidOrganizacao);
-        //    Assert.AreEqual(nivelClassificacaoModel.Aprovacao, aprovacao);
-        //    Assert.AreEqual(nivelClassificacaoModel.Publicacao, publicacao);
-        //    Assert.AreEqual(nivelClassificacaoModel.InicioVigencia, inicioVigencia);
-        //    Assert.AreEqual(nivelClassificacaoModel.FimVigencia, fimVigencia);
-        //}
+            Assert.AreEqual(nivelClassificacaoModel.Id, id);
+            Assert.AreEqual(nivelClassificacaoModel.Descricao, descricao);
+            Assert.AreEqual(nivelClassificacaoModel.Ativo, ativo);
+            Assert.AreEqual(nivelClassificacaoModel.Organizacao.GuidOrganizacao, _guidGees);
+        }
     }
 }

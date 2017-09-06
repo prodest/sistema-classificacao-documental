@@ -59,10 +59,13 @@ namespace Prodest.Scd.Business
 
             _validation.IdInsertValid(planoClassificacaoModel.Id);
 
-            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(planoClassificacaoModel.GuidOrganizacao);
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
+            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(guidProdest);
 
             OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid);
 
+            planoClassificacaoModel.GuidOrganizacao = guidProdest;
             planoClassificacaoModel.Organizacao = organizacaoPatriarca;
 
             PlanoClassificacao planoClassificacao = _mapper.Map<PlanoClassificacao>(planoClassificacaoModel);
@@ -112,17 +115,16 @@ namespace Prodest.Scd.Business
 
             PlanoClassificacao planoClassificacao = SearchPersistence(planoClassificacaoModel.Id);
 
-            _validation.CanUpdate(planoClassificacao);
+            _validation.CanUpdate(planoClassificacaoModel, planoClassificacao);
 
-            if (!planoClassificacaoModel.GuidOrganizacao.Equals(planoClassificacao.GuidOrganizacao))
-            {
-                OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(planoClassificacaoModel.GuidOrganizacao);
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
+            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(guidProdest);
 
-                OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid);
+            OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid);
 
-                if (planoClassificacao.IdOrganizacao != organizacaoPatriarca.Id)
-                    planoClassificacaoModel.Organizacao = organizacaoPatriarca;
-            }
+            planoClassificacaoModel.GuidOrganizacao = guidProdest;
+            planoClassificacaoModel.Organizacao = organizacaoPatriarca;
 
             _mapper.Map(planoClassificacaoModel, planoClassificacao);
 
