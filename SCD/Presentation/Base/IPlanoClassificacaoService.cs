@@ -11,5 +11,9 @@ namespace Prodest.Scd.Presentation.Base
         Task<PlanoClassificacaoViewModel> Update(PlanoClassificacaoEntidade entidade);
         Task<PlanoClassificacaoViewModel> Create(PlanoClassificacaoEntidade entidade);
         Task<PlanoClassificacaoViewModel> New();
+
+        Task<PlanoClassificacaoViewModel> UpdateVigencia(PlanoClassificacaoEntidade entidade);
+        Task<PlanoClassificacaoViewModel> EncerrarVigencia(int id);
+
     }
 }

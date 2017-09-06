@@ -158,7 +158,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<NivelClassificacaoViewModel> Search(FiltroPlanoClassificacao filtro)
+        public async Task<NivelClassificacaoViewModel> Search(FiltroNivelClassificacao filtro)
         {
             //prodest
             //var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
@@ -186,6 +186,6 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-
+       
     }
 }

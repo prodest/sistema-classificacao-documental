@@ -12,6 +12,20 @@ namespace Prodest.Scd.Presentation.ViewModel
         public List<OrganogramaOrganizacao> organizacoes { get; set; }
         public PlanoClassificacaoEntidade entidade { get; set; }
         public FiltroPlanoClassificacao filtro { get; set; }
+        public bool EncerrarDataVigencia
+        {
+            get
+            {
+                return Action != null && Action.Equals("UpdateVigencia") ? true : false;
+            }
+        }
+        public string DisableInput
+        {
+            get
+            {
+                return EncerrarDataVigencia ? "disabled" : "";
+            }
+        }
     }
 
     public class Organizacao
@@ -42,9 +56,7 @@ namespace Prodest.Scd.Presentation.ViewModel
                 return AreaFim ? "Fim" : "Meio";
             }
         }
-        [Required(ErrorMessage = "Obrigatório")]
-        public Guid GuidOrganizacao { get; set; }
-        public string OrganizacaoDescricao { get; set; }
+      
 
         [DataType(DataType.Date)]
         public DateTime? Aprovacao { get; set; }

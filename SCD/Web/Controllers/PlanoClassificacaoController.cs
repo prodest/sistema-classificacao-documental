@@ -23,7 +23,6 @@ namespace Web.Controllers
             var model = await _service.Search(null);
             return View(model);
         }
-        //[ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> List()
         {
             var model = await _service.Search(null);
@@ -52,7 +51,8 @@ namespace Web.Controllers
             if (model.Result.Ok)
             {
                 return PartialView("_Form", model);
-            } else
+            }
+            else
             {
                 return await List();
             }
@@ -79,7 +79,7 @@ namespace Web.Controllers
             //Se de tudo der errado, volta para o formulário
             return PartialView("_Form", modelForm);
         }
-        
+
         public async Task<IActionResult> Update(PlanoClassificacaoViewModel model)
         {
             if (model != null && model.entidade != null)
@@ -93,6 +93,33 @@ namespace Web.Controllers
             }
             return await Edit(model.entidade.Id);
         }
-
+        #region Fim Vigência
+        public async Task<IActionResult> UpdateVigencia(PlanoClassificacaoViewModel model)
+        {
+            if (model != null && model.entidade != null)
+            {
+                model = await _service.UpdateVigencia(model.entidade);
+                AddHttpContextMessages(model.Result.Messages);
+                if (model.Result.Ok)
+                {
+                    return await List();
+                }
+            }
+            return await Edit(model.entidade.Id);
+        }
+        public async Task<IActionResult> EncerrarVigencia(int id)
+        {
+            var model = await _service.EncerrarVigencia(id);
+            AddHttpContextMessages(model.Result.Messages);
+            if (model.Result.Ok)
+            {
+                return PartialView("_Form", model);
+            }
+            else
+            {
+                return await List();
+            }
+        }
+        #endregion
     }
 }
