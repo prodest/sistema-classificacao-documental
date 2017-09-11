@@ -39,7 +39,7 @@ namespace Prodest.Scd.Business.Validation
 
             Filled(nivelClassificacao);
 
-            OrganizacaoNotNull(nivelClassificacao.Organizacao);
+            //OrganizacaoNotNull(nivelClassificacao.Organizacao);
         }
 
         private void NotNull(NivelClassificacaoModel nivelClassificacao)
@@ -91,7 +91,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal void CanUpdate(NivelClassificacaoModel newNivelClassificacaoModel, NivelClassificacao oldNivelClassificacao)
         {
-            if (oldNivelClassificacao.Organizacao.Id != newNivelClassificacaoModel.Organizacao.Id || !oldNivelClassificacao.Organizacao.GuidOrganizacao.Equals(newNivelClassificacaoModel.Organizacao.GuidOrganizacao))
+            if (newNivelClassificacaoModel.Organizacao != null && (oldNivelClassificacao.Organizacao.Id != newNivelClassificacaoModel.Organizacao.Id || !oldNivelClassificacao.Organizacao.GuidOrganizacao.Equals(newNivelClassificacaoModel.Organizacao.GuidOrganizacao)))
             {
                 throw new ScdException("Não é possível atualizar a Organização do Nível de Classificação.");
             }

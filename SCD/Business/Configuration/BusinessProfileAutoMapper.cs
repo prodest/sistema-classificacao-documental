@@ -15,7 +15,18 @@ namespace Prodest.Scd.Business.Configuration
             #endregion
 
             #region Nível de Classificação
-            CreateMap<NivelClassificacao, NivelClassificacaoModel>().ReverseMap();
+            CreateMap<NivelClassificacao, NivelClassificacaoModel>();
+
+            CreateMap<NivelClassificacaoModel, NivelClassificacao>()
+                .ForMember(dest => dest.Organizacao,
+                opt =>
+                {
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        return (destMember == null);
+                    });
+                });
+            ;
             #endregion
 
             #region Organização
@@ -32,33 +43,33 @@ namespace Prodest.Scd.Business.Configuration
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                //.ForAllMembers(opt =>
-                //{
-                //    opt.Condition((src, dest, srcMember, destMember) =>
-                //    {
-                //        bool mapear = false;
-                //        if (destMember == null)
-                //            mapear = true;
-                //        else if (typeof(Guid).Equals(destMember.GetType()))
-                //        {
-                //            Guid guid = (Guid)destMember;
-                //            if (guid.Equals(Guid.Empty))
-                //                mapear = true;
-                //        }
-                //        else
-                //        {
-                //            try
-                //            {
-                //                int valor = (int)destMember;
-                //                if (valor == 0)
-                //                    mapear = true;
-                //            }
-                //            catch (Exception)
-                //            { }
-                //        }
-                //        return mapear;
-                //    });
-                //});
+            //.ForAllMembers(opt =>
+            //{
+            //    opt.Condition((src, dest, srcMember, destMember) =>
+            //    {
+            //        bool mapear = false;
+            //        if (destMember == null)
+            //            mapear = true;
+            //        else if (typeof(Guid).Equals(destMember.GetType()))
+            //        {
+            //            Guid guid = (Guid)destMember;
+            //            if (guid.Equals(Guid.Empty))
+            //                mapear = true;
+            //        }
+            //        else
+            //        {
+            //            try
+            //            {
+            //                int valor = (int)destMember;
+            //                if (valor == 0)
+            //                    mapear = true;
+            //            }
+            //            catch (Exception)
+            //            { }
+            //        }
+            //        return mapear;
+            //    });
+            //});
             ;
             #endregion
         }

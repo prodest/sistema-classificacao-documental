@@ -51,11 +51,14 @@ namespace Prodest.Scd.Business
 
         public async Task<NivelClassificacaoModel> InsertAsync(NivelClassificacaoModel nivelClassificacaoModel)
         {
+
             _validation.BasicValid(nivelClassificacaoModel);
 
             _validation.IdInsertValid(nivelClassificacaoModel.Id);
 
-            OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(nivelClassificacaoModel.Organizacao.GuidOrganizacao);
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidGEES"));
+            OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(guidProdest);
 
             nivelClassificacaoModel.Organizacao = organizacao;
 
