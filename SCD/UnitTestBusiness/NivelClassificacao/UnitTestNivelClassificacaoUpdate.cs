@@ -138,29 +138,6 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
         #region Organização
         [TestMethod]
-        public async Task NivelClassificacaoTestUpdateWithOrganizacaoNull()
-        {
-            bool ok = false;
-            try
-            {
-                _nivelClassificacaoModel.Organizacao = null;
-
-                await _core.UpdateAsync(_nivelClassificacaoModel);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter atualizado com a organização nulo.");
-        }
-
-        [TestMethod]
         public async Task NivelClassificacaoTestUpdateGuidOrganizacao()
         {
             bool ok = false;
