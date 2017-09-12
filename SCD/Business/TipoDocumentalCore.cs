@@ -1,27 +1,31 @@
 ﻿using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Persistence.Base;
+using Prodest.Scd.Persistence.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
 {
     public class TipoDocumentalCore : ITipoDocumentalCore
     {
-        //private IUnitOfWork _unitOfWork;
-        //private IGenericRepository<TipoDocumental> _tiposDocumentais;
-        //private TipoDocumentalValidation _validation;
+        private TipoDocumentalValidation _validation;
+        private IUnitOfWork _unitOfWork;
+        private IGenericRepository<TipoDocumental> _tiposDocumentais;
         //private IMapper _mapper;
         //private IOrganizacaoCore _organizacaoCore;
 
-        //public TipoDocumentalCore(IScdRepositories repositories, TipoDocumentalValidation validation, IMapper mapper, IOrganizacaoCore organizacaoCore)
-        //{
-        //    _unitOfWork = repositories.UnitOfWork;
-        //    _tiposDocumentais = repositories.NiveisClassificacao;
-        //    _validation = validation;
-        //    _mapper = mapper;
-        //    _organizacaoCore = organizacaoCore;
-        //}
+        public TipoDocumentalCore(TipoDocumentalValidation validation, IScdRepositories repositories/*, IMapper mapper, IOrganizacaoCore organizacaoCore*/)
+        {
+            _unitOfWork = repositories.UnitOfWork;
+            _tiposDocumentais = repositories.TiposDocumentais;
+            _validation = validation;
+            //    _mapper = mapper;
+            //    _organizacaoCore = organizacaoCore;
+        }
 
         public int Count(Guid guidOrganizacao)
         {
@@ -36,19 +40,18 @@ namespace Prodest.Scd.Business
 
         public async Task DeleteAsync(int id)
         {
-            //TipoDocumental tipoDocumental = SearchPersistence(id);
+            TipoDocumental tipoDocumental = SearchPersistence(id);
 
-            //_validation.CanDelete(tipoDocumental);
+            _validation.CanDelete(tipoDocumental);
 
-            //_tiposDocumentais.Remove(tipoDocumental);
+            _tiposDocumentais.Remove(tipoDocumental);
 
-            //await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<TipoDocumentalModel> InsertAsync(TipoDocumentalModel tipoDocumentalModel)
         {
-
-            //_validation.BasicValid(tipoDocumentalModel);
+            _validation.BasicValid(tipoDocumentalModel);
 
             //_validation.IdInsertValid(tipoDocumentalModel.Id);
 
@@ -115,16 +118,16 @@ namespace Prodest.Scd.Business
             //await _unitOfWork.SaveAsync();
         }
 
-        //private TipoDocumental SearchPersistence(int id)
-        //{
-        //    _validation.IdValid(id);
+        private TipoDocumental SearchPersistence(int id)
+        {
+            _validation.IdValid(id);
 
-        //    TipoDocumental tipoDocumental = _tiposDocumentais.Where(pc => pc.Id == id)
-        //                                                                .SingleOrDefault();
+            TipoDocumental tipoDocumental = _tiposDocumentais.Where(pc => pc.Id == id)
+                                                             .SingleOrDefault();
 
-        //    _validation.Found(tipoDocumental);
+            _validation.Found(tipoDocumental);
 
-        //    return tipoDocumental;
-        //}
+            return tipoDocumental;
+        }
     }
 }

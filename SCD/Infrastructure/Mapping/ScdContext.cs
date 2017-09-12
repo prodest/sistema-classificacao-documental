@@ -154,6 +154,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             modelBuilder.Entity<TipoDocumental>(entity =>
             {
+                entity.ToTable("PlanoClassificacao");
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Ativo).HasColumnName("ativo");
