@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
 {
-    public class ItemClassificacaoCore : IItemPlanoClassificacaoCore
+    public class ItemPlanoClassificacaoCore : IItemPlanoClassificacaoCore
     {
         private IUnitOfWork _unitOfWork;
         private IGenericRepository<ItemPlanoClassificacao> _itensPlanoClassificacao;
