@@ -10,6 +10,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
         public virtual DbSet<NivelClassificacao> NivelClassificacao { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
         public virtual DbSet<PlanoClassificacao> PlanoClassificacao { get; set; }
+        public virtual DbSet<TipoDocumental> TipoDocumental { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -149,6 +150,27 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PlanoClassificacao_Organizacao");
+            });
+
+            modelBuilder.Entity<TipoDocumental>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Ativo).HasColumnName("ativo");
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
+
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.TiposDocumentais)
+                    .HasForeignKey(d => d.IdOrganizacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TipoDocumental_Organizacao");
             });
         }
     }
