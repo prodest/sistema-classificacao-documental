@@ -118,28 +118,6 @@
 
     <script>
         _messages = [];
-
-        $(document).ajaxStart(function () {
-            $("#DivConteudo").hide();
-            $("#loading").show();
-            //$(".mdl-layout__drawer").removeClass("is-visible");
-            //$(".mdl-layout__obfuscator").addClass("is-visible");
-        });
-        $(document).ajaxStop(function () {
-            $("#loading").hide();
-            $("#DivConteudo").show();
-            //$(".mdl-layout__obfuscator").removeClass("is-visible");
-        });
-        $(document).ajaxComplete(function () {
-            componentHandler.upgradeDom();
-            $.validator.unobtrusive.parse($('form'));
-            _messages.forEach(ShowMessage);
-            //limpa as mensagens já notificadas
-            _messages = [];
-        });
-
-
-
     </script>
     @RenderSection("Scripts", required: false)
 
