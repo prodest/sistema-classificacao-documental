@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
+using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Repository;
@@ -25,18 +27,18 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             ScdRepositories repositories = new ScdRepositories();
 
-            //Mapper.Initialize(cfg =>
-            //{
-            //    cfg.AddProfile<BusinessProfileAutoMapper>();
-            //});
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<BusinessProfileAutoMapper>();
+            });
 
-            //IMapper mapper = Mapper.Instance;
+            IMapper mapper = Mapper.Instance;
 
-            //OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
+            OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            //OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
 
-            _core = new TipoDocumentalCore(tipoDocumentalValidation, repositories);
+            _core = new TipoDocumentalCore(tipoDocumentalValidation, repositories, organizacaoCore, mapper);
         }
 
         [TestCleanup]
@@ -104,96 +106,107 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
             }
         }
 
-        //[TestMethod]
-        //public async Task TipoDocumentalTestInsertWithDescricaoEmpty()
-        //{
-        //    TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = "" };
+        [TestMethod]
+        public async Task TipoDocumentalTestInsertWithDescricaoEmpty()
+        {
+            TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = "" };
 
-        //    bool ok = false;
+            bool ok = false;
 
-        //    try
-        //    {
-        //        await _core.InsertAsync(tipoDocumentalModel);
+            try
+            {
+                tipoDocumentalModel = await _core.InsertAsync(tipoDocumentalModel);
 
-        //        ok = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOfType(ex, typeof(ScdException));
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-        //        Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
-        //    }
+                Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
+            }
 
-        //    if (ok)
-        //        Assert.Fail("Não deveria ter inserido com descrição vazia.");
-        //}
+            if (ok)
+            {
+                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
 
-        //[TestMethod]
-        //public async Task TipoDocumentalTestInsertWithDescricaoTrimEmpty()
-        //{
-        //    TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = " " };
+                Assert.Fail("Não deveria ter inserido com descrição vazia.");
+            }
+        }
 
-        //    bool ok = false;
+        [TestMethod]
+        public async Task TipoDocumentalTestInsertWithDescricaoTrimEmpty()
+        {
+            TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = " " };
 
-        //    try
-        //    {
-        //        await _core.InsertAsync(tipoDocumentalModel);
+            bool ok = false;
 
-        //        ok = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOfType(ex, typeof(ScdException));
+            try
+            {
+                tipoDocumentalModel = await _core.InsertAsync(tipoDocumentalModel);
 
-        //        Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
-        //    }
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-        //    if (ok)
-        //        Assert.Fail("Não deveria ter inserido com descrição vazia.");
-        //}
+                Assert.AreEqual(ex.Message, "A descrição não pode ser vazia ou nula.");
+            }
+
+            if (ok)
+            {
+                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
+
+                Assert.Fail("Não deveria ter inserido com descrição somente com espaço.");
+            }
+        }
         #endregion
 
-        //#region Id
-        //[TestMethod]
-        //public async Task TipoDocumentalTestInsertWithInvalidInsertId()
-        //{
-        //    TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Id = 1, Descricao = "Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = new Guid(_guidGees) } };
+        #region Id
+        [TestMethod]
+        public async Task TipoDocumentalTestInsertWithInvalidInsertId()
+        {
+            TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Id = 1, Descricao = "Teste" };
 
-        //    bool ok = false;
+            bool ok = false;
 
-        //    try
-        //    {
-        //        await _core.InsertAsync(tipoDocumentalModel);
+            try
+            {
+                tipoDocumentalModel = await _core.InsertAsync(tipoDocumentalModel);
 
-        //        ok = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOfType(ex, typeof(ScdException));
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-        //        Assert.AreEqual(ex.Message, "O id não deve ser preenchido.");
-        //    }
+                Assert.AreEqual(ex.Message, "O id não deve ser preenchido.");
+            }
 
-        //    if (ok)
-        //        Assert.Fail("Não deveria ter inserido com o id inválido para inserção.");
-        //}
-        //#endregion
+            if (ok)
+            {
+                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
 
-        //[TestMethod]
-        //public async Task TipoDocumentalTestInsert()
-        //{
-        //    string descricao = "Descrição Teste";
-        //    Guid guidOrganizacao = new Guid(_guidGees);
+                Assert.Fail("Não deveria ter inserido com um id inválido para inserção.");
+            }
+        }
+        #endregion
 
-        //    TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = descricao, Organizacao = new OrganizacaoModel { GuidOrganizacao = guidOrganizacao } };
+        [TestMethod]
+        public async Task TipoDocumentalTestInsert()
+        {
+            string descricao = "Descrição Teste";
 
-        //    tipoDocumentalModel = await _core.InsertAsync(tipoDocumentalModel);
+            TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = descricao };
 
-        //    Assert.IsTrue(tipoDocumentalModel.Id > 0);
-        //    Assert.AreEqual(tipoDocumentalModel.Descricao, descricao);
-        //    Assert.AreEqual(tipoDocumentalModel.Ativo, true);
-        //    Assert.IsFalse(tipoDocumentalModel.Organizacao == null);
-        //    Assert.AreEqual(tipoDocumentalModel.Organizacao.GuidOrganizacao, guidOrganizacao);
-        //}
+            tipoDocumentalModel = await _core.InsertAsync(tipoDocumentalModel);
+
+            Assert.IsTrue(tipoDocumentalModel.Id > 0);
+            Assert.AreEqual(tipoDocumentalModel.Descricao, descricao);
+            Assert.AreEqual(tipoDocumentalModel.Ativo, true);
+            Assert.IsFalse(tipoDocumentalModel.Organizacao == null);
+            Assert.IsFalse(tipoDocumentalModel.Organizacao.GuidOrganizacao.Equals(Guid.Empty));
+        }
     }
 }

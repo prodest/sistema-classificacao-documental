@@ -5,6 +5,12 @@ namespace Prodest.Scd.Business.Validation.Common
 {
     public class CommonValidation
     {
+        internal void IdInsertValid(int id)
+        {
+            if (id != default(int))
+                throw new ScdException("O id não deve ser preenchido.");
+        }
+
         internal void IdValid(int id)
         {
             if (id == default(int))

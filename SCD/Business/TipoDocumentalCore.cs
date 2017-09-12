@@ -1,4 +1,5 @@
-﻿using Prodest.Scd.Business.Base;
+﻿using AutoMapper;
+using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Persistence.Base;
@@ -15,16 +16,17 @@ namespace Prodest.Scd.Business
         private TipoDocumentalValidation _validation;
         private IUnitOfWork _unitOfWork;
         private IGenericRepository<TipoDocumental> _tiposDocumentais;
-        //private IMapper _mapper;
-        //private IOrganizacaoCore _organizacaoCore;
+        private IOrganizacaoCore _organizacaoCore;
+        private IMapper _mapper;
 
-        public TipoDocumentalCore(TipoDocumentalValidation validation, IScdRepositories repositories/*, IMapper mapper, IOrganizacaoCore organizacaoCore*/)
+
+        public TipoDocumentalCore(TipoDocumentalValidation validation, IScdRepositories repositories, IOrganizacaoCore organizacaoCore, IMapper mapper)
         {
+            _validation = validation;
             _unitOfWork = repositories.UnitOfWork;
             _tiposDocumentais = repositories.TiposDocumentais;
-            _validation = validation;
-            //    _mapper = mapper;
-            //    _organizacaoCore = organizacaoCore;
+            _organizacaoCore = organizacaoCore;
+            _mapper = mapper;
         }
 
         public int Count(Guid guidOrganizacao)
@@ -40,38 +42,37 @@ namespace Prodest.Scd.Business
 
         public async Task DeleteAsync(int id)
         {
-            TipoDocumental tipoDocumental = SearchPersistence(id);
+            //TipoDocumental tipoDocumental = SearchPersistence(id);
 
-            _validation.CanDelete(tipoDocumental);
+            //_validation.CanDelete(tipoDocumental);
 
-            _tiposDocumentais.Remove(tipoDocumental);
+            //_tiposDocumentais.Remove(tipoDocumental);
 
-            await _unitOfWork.SaveAsync();
+            //await _unitOfWork.SaveAsync();
         }
 
         public async Task<TipoDocumentalModel> InsertAsync(TipoDocumentalModel tipoDocumentalModel)
         {
             _validation.BasicValid(tipoDocumentalModel);
 
-            //_validation.IdInsertValid(tipoDocumentalModel.Id);
+            _validation.IdInsertValid(tipoDocumentalModel.Id);
 
             ////TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
-            //Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidGEES"));
-            //OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(guidProdest);
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidGEES"));
+            OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(guidProdest);
 
-            //tipoDocumentalModel.Organizacao = organizacao;
+            tipoDocumentalModel.Organizacao = organizacao;
+            tipoDocumentalModel.Ativo = true;
 
-            //TipoDocumental tipoDocumental = _mapper.Map<TipoDocumental>(tipoDocumentalModel);
-            //tipoDocumental.Ativo = true;
+            TipoDocumental tipoDocumental = _mapper.Map<TipoDocumental>(tipoDocumentalModel);
 
-            //await _tiposDocumentais.AddAsync(tipoDocumental);
+            await _tiposDocumentais.AddAsync(tipoDocumental);
 
-            //await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
-            //tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
+            tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
 
-            //return tipoDocumentalModel;
-            return new TipoDocumentalModel { Id = 1, Descricao = "Tipo Documental", Ativo = true, Organizacao = new OrganizacaoModel { Id = 1, GuidOrganizacao = new Guid(Environment.GetEnvironmentVariable("guidGEES")) } };
+            return tipoDocumentalModel;
         }
 
         public TipoDocumentalModel Search(int id)

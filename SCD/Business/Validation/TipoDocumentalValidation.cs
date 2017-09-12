@@ -22,12 +22,6 @@ namespace Prodest.Scd.Business.Validation
         //    IdValid(tipoDocumental.Id);
         //}
 
-        //internal void IdInsertValid(int id)
-        //{
-        //    if (id != default(int))
-        //        throw new ScdException("O id não deve ser preenchido.");
-        //}
-
         //#endregion
 
         #region Basic Valid
@@ -35,7 +29,7 @@ namespace Prodest.Scd.Business.Validation
         {
             NotNull(tipoDocumental);
 
-            //Filled(tipoDocumental);
+            Filled(tipoDocumental);
 
             //OrganizacaoNotNull(tipoDocumental.Organizacao);
         }
@@ -46,24 +40,24 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O Tipo Documental não pode ser nulo.");
         }
 
-        //#region Filled
-        //internal void Filled(TipoDocumentalModel tipoDocumental)
-        //{
-        //    DescricaoFilled(tipoDocumental.Descricao);
-        //}
+        #region Filled
+        internal void Filled(TipoDocumentalModel tipoDocumental)
+        {
+            DescricaoFilled(tipoDocumental.Descricao);
+        }
 
-        //private void DescricaoFilled(string descricao)
-        //{
-        //    if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
-        //        throw new ScdException("A descrição não pode ser vazia ou nula.");
-        //}
+        private void DescricaoFilled(string descricao)
+        {
+            if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
+                throw new ScdException("A descrição não pode ser vazia ou nula.");
+        }
 
         //private void OrganizacaoNotNull(OrganizacaoModel organizacao)
         //{
         //    if (organizacao == null)
         //        throw new ScdException("A organização não pode ser nula.");
         //}
-        //#endregion
+        #endregion
         #endregion
 
         internal void Found(TipoDocumental tipoDocumental)
