@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Persistence.Model;
+using System;
 
 namespace Prodest.Scd.Business.Configuration
 {
@@ -9,8 +10,23 @@ namespace Prodest.Scd.Business.Configuration
 
         public BusinessProfileAutoMapper()
         {
+            #region Item do Plano de Classificação
+            CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>().ReverseMap();
+            #endregion
+
             #region Nível de Classificação
-            CreateMap<NivelClassificacao, NivelClassificacaoModel>().ReverseMap();
+            CreateMap<NivelClassificacao, NivelClassificacaoModel>();
+
+            CreateMap<NivelClassificacaoModel, NivelClassificacao>()
+                .ForMember(dest => dest.Organizacao,
+                opt =>
+                {
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        return (destMember == null);
+                    });
+                });
+            ;
             #endregion
 
             #region Organização
@@ -21,10 +37,40 @@ namespace Prodest.Scd.Business.Configuration
             #endregion
 
             #region Plano de Classificação
-            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>();
+            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
+                .MaxDepth(1)
+            ;
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+            //.ForAllMembers(opt =>
+            //{
+            //    opt.Condition((src, dest, srcMember, destMember) =>
+            //    {
+            //        bool mapear = false;
+            //        if (destMember == null)
+            //            mapear = true;
+            //        else if (typeof(Guid).Equals(destMember.GetType()))
+            //        {
+            //            Guid guid = (Guid)destMember;
+            //            if (guid.Equals(Guid.Empty))
+            //                mapear = true;
+            //        }
+            //        else
+            //        {
+            //            try
+            //            {
+            //                int valor = (int)destMember;
+            //                if (valor == 0)
+            //                    mapear = true;
+            //            }
+            //            catch (Exception)
+            //            { }
+            //        }
+            //        return mapear;
+            //    });
+            //});
+            ;
             #endregion
         }
     }

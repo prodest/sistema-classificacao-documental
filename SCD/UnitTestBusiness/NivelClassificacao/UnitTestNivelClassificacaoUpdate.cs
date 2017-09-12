@@ -12,13 +12,14 @@ using System.Threading.Tasks;
 namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 {
     [TestClass]
-    public class UnitTestNivelClassificacaoInsert
+    public class UnitTestNivelClassificacaoUpdate
     {
-        private string _guidGees = Environment.GetEnvironmentVariable("GuidGEES");
+        private Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
         private NivelClassificacaoCore _core;
+        private NivelClassificacaoModel _nivelClassificacaoModel;
 
         [TestInitialize]
-        public void Setup()
+        public async Task Setup()
         {
             ScdRepositories repositories = new ScdRepositories();
 
@@ -36,16 +37,20 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
 
             _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
+
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees } };
+
+            _nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
         }
 
         [TestMethod]
-        public async Task NivelClassificacaoTestInsertNull()
+        public async Task NivelClassificacaoTestUpdateNull()
         {
             bool ok = false;
 
             try
             {
-                await _core.InsertAsync(null);
+                await _core.UpdateAsync(null);
 
                 ok = true;
             }
@@ -57,20 +62,19 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter inserido com objeto nulo.");
+                Assert.Fail("Não deveria ter atualizado com objeto nulo.");
         }
 
         #region Descrição
         [TestMethod]
-        public async Task NivelClassificacaoTestInsertWithDescricaoNull()
+        public async Task NivelClassificacaoTestUpdateWithDescricaoNull()
         {
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel();
-
             bool ok = false;
-
             try
             {
-                await _core.InsertAsync(nivelClassificacaoModel);
+                _nivelClassificacaoModel.Descricao = null;
+
+                await _core.UpdateAsync(_nivelClassificacaoModel);
 
                 ok = true;
             }
@@ -82,19 +86,19 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter inserido com descrição nula.");
+                Assert.Fail("Não deveria ter atualizado com descrição nula.");
         }
 
         [TestMethod]
-        public async Task NivelClassificacaoTestInsertWithDescricaoEmpty()
+        public async Task NivelClassificacaoTestUpdateWithDescricaoEmpty()
         {
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "" };
-
             bool ok = false;
 
             try
             {
-                await _core.InsertAsync(nivelClassificacaoModel);
+                _nivelClassificacaoModel.Descricao = "";
+
+                await _core.UpdateAsync(_nivelClassificacaoModel);
 
                 ok = true;
             }
@@ -106,21 +110,19 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter inserido com descrição vazia.");
+                Assert.Fail("Não deveria ter atualizado com descrição vazia.");
         }
 
         [TestMethod]
-        public async Task NivelClassificacaoTestInsertWithDescricaoTrimEmpty()
+        public async Task NivelClassificacaoTestUpdateWithDescricaoTrimEmpty()
         {
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = " " };
-
             bool ok = false;
 
             try
             {
-                await _core.InsertAsync(nivelClassificacaoModel);
+                _nivelClassificacaoModel.Descricao = " ";
 
-                ok = true;
+                await _core.UpdateAsync(_nivelClassificacaoModel);
             }
             catch (Exception ex)
             {
@@ -130,51 +132,62 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter inserido com descrição vazia.");
+                Assert.Fail("Não deveria ter atualizado com descrição somente com espaço.");
         }
         #endregion
 
-        #region Id
+        #region Organização
         [TestMethod]
-        public async Task NivelClassificacaoTestInsertWithInvalidInsertId()
+        public async Task NivelClassificacaoTestUpdateGuidOrganizacao()
         {
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Id = 1, Descricao = "Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = new Guid(_guidGees) } };
-
             bool ok = false;
 
             try
             {
-                await _core.InsertAsync(nivelClassificacaoModel);
+                _nivelClassificacaoModel.Organizacao.GuidOrganizacao = Guid.NewGuid();
+
+                await _core.UpdateAsync(_nivelClassificacaoModel);
 
                 ok = true;
             }
             catch (Exception ex)
             {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
+                Assert.IsInstanceOfType(ex, typeof(Exception));
 
-                Assert.AreEqual(ex.Message, "O id não deve ser preenchido.");
+                Assert.AreEqual(ex.Message, "Não é possível atualizar a Organização do Nível de Classificação.");
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter inserido com o id inválido para inserção.");
+                Assert.Fail("Não deveria ter atualizado com o guid da organização não existindo no sistema.");
         }
         #endregion
 
         [TestMethod]
-        public async Task NivelClassificacaoTestInsert()
+        public async Task NivelClassificacaoTestUpdate()
         {
-            string descricao = "Descrição Teste";
-            Guid guidOrganizacao = new Guid(_guidGees);
-
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = descricao, Organizacao = new OrganizacaoModel { GuidOrganizacao = guidOrganizacao } };
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
+            {
+                Descricao = "Descrição Teste",
+                Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees }
+            };
 
             nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
 
-            Assert.IsTrue(nivelClassificacaoModel.Id > 0);
+            int id = nivelClassificacaoModel.Id;
+            string descricao = "TestUpdateWithBasicsFieldsDescrição Teste";
+            bool ativo = false;
+
+            nivelClassificacaoModel.Descricao = descricao;
+            nivelClassificacaoModel.Ativo = ativo;
+
+            await _core.UpdateAsync(nivelClassificacaoModel);
+
+            nivelClassificacaoModel = _core.Search(nivelClassificacaoModel.Id);
+
+            Assert.AreEqual(nivelClassificacaoModel.Id, id);
             Assert.AreEqual(nivelClassificacaoModel.Descricao, descricao);
-            Assert.AreEqual(nivelClassificacaoModel.Ativo, true);
-            Assert.IsFalse(nivelClassificacaoModel.Organizacao == null);
-            Assert.AreEqual(nivelClassificacaoModel.Organizacao.GuidOrganizacao, guidOrganizacao);
+            Assert.AreEqual(nivelClassificacaoModel.Ativo, ativo);
+            Assert.AreEqual(nivelClassificacaoModel.Organizacao.GuidOrganizacao, _guidGees);
         }
     }
 }

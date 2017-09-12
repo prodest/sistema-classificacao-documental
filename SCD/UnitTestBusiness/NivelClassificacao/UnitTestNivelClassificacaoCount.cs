@@ -9,12 +9,12 @@ using Prodest.Scd.Infrastructure.Repository;
 using System;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
+namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 {
     [TestClass]
     public class UnitTestNivelClassificacaoCount
     {
-        private string _guidGees = Environment.GetEnvironmentVariable("guidGEES");
+        private Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("guidGEES"));
         private NivelClassificacaoCore _core;
 
         [TestInitialize]
@@ -37,108 +37,20 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
 
             _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
 
-            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = new Guid(_guidGees) } };
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees } };
 
             await _core.InsertAsync(nivelClassificacaoModel);
         }
 
         #region Guid Organização
         [TestMethod]
-        public void TestCountWithGuidOrganizacaoNull()
+        public void NivelClassificacaoTestCountWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Count(null);
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter contado com guid da organização nulo.");
-        }
-
-        [TestMethod]
-        public void TestCountWithGuidOrganizacaoEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Count("");
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter contado com guid da organização vazio.");
-        }
-
-        [TestMethod]
-        public void TestCountWithGuidOrganizacaoTrimEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Count(" ");
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "A organização não pode ser vazia ou nula.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter contado com o guid da organização sendo um guid vazio.");
-        }
-
-        [TestMethod]
-        public void TestCountWithGuidOrganizacaoNotGuid()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Count("ABC");
-
-                ok = true;
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(ScdException));
-
-                Assert.AreEqual(ex.Message, "Guid da organização inválido.");
-            }
-
-            if (ok)
-                Assert.Fail("Não deveria ter contado com o guid da organização não válido.");
-        }
-
-        [TestMethod]
-        public void TestCountWithGuidOrganizacaoGuidEmpty()
-        {
-            bool ok = false;
-
-            try
-            {
-                _core.Count(new Guid().ToString());
+                _core.Count(Guid.Empty);
 
                 ok = true;
             }
@@ -155,14 +67,14 @@ namespace Prodest.Scd.NivelClassificacao.UnitTestBusiness
         #endregion
 
         [TestMethod]
-        public void TestCountWithGuidOrganizacaoNonexistentOnDataBase()
+        public void NivelClassificacaoTestCountWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            int count = _core.Count(Guid.NewGuid().ToString());
+            int count = _core.Count(Guid.NewGuid());
             Assert.IsTrue(count == 0);
         }
 
         [TestMethod]
-        public void TestCountWithGuidOrganizacaoCorrect()
+        public void NivelClassificacaoTestCountWithGuidOrganizacaoCorrect()
         {
             int count = _core.Count(_guidGees);
             Assert.IsTrue(count > 0);

@@ -26,18 +26,18 @@ namespace Prodest.Scd.Infrastructure.Integration
             return organizacoes;
         }
 
-        public async Task<OrganogramaOrganizacao> SearchAsync(string guid)
+        public async Task<OrganogramaOrganizacao> SearchAsync(Guid guidOrganizacao)
         {
-            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{guid}";
+            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{guidOrganizacao.ToString()}";
 
             OrganogramaOrganizacao organizacao = await JsonData.DownloadAsync<OrganogramaOrganizacao>(url, _clientAccessToken.AccessToken);
 
             return organizacao;
         }
 
-        public async Task<OrganogramaOrganizacao> SearchPatriarcaAsync(string guid)
+        public async Task<OrganogramaOrganizacao> SearchPatriarcaAsync(Guid guidOrganizacao)
         {
-            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{guid}/patriarca";
+            string url = $"https://sistemas.es.gov.br/prodest/organograma/api/organizacoes/{guidOrganizacao.ToString()}/patriarca";
 
             OrganogramaOrganizacao organizacao = await JsonData.DownloadAsync<OrganogramaOrganizacao>(url, _clientAccessToken.AccessToken);
 

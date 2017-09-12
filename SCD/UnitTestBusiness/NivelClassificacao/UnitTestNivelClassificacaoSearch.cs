@@ -8,32 +8,25 @@ using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
-using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
+namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 {
     [TestClass]
-    public class UnitTestPlanoClassificacaoSearch
+    public class UnitTestNivelClassificacaoSearch
     {
-        private Guid _guidProdest = new Guid(Environment.GetEnvironmentVariable("GuidProdest"));
-        private PlanoClassificacaoCore _core;
+        private Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
+        private NivelClassificacaoCore _core;
 
         [TestInitialize]
         public async Task Setup()
         {
             ScdRepositories repositories = new ScdRepositories();
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
-
-            IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
-
-            AcessoCidadaoClientAccessToken acessoCidadaoClientAccessToken = new AcessoCidadaoClientAccessToken(autenticacaoIdentityServerConfig);
-
-            OrganogramaService organogramaService = new OrganogramaService(acessoCidadaoClientAccessToken);
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
 
             Mapper.Initialize(cfg =>
             {
@@ -46,21 +39,20 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
 
-            _core = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
+            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
 
-            string codigo = "01";
             string descricao = "Descrição Teste";
-            bool areaFim = true;
+            Guid guidOrganizacao = _guidGees;
 
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim };
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = descricao, Organizacao = new OrganizacaoModel { GuidOrganizacao = guidOrganizacao } };
 
-            await _core.InsertAsync(planoClassificacaoModel);
+            await _core.InsertAsync(nivelClassificacaoModel);
         }
 
         #region Search by Id
         #region Id
         [TestMethod]
-        public void PlanoClassificacaoTestSearchWithInvalidId()
+        public void NivelClassificacaoTestSearchWithInvalidId()
         {
             bool ok = false;
 
@@ -83,7 +75,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #endregion
 
         [TestMethod]
-        public void PlanoClassificacaoTestSearchWithIdNonexistentOnDataBase()
+        public void NivelClassificacaoTestSearchWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
@@ -97,7 +89,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             {
                 Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-                Assert.AreEqual(ex.Message, "Plano de Classificação não encontrado.");
+                Assert.AreEqual(ex.Message, "Nivel de Classificação não encontrado.");
             }
 
             if (ok)
@@ -105,35 +97,29 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         }
 
         [TestMethod]
-        public async Task PlanoClassificacaoTestSearchWithIdCorrect()
+        public async Task NivelClassificacaoTestSearchWithIdCorrect()
         {
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
             {
-                Codigo = "01",
                 Descricao = "Descrição Teste",
-                AreaFim = true
+                Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees }
             };
 
-            planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
+            nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
 
-            PlanoClassificacaoModel planoClassificacaoModelSearched = _core.Search(planoClassificacaoModel.Id);
+            NivelClassificacaoModel nivelClassificacaoModelSearched = _core.Search(nivelClassificacaoModel.Id);
 
-            Assert.AreEqual(planoClassificacaoModel.Id, planoClassificacaoModelSearched.Id);
-            Assert.AreEqual(planoClassificacaoModel.Codigo, planoClassificacaoModelSearched.Codigo);
-            Assert.AreEqual(planoClassificacaoModel.Descricao, planoClassificacaoModelSearched.Descricao);
-            Assert.AreEqual(planoClassificacaoModel.AreaFim, planoClassificacaoModelSearched.AreaFim);
-            //Assert.AreEqual(planoClassificacaoModel.GuidOrganizacao, planoClassificacaoModelSearched.GuidOrganizacao);
-            Assert.IsFalse(planoClassificacaoModelSearched.Aprovacao.HasValue);
-            Assert.IsFalse(planoClassificacaoModelSearched.Publicacao.HasValue);
-            Assert.IsFalse(planoClassificacaoModelSearched.InicioVigencia.HasValue);
-            Assert.IsFalse(planoClassificacaoModelSearched.FimVigencia.HasValue);
+            Assert.AreEqual(nivelClassificacaoModel.Id, nivelClassificacaoModelSearched.Id);
+            Assert.AreEqual(nivelClassificacaoModel.Descricao, nivelClassificacaoModelSearched.Descricao);
+            Assert.IsTrue(nivelClassificacaoModel.Ativo);
+            Assert.AreEqual(nivelClassificacaoModel.Organizacao.GuidOrganizacao, nivelClassificacaoModelSearched.Organizacao.GuidOrganizacao);
         }
         #endregion
                 
         #region Pagination Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
+        public void NivelClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
@@ -157,13 +143,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Page
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithInvalidPage()
+        public void NivelClassificacaoTestPaginationSearchWithInvalidPage()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidProdest, default(int), default(int));
+                _core.Search(_guidGees, default(int), default(int));
 
                 ok = true;
             }
@@ -181,13 +167,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Count
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithInvalidCount()
+        public void NivelClassificacaoTestPaginationSearchWithInvalidCount()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidProdest, 1, default(int));
+                _core.Search(_guidGees, 1, default(int));
 
                 ok = true;
             }
@@ -204,50 +190,48 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #endregion
 
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public void NivelClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(Guid.NewGuid(), 1, 1);
-            Assert.IsNotNull(planosClassificacaoModel);
-            Assert.IsTrue(planosClassificacaoModel.Count == 0);
+            List<NivelClassificacaoModel> niveisClassificacaoModel = _core.Search(Guid.NewGuid(), 1, 1);
+            Assert.IsNotNull(niveisClassificacaoModel);
+            Assert.IsTrue(niveisClassificacaoModel.Count == 0);
         }
 
         [TestMethod]
-        public async Task PlanoClassificacaoTestPaginationSearch()
+        public async Task NivelClassificacaoTestPaginationSearch()
         {
             int page = 2;
             int count = 5;
 
-            await InsertPlanosClassificacao(page * count);
+            await InsertNivelsClassificacao(page * count);
 
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(_guidProdest, page, count);
-            Assert.IsNotNull(planosClassificacaoModel);
-            Assert.IsTrue(planosClassificacaoModel.Count == count);
+            List<NivelClassificacaoModel> niveisClassificacaoModel = _core.Search(_guidGees, page, count);
+            Assert.IsNotNull(niveisClassificacaoModel);
+            Assert.IsTrue(niveisClassificacaoModel.Count == count);
 
-            foreach (PlanoClassificacaoModel pcm in planosClassificacaoModel)
+            foreach (NivelClassificacaoModel pcm in niveisClassificacaoModel)
             {
-                Assert.IsFalse(string.IsNullOrWhiteSpace(pcm.Codigo));
+                Assert.IsFalse(pcm.Id == default(int));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(pcm.Descricao));
-                Assert.IsFalse(Guid.Empty.Equals(pcm.GuidOrganizacao));
+                Assert.IsFalse(Guid.Empty.Equals(pcm.Organizacao.GuidOrganizacao));
             }
         }
         #endregion
 
-        private async Task InsertPlanosClassificacao(int count)
+        private async Task InsertNivelsClassificacao(int count)
         {
             for (int i = 0; i < count; i++)
             {
-                string codigo = "01";
                 string descricao = "Descrição Teste";
-                bool areaFim = true;
+                Guid guidOrganizacao = _guidGees;
 
-                PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
+                NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
                 {
-                    Codigo = codigo,
                     Descricao = descricao,
-                    AreaFim = areaFim
+                    Organizacao = new OrganizacaoModel { GuidOrganizacao = guidOrganizacao }
                 };
 
-                planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
+                nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
             }
         }
     }

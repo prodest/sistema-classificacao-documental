@@ -24,12 +24,6 @@ namespace Prodest.Scd.Business.Validation
             IdValid(nivelClassificacao.Id);
         }
 
-        internal void IdValid(int id)
-        {
-            if (id == default(int))
-                throw new ScdException("O id não pode ser nulo ou vazio.");
-        }
-
         internal void IdInsertValid(int id)
         {
             if (id != default(int))
@@ -45,7 +39,7 @@ namespace Prodest.Scd.Business.Validation
 
             Filled(nivelClassificacao);
 
-            OrganizacaoNotNull(nivelClassificacao.Organizacao);
+            //OrganizacaoNotNull(nivelClassificacao.Organizacao);
         }
 
         private void NotNull(NivelClassificacaoModel nivelClassificacao)
@@ -70,9 +64,6 @@ namespace Prodest.Scd.Business.Validation
         {
             if (organizacao == null)
                 throw new ScdException("A organização não pode ser nula.");
-
-            if (organizacao.GuidOrganizacao == null)
-                throw new ScdException("O guid da organização não pode ser nulo.");
         }
         #endregion
         #endregion
@@ -98,5 +89,12 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O Nivel de Classificação possui itens e não pode ser excluído.");
         }
 
+        internal void CanUpdate(NivelClassificacaoModel newNivelClassificacaoModel, NivelClassificacao oldNivelClassificacao)
+        {
+            if (newNivelClassificacaoModel.Organizacao != null && (oldNivelClassificacao.Organizacao.Id != newNivelClassificacaoModel.Organizacao.Id || !oldNivelClassificacao.Organizacao.GuidOrganizacao.Equals(newNivelClassificacaoModel.Organizacao.GuidOrganizacao)))
+            {
+                throw new ScdException("Não é possível atualizar a Organização do Nível de Classificação.");
+            }
+        }
     }
 }

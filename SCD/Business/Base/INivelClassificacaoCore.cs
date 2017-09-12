@@ -1,4 +1,5 @@
 ﻿using Prodest.Scd.Business.Model;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace Prodest.Scd.Business.Base
 {
     public interface INivelClassificacaoCore
     {
-        int Count(string guidOrganizacao);
+        int Count(Guid guidOrganizacao);
 
         Task DeleteAsync(int id);
 
@@ -14,7 +15,7 @@ namespace Prodest.Scd.Business.Base
 
         NivelClassificacaoModel Search(int id);
 
-        List<NivelClassificacaoModel> Search(string guidOrganizacao, int page, int count);
+        List<NivelClassificacaoModel> Search(Guid guidOrganizacao, int page, int count);
 
         Task UpdateAsync(NivelClassificacaoModel nivelClassificacao);
     }

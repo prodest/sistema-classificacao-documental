@@ -8,17 +8,16 @@ using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
-using Prodest.Scd.Integration.Organograma;
 using Prodest.Scd.Web.Configuration;
 using System;
 using System.Threading.Tasks;
 
-namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
+namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 {
     [TestClass]
     public class UnitTestPlanoClassificacaoDelete
     {
-        private string _guidProdest = Environment.GetEnvironmentVariable("GuidProdest");
+        private Guid _guidProdest = new Guid(Environment.GetEnvironmentVariable("GuidProdest"));
         private PlanoClassificacaoCore _core;
 
         [TestInitialize]
@@ -50,7 +49,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
         #region Id
         [TestMethod]
-        public async Task TestDeleteWithInvalidId()
+        public async Task PlanoClassificacaoTestDeleteWithInvalidId()
         {
             bool ok = false;
 
@@ -73,7 +72,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         #endregion
 
         [TestMethod]
-        public async Task TestDeleteWithIdNonexistentOnDataBase()
+        public async Task PlanoClassificacaoTestDeleteWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
@@ -96,7 +95,7 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
 
 
         [TestMethod]
-        public async Task TestDeletePlanoClassificacaoPublicado()
+        public async Task PlanoClassificacaoTestDeletePlanoClassificacaoPublicado()
         {
             DateTime now = DateTime.Now;
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
@@ -104,7 +103,6 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
                 Codigo = "01",
                 Descricao = "Descrição Teste",
                 AreaFim = true,
-                GuidOrganizacao = _guidProdest,
                 Aprovacao = now,
                 Publicacao = now,
                 InicioVigencia = now
@@ -134,14 +132,13 @@ namespace Prodest.Scd.PlanoClassificacao.UnitTestBusiness
         //TODO: Após a implementação dos CRUDs de Itens de Plnao de Classificacação fazer os testes de remoção de plano de classificação com itens associados
 
         [TestMethod]
-        public async Task TestDeletehWithIdCorrect()
+        public async Task PlanoClassificacaoTestDeletehWithIdCorrect()
         {
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
             {
                 Codigo = "01",
                 Descricao = "Descrição Teste",
-                AreaFim = true,
-                GuidOrganizacao = _guidProdest
+                AreaFim = true
             };
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
