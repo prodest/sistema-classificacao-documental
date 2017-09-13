@@ -8,7 +8,6 @@ using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
@@ -16,14 +15,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
     [TestClass]
     public class UnitTestTipoDocumentalInsert
     {
-        //private string _guidGees = Environment.GetEnvironmentVariable("GuidGEES");
         private TipoDocumentalCore _core;
         private List<TipoDocumentalModel> _tiposDocumentaisTestados = new List<TipoDocumentalModel>();
 
         [TestInitialize]
         public void Setup()
         {
-            TipoDocumentalValidation tipoDocumentalValidation = new TipoDocumentalValidation(/*repositories*/);
+            TipoDocumentalValidation tipoDocumentalValidation = new TipoDocumentalValidation();
 
             ScdRepositories repositories = new ScdRepositories();
 

@@ -42,13 +42,13 @@ namespace Prodest.Scd.Business
 
         public async Task DeleteAsync(int id)
         {
-            //TipoDocumental tipoDocumental = SearchPersistence(id);
+            TipoDocumental tipoDocumental = SearchPersistence(id);
 
-            //_validation.CanDelete(tipoDocumental);
+            _validation.CanDelete(tipoDocumental);
 
-            //_tiposDocumentais.Remove(tipoDocumental);
+            _tiposDocumentais.Remove(tipoDocumental);
 
-            //await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<TipoDocumentalModel> InsertAsync(TipoDocumentalModel tipoDocumentalModel)
