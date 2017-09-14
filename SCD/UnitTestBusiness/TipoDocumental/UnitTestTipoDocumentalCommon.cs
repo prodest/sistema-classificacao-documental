@@ -2,13 +2,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Configuration;
-using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.UnitTestBusiness.TipoDocumental

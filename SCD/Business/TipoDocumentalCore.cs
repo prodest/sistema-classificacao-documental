@@ -31,13 +31,12 @@ namespace Prodest.Scd.Business
 
         public int Count(Guid guidOrganizacao)
         {
-            //_validation.OrganizacaoValid(guidOrganizacao);
+            _validation.OrganizacaoValid(guidOrganizacao);
 
-            //var count = _tiposDocumentais.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
-            //                                .Count();
+            var count = _tiposDocumentais.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
+                                         .Count();
 
-            //return count;
-            return 10;
+            return count;
         }
 
         public async Task DeleteAsync(int id)
