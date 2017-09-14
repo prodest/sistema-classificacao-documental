@@ -1,44 +1,14 @@
-using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
-using Prodest.Scd.Business.Model;
-using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Repository;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 {
     [TestClass]
-    public class UnitTestTipoDocumentalDelete
+    public class UnitTestTipoDocumentalDelete : UnitTestTipoDocumentalCommon
     {
-        private TipoDocumentalCore _core;
-        private List<TipoDocumentalModel> _tiposDocumentaisTestados = new List<TipoDocumentalModel>();
-        ScdRepositories _repositories = new ScdRepositories();
-
-        [TestInitialize]
-        public void Setup()
-        {
-            TipoDocumentalValidation tipoDocumentalValidation = new TipoDocumentalValidation();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
-            });
-
-            IMapper mapper = Mapper.Instance;
-
-            OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
-
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation, mapper);
-
-            _core = new TipoDocumentalCore(tipoDocumentalValidation, _repositories, organizacaoCore, mapper);
-        }
-
         #region Id
         [TestMethod]
         public async Task TipoDocumentalTestDeleteWithInvalidId()
@@ -90,11 +60,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         [TestMethod]
         public async Task TipoDocumentalTestDelete()
         {
-            Persistence.Model.TipoDocumental tipoDocumental = new Persistence.Model.TipoDocumental { Descricao = "Tipo Documental Teste", Ativo = true, IdOrganizacao = 1 };
-
-            tipoDocumental = await _repositories.TiposDocumentais.AddAsync(tipoDocumental);
-
-            await _repositories.UnitOfWork.SaveAsync();
+            Persistence.Model.TipoDocumental tipoDocumental = await InsertAsync();
 
             await _core.DeleteAsync(tipoDocumental.Id);
 

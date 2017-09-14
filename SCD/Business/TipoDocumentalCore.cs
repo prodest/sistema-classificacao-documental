@@ -77,33 +77,31 @@ namespace Prodest.Scd.Business
 
         public TipoDocumentalModel Search(int id)
         {
-            //TipoDocumental tipoDocumental = SearchPersistence(id);
+            TipoDocumental tipoDocumental = SearchPersistence(id);
 
-            //TipoDocumentalModel tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
+            TipoDocumentalModel tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
 
-            //return tipoDocumentalModel;
-            return new TipoDocumentalModel { Id = 1, Descricao = "Tipo Documental", Ativo = true, Organizacao = new OrganizacaoModel { Id = 1, GuidOrganizacao = new Guid(Environment.GetEnvironmentVariable("guidGEES")) } };
+            return tipoDocumentalModel;
         }
 
         public List<TipoDocumentalModel> Search(Guid guidOrganizacao, int page, int count)
         {
-            //            _validation.OrganizacaoValid(guidOrganizacao);
+            _validation.OrganizacaoValid(guidOrganizacao);
 
-            //            _validation.PaginationSearch(page, count);
+            _validation.PaginationSearch(page, count);
 
-            //            int skip = (page - 1) * count;
+            int skip = (page - 1) * count;
 
-            //            List<TipoDocumental> nivelsClassificacao = _tiposDocumentais.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
-            //                                                                               .OrderBy(pc => pc.Ativo)
-            //                                                                               .ThenBy(pc => pc.Descricao)
-            //                                                                               .Skip(skip)
-            //                                                                               .Take(count)
-            //                                                                               .ToList()
-            //;
-            //            List<TipoDocumentalModel> nivelsClassificacaoModel = _mapper.Map<List<TipoDocumentalModel>>(nivelsClassificacao);
+            List<TipoDocumental> nivelsClassificacao = _tiposDocumentais.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
+                                                                        .OrderBy(pc => pc.Ativo)
+                                                                        .ThenBy(pc => pc.Descricao)
+                                                                        .Skip(skip)
+                                                                        .Take(count)
+                                                                        .ToList();
 
-            //            return nivelsClassificacaoModel;
-            return new List<TipoDocumentalModel> { new TipoDocumentalModel { Id = 1, Descricao = "Tipo Documental", Ativo = true, Organizacao = new OrganizacaoModel { Id = 1, GuidOrganizacao = new Guid(Environment.GetEnvironmentVariable("guidGEES")) } } };
+            List<TipoDocumentalModel> nivelsClassificacaoModel = _mapper.Map<List<TipoDocumentalModel>>(nivelsClassificacao);
+
+            return nivelsClassificacaoModel;
         }
 
         public async Task UpdateAsync(TipoDocumentalModel tipoDocumentalModel)

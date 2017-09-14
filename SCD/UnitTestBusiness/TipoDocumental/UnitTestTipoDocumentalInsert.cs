@@ -1,53 +1,14 @@
-using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
-using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Repository;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 {
     [TestClass]
-    public class UnitTestTipoDocumentalInsert
+    public class UnitTestTipoDocumentalInsert : UnitTestTipoDocumentalCommon
     {
-        private TipoDocumentalCore _core;
-        private List<TipoDocumentalModel> _tiposDocumentaisTestados = new List<TipoDocumentalModel>();
-
-        [TestInitialize]
-        public void Setup()
-        {
-            TipoDocumentalValidation tipoDocumentalValidation = new TipoDocumentalValidation();
-
-            ScdRepositories repositories = new ScdRepositories();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
-            });
-
-            IMapper mapper = Mapper.Instance;
-
-            OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
-
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
-
-            _core = new TipoDocumentalCore(tipoDocumentalValidation, repositories, organizacaoCore, mapper);
-        }
-
-        [TestCleanup]
-        public async Task Cleanup()
-        {
-            foreach (TipoDocumentalModel tipoDocumental in _tiposDocumentaisTestados)
-            {
-                await _core.DeleteAsync(tipoDocumental.Id);
-            }
-        }
-
         [TestMethod]
         public async Task TipoDocumentalTestInsertNull()
         {
@@ -69,7 +30,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             if (ok)
             {
-                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
+                _idsTiposDocumentaisTestados.Add(tipoDocumentalModel.Id);
 
                 Assert.Fail("Não deveria ter inserido com objeto nulo.");
             }
@@ -98,7 +59,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             if (ok)
             {
-                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
+                _idsTiposDocumentaisTestados.Add(tipoDocumentalModel.Id);
 
                 Assert.Fail("Não deveria ter inserido com descrição nula.");
             }
@@ -126,7 +87,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             if (ok)
             {
-                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
+                _idsTiposDocumentaisTestados.Add(tipoDocumentalModel.Id);
 
                 Assert.Fail("Não deveria ter inserido com descrição vazia.");
             }
@@ -154,7 +115,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             if (ok)
             {
-                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
+                _idsTiposDocumentaisTestados.Add(tipoDocumentalModel.Id);
 
                 Assert.Fail("Não deveria ter inserido com descrição somente com espaço.");
             }
@@ -184,7 +145,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             if (ok)
             {
-                _tiposDocumentaisTestados.Add(tipoDocumentalModel);
+                _idsTiposDocumentaisTestados.Add(tipoDocumentalModel.Id);
 
                 Assert.Fail("Não deveria ter inserido com um id inválido para inserção.");
             }
@@ -199,6 +160,8 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
             TipoDocumentalModel tipoDocumentalModel = new TipoDocumentalModel { Descricao = descricao };
 
             tipoDocumentalModel = await _core.InsertAsync(tipoDocumentalModel);
+
+            _idsTiposDocumentaisTestados.Add(tipoDocumentalModel.Id);
 
             Assert.IsTrue(tipoDocumentalModel.Id > 0);
             Assert.AreEqual(tipoDocumentalModel.Descricao, descricao);
