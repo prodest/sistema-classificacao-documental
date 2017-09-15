@@ -105,15 +105,15 @@ namespace Prodest.Scd.Business
 
         public async Task UpdateAsync(TipoDocumentalModel tipoDocumentalModel)
         {
-            //_validation.Valid(tipoDocumentalModel);
+            _validation.Valid(tipoDocumentalModel);
 
-            //TipoDocumental tipoDocumental = SearchPersistence(tipoDocumentalModel.Id);
+            TipoDocumental tipoDocumental = SearchPersistence(tipoDocumentalModel.Id);
 
-            //_validation.CanUpdate(tipoDocumentalModel, tipoDocumental);
+            _validation.CanUpdate(tipoDocumentalModel, tipoDocumental);
 
-            //_mapper.Map(tipoDocumentalModel, tipoDocumental);
+            _mapper.Map(tipoDocumentalModel, tipoDocumental);
 
-            //await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         private TipoDocumental SearchPersistence(int id)

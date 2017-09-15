@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Configuration;
+using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Repository;
 using System;
@@ -17,6 +18,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         protected List<int> _idsTiposDocumentaisTestados = new List<int>();
         protected TipoDocumentalCore _core;
         protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
+        private IMapper _mapper;
 
         protected async Task<Persistence.Model.TipoDocumental> InsertAsync()
         {
@@ -31,6 +33,32 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
             return tipoDocumental;
         }
 
+        protected async Task<TipoDocumentalModel> InsertModelAsync()
+        {
+            Persistence.Model.TipoDocumental tipoDocumental = await InsertAsync();
+
+            TipoDocumentalModel tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
+
+            return tipoDocumentalModel;
+        }
+
+        protected Persistence.Model.TipoDocumental SearchAsync(int id)
+        {
+            Persistence.Model.TipoDocumental tipoDocumental = _repositories.TiposDocumentais.Where(td => td.Id == id)
+                                                                                            .SingleOrDefault();
+
+            return tipoDocumental;
+        }
+
+        protected TipoDocumentalModel SearchModelAsync(int id)
+        {
+            Persistence.Model.TipoDocumental tipoDocumental = SearchAsync(id);
+
+            TipoDocumentalModel tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
+
+            return tipoDocumentalModel;
+        }
+
         [TestInitialize]
         public void Setup()
         {
@@ -43,13 +71,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
                 cfg.AddProfile<BusinessProfileAutoMapper>();
             });
 
-            IMapper mapper = Mapper.Instance;
+            _mapper = Mapper.Instance;
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, _mapper);
 
-            _core = new TipoDocumentalCore(tipoDocumentalValidation, repositories, organizacaoCore, mapper);
+            _core = new TipoDocumentalCore(tipoDocumentalValidation, repositories, organizacaoCore, _mapper);
         }
 
         [TestCleanup]

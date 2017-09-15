@@ -14,15 +14,14 @@ namespace Prodest.Scd.Business.Validation
         //    _tiposDocumental = repositories.TiposDocumentais;
         //}
 
-        //#region Valid
-        //internal void Valid(TipoDocumentalModel tipoDocumental)
-        //{
-        //    BasicValid(tipoDocumental);
+        #region Valid
+        internal void Valid(TipoDocumentalModel tipoDocumental)
+        {
+            BasicValid(tipoDocumental);
 
-        //    IdValid(tipoDocumental.Id);
-        //}
-
-        //#endregion
+            IdValid(tipoDocumental.Id);
+        }
+        #endregion
 
         #region Basic Valid
         internal void BasicValid(TipoDocumentalModel tipoDocumental)
@@ -81,12 +80,13 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
-        //internal void CanUpdate(TipoDocumentalModel newTipoDocumentalModel, TipoDocumental oldTipoDocumental)
-        //{
-        //    if (newTipoDocumentalModel.Organizacao != null && (oldTipoDocumental.Organizacao.Id != newTipoDocumentalModel.Organizacao.Id || !oldTipoDocumental.Organizacao.GuidOrganizacao.Equals(newTipoDocumentalModel.Organizacao.GuidOrganizacao)))
-        //    {
-        //        throw new ScdException("Não é possível atualizar a Organização do Nível de Classificação.");
-        //    }
-        //}
+        internal void CanUpdate(TipoDocumentalModel newTipoDocumentalModel, TipoDocumental oldTipoDocumental)
+        {
+            //TODO: Verificar após desacoplar o repositório do Negócio
+            if (newTipoDocumentalModel.Organizacao != null /*&& (oldTipoDocumental.Organizacao.Id != newTipoDocumentalModel.Organizacao.Id || !oldTipoDocumental.Organizacao.GuidOrganizacao.Equals(newTipoDocumentalModel.Organizacao.GuidOrganizacao))*/)
+            {
+                throw new ScdException("Não é possível atualizar a Organização do Tipo Documental.");
+            }
+        }
     }
 }

@@ -64,7 +64,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             await _core.DeleteAsync(tipoDocumental.Id);
 
-            tipoDocumental = _repositories.TiposDocumentais.SingleOrDefault(td => td.Id == tipoDocumental.Id);
+            tipoDocumental = SearchAsync(tipoDocumental.Id);
 
             if (tipoDocumental != null)
                 Assert.Fail("O repositório não deveria conter um Tipo Documental excluído.");
