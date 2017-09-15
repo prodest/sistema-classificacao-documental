@@ -87,7 +87,7 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         //TODO: Após a implementação dos CRUDs de Itens de Plnao de Classificacação fazer os testes de remoção de nivel de classificação com itens associados
 
         [TestMethod]
-        public async Task NivelClassificacaoTestDeletehWithIdCorrect()
+        public async Task NivelClassificacaoTestDeleteWithIdCorrect()
         {
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel
             {
