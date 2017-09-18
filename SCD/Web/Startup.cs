@@ -56,12 +56,12 @@ namespace Prodest.Scd.Web
             app.UseStaticFiles();  // For the wwwroot folder
 
 
-            //app.UseStaticFiles(new StaticFileOptions()
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //    Path.Combine(Directory.GetCurrentDirectory(), @"node_modules")),
-            //    RequestPath = new PathString("/node_modules")
-            //});
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), @"node_modules")),
+                RequestPath = new PathString("/node_modules")
+            });
 
             app.UseMvc(routes =>
             {

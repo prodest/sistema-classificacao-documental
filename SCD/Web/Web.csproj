@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\template.html" />
+    <None Include="wwwroot\workbox-build.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependency\Dependency.csproj" />
