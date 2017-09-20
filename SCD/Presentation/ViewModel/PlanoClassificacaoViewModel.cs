@@ -9,7 +9,6 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class PlanoClassificacaoViewModel : BaseViewModel
     {
         public List<PlanoClassificacaoEntidade> entidades { get; set; }
-        public List<OrganogramaOrganizacao> organizacoes { get; set; }
         public PlanoClassificacaoEntidade entidade { get; set; }
         public FiltroPlanoClassificacao filtro { get; set; }
         public bool EncerrarDataVigencia

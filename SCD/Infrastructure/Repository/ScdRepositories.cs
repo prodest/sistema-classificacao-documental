@@ -14,6 +14,7 @@ namespace Prodest.Scd.Infrastructure.Repository
             NiveisClassificacao = UnitOfWork.MakeGenericRepository<NivelClassificacao>();
             PlanosClassificacao = UnitOfWork.MakeGenericRepository<PlanoClassificacao>();
             Organizacoes = UnitOfWork.MakeGenericRepository<Organizacao>();
+            TiposDocumentais = UnitOfWork.MakeGenericRepository<TipoDocumental>();
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
@@ -25,6 +26,7 @@ namespace Prodest.Scd.Infrastructure.Repository
         public IGenericRepository<PlanoClassificacao> PlanosClassificacao { get; private set; }
 
         public IGenericRepository<Organizacao> Organizacoes { get; private set; }
+        public IGenericRepository<TipoDocumental> TiposDocumentais { get; private set; }
 
         public void Dispose()
         {

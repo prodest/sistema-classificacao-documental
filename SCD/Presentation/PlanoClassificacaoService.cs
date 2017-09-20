@@ -67,7 +67,6 @@ namespace Prodest.Scd.Presentation
             {
                 model.Action = "Update";
                 model.entidade = _mapper.Map<PlanoClassificacaoEntidade>(_core.Search(id));
-                model.organizacoes = await _organogramaService.SearchAsync();
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -183,7 +182,6 @@ namespace Prodest.Scd.Presentation
             {
                 Action = "Create",
                 entidade = new PlanoClassificacaoEntidade(),
-                organizacoes = await _organogramaService.SearchAsync()
             };
             return model;
         }
@@ -196,7 +194,6 @@ namespace Prodest.Scd.Presentation
             {
                 model.Action = "UpdateVigencia";
                 model.entidade = _mapper.Map<PlanoClassificacaoEntidade>(_core.Search(id));
-                model.organizacoes = await _organogramaService.SearchAsync();
                 model.Result = new ResultViewModel
                 {
                     Ok = true

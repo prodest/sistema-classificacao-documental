@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
-using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
