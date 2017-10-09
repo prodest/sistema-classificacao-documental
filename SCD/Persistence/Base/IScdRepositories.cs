@@ -11,5 +11,6 @@ namespace Prodest.Scd.Persistence.Base
         IGenericRepository<NivelClassificacao> NiveisClassificacao { get; }
         IGenericRepository<PlanoClassificacao> PlanosClassificacao { get; }
         IGenericRepository<Organizacao> Organizacoes { get; }
+        IGenericRepository<TipoDocumental> TiposDocumentais { get; }
     }
 }
