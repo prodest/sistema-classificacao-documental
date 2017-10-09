@@ -7,7 +7,7 @@ namespace Prodest.Scd.Business.Base
 {
     public interface IItemPlanoClassificacaoCore
     {
-        int Count(Guid guidOrganizacao);
+        int Count(int idPlanoClassificacao);
 
         Task DeleteAsync(int id);
 
@@ -15,7 +15,7 @@ namespace Prodest.Scd.Business.Base
 
         ItemPlanoClassificacaoModel Search(int id);
 
-        List<ItemPlanoClassificacaoModel> Search(Guid guidOrganizacao, int page, int count);
+        List<ItemPlanoClassificacaoModel> Search(int idPlanoClassificacao, int page, int count);
 
         Task UpdateAsync(ItemPlanoClassificacaoModel itemPlanoClassificacao);
     }

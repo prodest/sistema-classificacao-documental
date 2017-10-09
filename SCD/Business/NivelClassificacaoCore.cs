@@ -96,8 +96,7 @@ namespace Prodest.Scd.Business
                                                                                .ThenBy(pc => pc.Descricao)
                                                                                .Skip(skip)
                                                                                .Take(count)
-                                                                               .ToList()
-;
+                                                                               .ToList();
             List<NivelClassificacaoModel> nivelsClassificacaoModel = _mapper.Map<List<NivelClassificacaoModel>>(nivelsClassificacao);
 
             return nivelsClassificacaoModel;
