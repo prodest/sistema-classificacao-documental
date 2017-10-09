@@ -1,20 +1,17 @@
-﻿$(document).ajaxStart(function () {
+﻿window.mdc.autoInit();
+let menu = new mdc.menu.MDCSimpleMenu(document.querySelector('.mdc-simple-menu'));
+document.querySelector('.toggle-avatar').addEventListener('click', () => menu.open = !menu.open);
+
+$(document).ajaxStart(function () {
     $("#DivConteudo").hide();
     $("#loading").show();
-    //$(".mdl-layout__drawer").removeClass("is-visible");
-    //$(".mdl-layout__obfuscator").addClass("is-visible");
 });
 $(document).ajaxStop(function () {
     $("#loading").hide();
     $("#DivConteudo").show();
-    console.log('stop');
-    //$(".mdl-layout__obfuscator").removeClass("is-visible");
 });
 $(document).ajaxComplete(function (evento, request, ajaxOptions) {
-    console.log('complete');
     componentHandler.upgradeDom();
-    //$.validator.unobtrusive.parse(ajaxOptions.currentTarget);
-    //$.validator.unobtrusive.parse($('form'));
     _messages.forEach(ShowMessage);
     //limpa as mensagens já notificadas
     _messages = [];

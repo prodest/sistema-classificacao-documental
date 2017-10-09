@@ -11,6 +11,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
     <PackageReference Include="IdentityModel" Version="2.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\template.html" />
     <None Include="wwwroot\workbox-build.js" />
   </ItemGroup>
   <ItemGroup>

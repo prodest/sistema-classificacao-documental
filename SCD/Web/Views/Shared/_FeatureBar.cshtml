@@ -1,0 +1,30 @@
+﻿<div class="second-header">
+    <div class="mdc-toolbar">
+        <div class="mdc-toolbar__row feature-bar">
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+                <span class="feature-title">Sub-título</span>
+                <div class="feature-title-badge">Badge</div>
+            </section>
+            <div class="mdc-toolbar__section mdc-toolbar__section--align-end">
+                <div>
+                    <a href="#" class="material-icons ajuda-icon" aria-label="Ajuda" alt="Ajuda">help</a>
+                </div>
+            </div>
+        </div>
+        @if (bool.TryParse((ViewData["ExibirTerceiroNivel"]!=null? ViewData["ExibirTerceiroNivel"]:string.Empty).ToString(), out var exibir))
+        {
+            <div class="mdc-toolbar__row subfeature-bar">
+                <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
+                    <div>
+                        <nav id="toolbar-tab-bar-secondary-indicator" class="mdc-tab-bar mdc-tab-bar--indicator-accent mdc-tab-bar-upgraded">
+                            <a class="mdc-tab mdc-tab--active mdc-ripple-upgraded" href="#one" style="--mdc-ripple-surface-width:160px; --mdc-ripple-surface-height:48px; --mdc-ripple-fg-size:96px; --mdc-ripple-fg-scale:1.84422; --mdc-ripple-fg-translate-start:46px, -17.5938px; --mdc-ripple-fg-translate-end:32px, -24px;">Item One</a>
+                            <a class="mdc-tab mdc-ripple-upgraded" href="#two" style="--mdc-ripple-surface-width:160px; --mdc-ripple-surface-height:48px; --mdc-ripple-fg-size:96px; --mdc-ripple-fg-scale:1.84422;">Item Two</a>
+                            <a class="mdc-tab mdc-ripple-upgraded" href="#three" style="--mdc-ripple-surface-width:160px; --mdc-ripple-surface-height:48px; --mdc-ripple-fg-size:96px; --mdc-ripple-fg-scale:1.84422;">Item Three</a>
+                            <span class="mdc-tab-bar__indicator" style="transform: translateX(0px) scale(0.333333, 1); visibility: visible;"></span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

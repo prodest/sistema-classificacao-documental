@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -30,6 +31,25 @@ namespace Prodest.Scd.Web
         {
             services.AddMvc();
 
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
+            services.AddResponseCompression(options =>
+            {
+                options.MimeTypes = new[]
+                {
+                        // Default
+                        "text/plain",
+                        "text/css",
+                        "application/javascript",
+                        "text/html",
+                        "application/xml",
+                        "text/xml",
+                        "application/json",
+                        "text/json",
+                        // Custom
+                        "image/svg+xml"
+                    };
+            });
+
             WebDependencies.AddDependencies(services);
 
             services.AddAutoMapper();
@@ -40,6 +60,8 @@ namespace Prodest.Scd.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseResponseCompression();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
