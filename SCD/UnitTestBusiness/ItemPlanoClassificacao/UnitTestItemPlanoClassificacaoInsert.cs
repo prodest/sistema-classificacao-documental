@@ -1,41 +1,32 @@
-﻿using AutoMapper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Prodest.Scd.Business;
-using Prodest.Scd.Business.Configuration;
-using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Prodest.Scd.Business.Model;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 {
     [TestClass]
-    public class UnitTestItemPlanoClassificacaoInsert
+    public class UnitTestItemPlanoClassificacaoInsert : UnitTestItemPlanoClassificacaoCommon
     {
-        private string _guidGees = Environment.GetEnvironmentVariable("GuidGEES");
-        private ItemPlanoClassificacaoCore _core;
-
-        [TestInitialize]
-        public void Setup()
+        [TestMethod]
+        public async Task ItemPlanoClassificacaoTestInsert()
         {
-            ScdRepositories repositories = new ScdRepositories();
+            string codigo = "01";
+            string descricao = "Plano de Classidifação Descrição Teste";
 
-            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation(repositories);
+            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoModelAsync();
 
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
-            });
+            NivelClassificacaoModel nivelClassificacaoModel = await InsertNivelClassificacaoModelAsync();
 
-            IMapper mapper = Mapper.Instance;
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = new ItemPlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, PlanoClassificacao = planoClassificacaoModel, NivelClassificacao = nivelClassificacaoModel };
+            itemPlanoClassificacaoModel = await _core.InsertAsync(itemPlanoClassificacaoModel);
 
-            OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
-
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
-
-            //_core = new ItemPlanoClassificacaoCore(repositories, itemPlanoClassificacaoValidation, mapper, organizacaoCore);
+            Assert.IsTrue(itemPlanoClassificacaoModel.Id > 0);
+            Assert.AreEqual(itemPlanoClassificacaoModel.Codigo, codigo);
+            Assert.AreEqual(itemPlanoClassificacaoModel.Descricao, descricao);
+            Assert.IsFalse(itemPlanoClassificacaoModel.PlanoClassificacao == null);
+            Assert.IsTrue(itemPlanoClassificacaoModel.PlanoClassificacao.Id == planoClassificacaoModel.Id);
+            Assert.IsFalse(itemPlanoClassificacaoModel.NivelClassificacao == null);
+            Assert.IsTrue(itemPlanoClassificacaoModel.NivelClassificacao.Id == nivelClassificacaoModel.Id);
         }
-
     }
 }

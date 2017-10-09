@@ -42,8 +42,13 @@ namespace Prodest.Scd.Business.Configuration
             ;
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-            ;
+                .ForMember(dest => dest.Id, opt =>
+                {
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        return (destMember == default(int));
+                    });
+                });
             #endregion
 
 
@@ -59,7 +64,6 @@ namespace Prodest.Scd.Business.Configuration
                         return (destMember == null);
                     });
                 });
-            ;
             #endregion
 
         }
