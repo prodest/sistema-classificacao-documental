@@ -23,13 +23,6 @@ namespace Prodest.Scd.Business.Validation
 
             IdValid(nivelClassificacao.Id);
         }
-
-        internal void IdInsertValid(int id)
-        {
-            if (id != default(int))
-                throw new ScdException("O id não deve ser preenchido.");
-        }
-
         #endregion
 
         #region Basic Valid
@@ -72,15 +65,6 @@ namespace Prodest.Scd.Business.Validation
         {
             if (nivelClassificacao == null)
                 throw new ScdException("Nivel de Classificação não encontrado.");
-        }
-
-        internal void PaginationSearch(int page, int count)
-        {
-            if (page <= 0)
-                throw new ScdException("Página inválida.");
-
-            if (count <= 0)
-                throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
         internal void CanDelete(NivelClassificacao nivelClassificacao)

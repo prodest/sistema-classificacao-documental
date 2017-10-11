@@ -71,15 +71,6 @@ namespace Prodest.Scd.Business.Validation
             //    throw new ScdException("O Nivel de Classificação possui itens e não pode ser excluído.");
         }
 
-        internal void PaginationSearch(int page, int count)
-        {
-            if (page <= 0)
-                throw new ScdException("Página inválida.");
-
-            if (count <= 0)
-                throw new ScdException("Quantidade de rgistro por página inválida.");
-        }
-
         internal void CanUpdate(TipoDocumentalModel newTipoDocumentalModel, TipoDocumental oldTipoDocumental)
         {
             //TODO: Verificar após desacoplar o repositório do Negócio

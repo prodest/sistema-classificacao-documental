@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,15 +83,16 @@ namespace Prodest.Scd.Business
 
             int skip = (page - 1) * count;
 
-            List<ItemPlanoClassificacao> itemPlanosClassificacao = _itensPlanoClassificacao
-                                                                               .Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
-                                                                               .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
-                                                                               .OrderBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
-                                                                               .ThenBy(pc => pc.Descricao)
-                                                                               .Skip(skip)
-                                                                               .Take(count)
-                                                                               .ToList()
-;
+            List<ItemPlanoClassificacao> itemPlanosClassificacao = _itensPlanoClassificacao.Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
+                                                                                           .Include(ipc => ipc.NivelClassificacao)
+                                                                                           .Include(ipc => ipc.PlanoClassificacao)
+                                                                                           .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
+                                                                                           .ThenBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
+                                                                                           .ThenBy(pc => pc.Descricao)
+                                                                                           .Skip(skip)
+                                                                                           .Take(count)
+                                                                                           .ToList();
+
             List<ItemPlanoClassificacaoModel> itemPlanosClassificacaoModel = _mapper.Map<List<ItemPlanoClassificacaoModel>>(itemPlanosClassificacao);
 
             return itemPlanosClassificacaoModel;
