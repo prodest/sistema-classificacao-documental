@@ -83,7 +83,8 @@ namespace Prodest.Scd.Business
 
             int skip = (page - 1) * count;
 
-            List<ItemPlanoClassificacao> itemPlanosClassificacao = _itensPlanoClassificacao.Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
+            List<ItemPlanoClassificacao> itemPlanosClassificacao = _itensPlanoClassificacao
+                                                                               .Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
                                                                                .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
                                                                                .OrderBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
                                                                                .ThenBy(pc => pc.Descricao)

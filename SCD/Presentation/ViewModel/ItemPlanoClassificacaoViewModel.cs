@@ -8,6 +8,7 @@ namespace Prodest.Scd.Presentation.ViewModel
 {
     public class ItemPlanoClassificacaoViewModel : BaseViewModel
     {
+        public PlanoClassificacaoEntidade plano { get; set; }
         public List<ItemPlanoClassificacaoEntidade> entidades { get; set; }
         public ItemPlanoClassificacaoEntidade entidade { get; set; }
         public FiltroItemPlanoClassificacao filtro { get; set; }
@@ -17,6 +18,7 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class FiltroItemPlanoClassificacao
     {
         public string pesquisa { get; set; }
+        public int IdPlanoClassificacao { get; set; }
     }
 
     public class ItemPlanoClassificacaoEntidade

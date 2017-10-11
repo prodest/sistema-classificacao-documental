@@ -15,11 +15,13 @@ namespace Prodest.Scd.Presentation
     public class ItemPlanoClassificacaoService : IItemPlanoClassificacaoService
     {
         private IItemPlanoClassificacaoCore _core;
+        private IPlanoClassificacaoCore _corePlanoClassificacao;
         private IMapper _mapper;
         private IOrganogramaService _organogramaService;
 
-        public ItemPlanoClassificacaoService(IItemPlanoClassificacaoCore core, IMapper mapper, IOrganogramaService organogramaService)
+        public ItemPlanoClassificacaoService(IItemPlanoClassificacaoCore core, IPlanoClassificacaoCore corePlanoClassificaca,  IMapper mapper, IOrganogramaService organogramaService)
         {
+            _corePlanoClassificacao = corePlanoClassificaca;
             _core = core;
             _mapper = mapper;
             _organogramaService = organogramaService;
@@ -162,12 +164,10 @@ namespace Prodest.Scd.Presentation
 
         public async Task<ItemPlanoClassificacaoViewModel> Search(FiltroItemPlanoClassificacao filtro)
         {
-            //prodest
-            var guid = new Guid("3ca6ea0e-ca14-46fa-a911-22e616303722");
-            //GEES
-            //var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-            var entidades = _core.Search(guid, 1, 1000);
+            var plano = _corePlanoClassificacao.Search(filtro.IdPlanoClassificacao);
+            var entidades = _core.Search(filtro.IdPlanoClassificacao, 1, 1000);
             var model = new ItemPlanoClassificacaoViewModel();
+            model.plano = _mapper.Map<PlanoClassificacaoEntidade>(plano);
             model.entidades = _mapper.Map<List<ItemPlanoClassificacaoEntidade>>(entidades);
             model.Result = new ResultViewModel
             {

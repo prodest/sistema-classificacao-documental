@@ -29,6 +29,7 @@ namespace Prodest.Scd.Dependency
             #region Validation
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
+            dependencies.Add(typeof(ItemPlanoClassificacaoValidation), typeof(ItemPlanoClassificacaoValidation));
             dependencies.Add(typeof(NivelClassificacaoValidation), typeof(NivelClassificacaoValidation));
             #endregion
             #endregion

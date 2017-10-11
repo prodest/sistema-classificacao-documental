@@ -17,14 +17,14 @@ namespace Web.Controllers
         {
             _service = service;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            var model = await _service.Search(null);
+            var model = await _service.Search(new FiltroItemPlanoClassificacao { IdPlanoClassificacao = id });
             return View(model);
         }
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(int id)
         {
-            var model = await _service.Search(null);
+            var model = await _service.Search(new FiltroItemPlanoClassificacao { IdPlanoClassificacao = id });
             return PartialView("_List", model);
         }
 
@@ -34,12 +34,12 @@ namespace Web.Controllers
             AddHttpContextMessages(model.Result.Messages);
             if (model.Result.Ok)
             {
-                return await List();
+                return await List(1);
             }
             else
             {
                 //Neste cenário a chamada é a mesma independente do resultado do delete
-                return await List();
+                return await List(1);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Web.Controllers
             }
             else
             {
-                return await List();
+                return await List(1);
             }
         }
 
@@ -72,7 +72,7 @@ namespace Web.Controllers
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
                 {
-                    return await List();
+                    return await List(1);
                 }
             }
             //Se de tudo der errado, volta para o formulário
@@ -87,7 +87,7 @@ namespace Web.Controllers
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
                 {
-                    return await List();
+                    return await List(1);
                 }
             }
             return await Edit(model.entidade.Id);

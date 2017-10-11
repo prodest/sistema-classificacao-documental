@@ -50,6 +50,10 @@
                             <button title="Excluir" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--red BotaoAjax" data-url="/PlanoClassificacao/Delete/@item.Id">
                                 <i class="material-icons">delete</i>
                             </button>
+                            <button title="Atribuir Itens" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--grey BotaoAjax" data-url="/ItemPlanoClassificacao/List/@item.Id">
+                                <i class="material-icons">assignment</i>
+                            </button>
+                            
                             @if (item.Publicacao.HasValue)
                             {
                                 <button title="Informar Data Fim Vigência" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--black BotaoAjax" data-url="/PlanoClassificacao/EncerrarVigencia/@item.Id">
