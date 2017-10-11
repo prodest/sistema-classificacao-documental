@@ -22,6 +22,7 @@ namespace Prodest.Scd.Business.Validation.Common
             if (guidOrganizacao.Equals(Guid.Empty))
                 throw new ScdException("Guid da organização inválido.");
         }
+
         internal void PaginationSearch(int page, int count)
         {
             if (page <= 0)

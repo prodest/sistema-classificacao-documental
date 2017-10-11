@@ -23,13 +23,6 @@ namespace Prodest.Scd.Business.Validation
 
             IdValid(planoClassificacao.Id);
         }
-
-        internal void IdInsertValid(int id)
-        {
-            if (id != default(int))
-                throw new ScdException("O id não deve ser preenchido.");
-        }
-
         #endregion
 
         #region Basic Valid
@@ -107,15 +100,6 @@ namespace Prodest.Scd.Business.Validation
         {
             if (planoClassificacao == null)
                 throw new ScdException("Plano de Classificação não encontrado.");
-        }
-
-        internal void PaginationSearch(int page, int count)
-        {
-            if (page <= 0)
-                throw new ScdException("Página inválida.");
-
-            if (count <= 0)
-                throw new ScdException("Quantidade de rgistro por página inválida.");
         }
 
         internal void CanUpdate(PlanoClassificacaoModel newPlanoClassificacaoModel, PlanoClassificacao oldPlanoClassificacao)
