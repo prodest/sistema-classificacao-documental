@@ -187,7 +187,7 @@ namespace Prodest.Scd.Presentation
         }
 
         #region Fim Vigência
-            public async Task<PlanoClassificacaoViewModel> EncerrarVigencia(int id)
+        public async Task<PlanoClassificacaoViewModel> EncerrarVigencia(int id)
         {
             var model = new PlanoClassificacaoViewModel();
             try
@@ -215,7 +215,7 @@ namespace Prodest.Scd.Presentation
             }
             return model;
         }
-            public async Task<PlanoClassificacaoViewModel> UpdateVigencia(PlanoClassificacaoEntidade entidade)
+        public async Task<PlanoClassificacaoViewModel> UpdateVigencia(PlanoClassificacaoEntidade entidade)
         {
             var model = new PlanoClassificacaoViewModel();
             model.entidade = entidade;
@@ -251,7 +251,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
         #endregion
-       
+
 
     }
 }

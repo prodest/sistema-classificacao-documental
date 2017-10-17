@@ -10,9 +10,9 @@ namespace Prodest.Scd.Business.Configuration
 
         public BusinessProfileAutoMapper()
         {
-            #region Item do Plano de Classificação
-            CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>().ReverseMap();
-            #endregion
+            //#region Item do Plano de Classificação
+            //CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>().ReverseMap();
+            //#endregion
 
             #region Nível de Classificação
             CreateMap<NivelClassificacao, NivelClassificacaoModel>();

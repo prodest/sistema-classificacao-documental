@@ -80,15 +80,15 @@ namespace Prodest.Scd.Business.Validation
         #endregion
         #endregion
 
-        internal void Found(ItemPlanoClassificacao itemPlanoClassificacao)
+        internal void Found(ItemPlanoClassificacaoModel itemPlanoClassificacao)
         {
             if (itemPlanoClassificacao == null)
                 throw new ScdException("Item do Plano de Classificação não encontrado.");
         }
 
-        internal void CanDelete(ItemPlanoClassificacao itemPlanoClassificacao)
+        internal void CanDelete(ItemPlanoClassificacaoModel itemPlanoClassificacao)
         {
-            if (itemPlanoClassificacao.ItensPlanoClassificacaoFilhos != null && itemPlanoClassificacao.ItensPlanoClassificacaoFilhos.Count > 0)
+            if (itemPlanoClassificacao.ItensPlanoClassificacaoChildren != null && itemPlanoClassificacao.ItensPlanoClassificacaoChildren.Count > 0)
                 throw new ScdException("O Itemd do Plano de Classificação possui itens e não pode ser excluído.");
         }
     }

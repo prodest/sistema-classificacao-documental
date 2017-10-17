@@ -13,13 +13,13 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         #region Search by Id
         #region Id
         [TestMethod]
-        public void ItemPlanoClassificacaoTestSearchWithInvalidId()
+        public async Task ItemPlanoClassificacaoTestSearchWithInvalidId()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(default(int));
+                await _core.Search(default(int));
 
                 ok = true;
             }
@@ -36,13 +36,13 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         #endregion
 
         [TestMethod]
-        public void ItemPlanoClassificacaoTestSearchWithIdNonexistentOnDataBase()
+        public async Task ItemPlanoClassificacaoTestSearchWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(-1);
+                await _core.Search(-1);
 
                 ok = true;
             }
@@ -62,7 +62,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         {
             Persistence.Model.ItemPlanoClassificacao itemPlanoClassificacao = await InsertAsync();
 
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = _core.Search(itemPlanoClassificacao.Id);
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = await _core.Search(itemPlanoClassificacao.Id);
 
             Assert.AreEqual(itemPlanoClassificacao.Id, itemPlanoClassificacaoModelSearched.Id);
             Assert.AreEqual(itemPlanoClassificacao.Codigo, itemPlanoClassificacaoModelSearched.Codigo);
@@ -147,9 +147,9 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         #endregion
 
         [TestMethod]
-        public void ItemPlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public async Task ItemPlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = _core.Search(0, 1, 1);
+            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.Search(0, 1, 1);
 
             Assert.IsNotNull(itensPlanoClassificacaoModel);
             Assert.IsTrue(itensPlanoClassificacaoModel.Count == 0);
@@ -166,7 +166,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
                 await InsertAsync();
             }
 
-            List<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = _core.Search(0, page, count);
+            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.Search(0, page, count);
             Assert.IsNotNull(itensPlanoClassificacaoModel);
             Assert.IsTrue(itensPlanoClassificacaoModel.Count == count);
 

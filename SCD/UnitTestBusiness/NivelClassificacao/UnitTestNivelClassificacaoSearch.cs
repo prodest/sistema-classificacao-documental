@@ -24,16 +24,16 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         [TestInitialize]
         public async Task Setup()
         {
-            ScdRepositories repositories = new ScdRepositories();
-
-            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
-
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<BusinessProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;
+
+            ScdRepositories repositories = new ScdRepositories(mapper);
+
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 

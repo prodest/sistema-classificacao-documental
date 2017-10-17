@@ -14,11 +14,11 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 {
     public class UnitTestTipoDocumentalCommon
     {
-        protected ScdRepositories _repositories = new ScdRepositories();
+        private IMapper _mapper;
+        protected ScdRepositories _repositories;
         protected List<int> _idsTiposDocumentaisTestados = new List<int>();
         protected TipoDocumentalCore _core;
         protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
-        private IMapper _mapper;
 
         protected async Task<Persistence.Model.TipoDocumental> InsertAsync()
         {
@@ -64,8 +64,6 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         {
             TipoDocumentalValidation tipoDocumentalValidation = new TipoDocumentalValidation();
 
-            ScdRepositories repositories = new ScdRepositories();
-
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<BusinessProfileAutoMapper>();
@@ -73,11 +71,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             _mapper = Mapper.Instance;
 
+            _repositories = new ScdRepositories(_mapper);
+
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, _mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation, _mapper);
 
-            _core = new TipoDocumentalCore(tipoDocumentalValidation, repositories, organizacaoCore, _mapper);
+            _core = new TipoDocumentalCore(tipoDocumentalValidation, _repositories, organizacaoCore, _mapper);
         }
 
         [TestCleanup]

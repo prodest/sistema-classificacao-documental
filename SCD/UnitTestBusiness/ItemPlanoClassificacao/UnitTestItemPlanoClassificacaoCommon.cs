@@ -17,13 +17,13 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 {
     public class UnitTestItemPlanoClassificacaoCommon
     {
-        protected ScdRepositories _repositories = new ScdRepositories();
+        private IMapper _mapper;
+        protected ScdRepositories _repositories;
         protected List<int> _idsPlanosClassificacaoTestados = new List<int>();
         protected List<int> _idsNiveisClassificacaoTestados = new List<int>();
         protected List<int> _idsItensPlanoClassificacaoTestados = new List<int>();
         protected ItemPlanoClassificacaoCore _core;
         protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
-        private IMapper _mapper;
 
         protected async Task<Persistence.Model.PlanoClassificacao> InsertPlanoClassificacaoAsync()
         {
@@ -112,24 +112,24 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestInitialize]
         public void Setup()
         {
-            ScdRepositories repositories = new ScdRepositories();
-
-            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation();
-
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<BusinessProfileAutoMapper>();
             });
 
-            IMapper mapper = Mapper.Instance;
+            _mapper = Mapper.Instance;
+
+            _repositories = new ScdRepositories(_mapper);
+
+            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation();
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation, _mapper);
 
-            _core = new ItemPlanoClassificacaoCore(repositories, itemPlanoClassificacaoValidation, mapper, organizacaoCore);
+            _core = new ItemPlanoClassificacaoCore(new Infrastructure.Repository.Specific.ScdRepositories(_mapper), itemPlanoClassificacaoValidation, organizacaoCore);
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(_repositories);
 
             IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
 
@@ -139,7 +139,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             //_planoClassificacaoCore = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
 
-            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(_repositories);
 
             //_nivelClassificacaoCore = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
         }

@@ -26,7 +26,14 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         [TestInitialize]
         public async Task Setup()
         {
-            ScdRepositories repositories = new ScdRepositories();
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<BusinessProfileAutoMapper>();
+            });
+
+            IMapper mapper = Mapper.Instance;
+
+            ScdRepositories repositories = new ScdRepositories(mapper);
 
             PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
 
@@ -35,13 +42,6 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             AcessoCidadaoClientAccessToken acessoCidadaoClientAccessToken = new AcessoCidadaoClientAccessToken(autenticacaoIdentityServerConfig);
 
             OrganogramaService organogramaService = new OrganogramaService(acessoCidadaoClientAccessToken);
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
-            });
-
-            IMapper mapper = Mapper.Instance;
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
