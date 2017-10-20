@@ -60,13 +60,13 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestMethod]
         public async Task ItemPlanoClassificacaoTestSearchWithIdCorrect()
         {
-            Persistence.Model.ItemPlanoClassificacao itemPlanoClassificacao = await InsertAsync();
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertModelAsync();
 
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = await _core.Search(itemPlanoClassificacao.Id);
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = await _core.Search(itemPlanoClassificacaoModel.Id);
 
-            Assert.AreEqual(itemPlanoClassificacao.Id, itemPlanoClassificacaoModelSearched.Id);
-            Assert.AreEqual(itemPlanoClassificacao.Codigo, itemPlanoClassificacaoModelSearched.Codigo);
-            Assert.AreEqual(itemPlanoClassificacao.Descricao, itemPlanoClassificacaoModelSearched.Descricao);
+            Assert.AreEqual(itemPlanoClassificacaoModel.Id, itemPlanoClassificacaoModelSearched.Id);
+            Assert.AreEqual(itemPlanoClassificacaoModel.Codigo, itemPlanoClassificacaoModelSearched.Codigo);
+            Assert.AreEqual(itemPlanoClassificacaoModel.Descricao, itemPlanoClassificacaoModelSearched.Descricao);
 
             //Assert.IsTrue(itemPlanoClassificacao.Ativo);
             //Assert.AreEqual(itemPlanoClassificacao.Organizacao.GuidOrganizacao, itemPlanoClassificacaoModelSearched.Organizacao.GuidOrganizacao);
@@ -163,7 +163,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             for (int i = 0; i < (page * count); i++)
             {
-                await InsertAsync();
+                await InsertModelAsync();
             }
 
             ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.Search(0, page, count);

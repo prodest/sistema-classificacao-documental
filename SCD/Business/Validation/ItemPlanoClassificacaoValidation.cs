@@ -30,7 +30,7 @@ namespace Prodest.Scd.Business.Validation
         private void NotNull(ItemPlanoClassificacaoModel itemPlanoClassificacao)
         {
             if (itemPlanoClassificacao == null)
-                throw new ScdException("O Item Plano de Classificação não pode ser nulo.");
+                throw new ScdException("O Item do Plano de Classificação não pode ser nulo.");
         }
 
         private void PlanoClassificacaoNotNull(PlanoClassificacaoModel planoClassificacao)

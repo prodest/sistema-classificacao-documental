@@ -33,8 +33,6 @@ namespace Prodest.Scd.Business
 
             itemPlanoClassificacaoModel =  await _itensPlanoClassificacao.AddAsync(itemPlanoClassificacaoModel);
 
-            //await _unitOfWork.SaveAsync();
-
             return itemPlanoClassificacaoModel;
         }
 

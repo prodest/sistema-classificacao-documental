@@ -36,20 +36,20 @@ namespace Prodest.Scd.Business.Configuration
                 .ForMember(dest => dest.PlanosClassificacao, opt => opt.Ignore());
             #endregion
 
-            #region Plano de Classificação
-            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
-                .MaxDepth(1)
-            ;
+            //#region Plano de Classificação
+            //CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
+            //    .MaxDepth(1)
+            //;
 
-            CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
-                .ForMember(dest => dest.Id, opt =>
-                {
-                    opt.Condition((src, dest, srcMember, destMember) =>
-                    {
-                        return (destMember == default(int));
-                    });
-                });
-            #endregion
+            //CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
+            //    .ForMember(dest => dest.Id, opt =>
+            //    {
+            //        opt.Condition((src, dest, srcMember, destMember) =>
+            //        {
+            //            return (destMember == default(int));
+            //        });
+            //    });
+            //#endregion
 
 
             #region Tipo Documental
