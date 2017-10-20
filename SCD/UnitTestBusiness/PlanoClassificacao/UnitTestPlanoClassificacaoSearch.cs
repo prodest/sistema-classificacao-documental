@@ -3,12 +3,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
-using Prodest.Scd.Integration.Organograma;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using Prodest.Scd.Web.Configuration;
 using System;
 using System.Collections.Generic;
@@ -27,14 +27,14 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
+                cfg.AddProfile<InfrastructureProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;
 
             ScdRepositories repositories = new ScdRepositories(mapper);
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
             IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
 
@@ -46,7 +46,9 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
 
-            _core = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
+            EFScdRepositories scdRepositories = new EFScdRepositories(mapper);
+
+            _core = new PlanoClassificacaoCore(scdRepositories, mapper, organogramaService, organizacaoCore);
 
             string codigo = "01";
             string descricao = "Descrição Teste";
@@ -60,13 +62,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #region Search by Id
         #region Id
         [TestMethod]
-        public void PlanoClassificacaoTestSearchWithInvalidId()
+        public async Task PlanoClassificacaoTestSearchWithInvalidId()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(default(int));
+                await _core.Search(default(int));
 
                 ok = true;
             }
@@ -83,13 +85,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #endregion
 
         [TestMethod]
-        public void PlanoClassificacaoTestSearchWithIdNonexistentOnDataBase()
+        public async Task PlanoClassificacaoTestSearchWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(-1);
+                await _core.Search(-1);
 
                 ok = true;
             }
@@ -116,7 +118,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
 
-            PlanoClassificacaoModel planoClassificacaoModelSearched = _core.Search(planoClassificacaoModel.Id);
+            PlanoClassificacaoModel planoClassificacaoModelSearched = await _core.Search(planoClassificacaoModel.Id);
 
             Assert.AreEqual(planoClassificacaoModel.Id, planoClassificacaoModelSearched.Id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, planoClassificacaoModelSearched.Codigo);
@@ -133,13 +135,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #region Pagination Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
+        public async Task PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(Guid.Empty, default(int), default(int));
+                await _core.Search(Guid.Empty, default(int), default(int));
 
                 ok = true;
             }
@@ -157,13 +159,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Page
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithInvalidPage()
+        public async Task PlanoClassificacaoTestPaginationSearchWithInvalidPage()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidProdest, default(int), default(int));
+                await _core.Search(_guidProdest, default(int), default(int));
 
                 ok = true;
             }
@@ -181,13 +183,13 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
         #region Count
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithInvalidCount()
+        public async Task PlanoClassificacaoTestPaginationSearchWithInvalidCount()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidProdest, 1, default(int));
+                await _core.Search(_guidProdest, 1, default(int));
 
                 ok = true;
             }
@@ -204,9 +206,9 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         #endregion
 
         [TestMethod]
-        public void PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public async Task PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(Guid.NewGuid(), 1, 1);
+            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _core.Search(Guid.NewGuid(), 1, 1);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == 0);
         }
@@ -219,7 +221,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await InsertPlanosClassificacao(page * count);
 
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _core.Search(_guidProdest, page, count);
+            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _core.Search(_guidProdest, page, count);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == count);
 

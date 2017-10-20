@@ -3,11 +3,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using Prodest.Scd.Web.Configuration;
 using System;
 using System.Threading.Tasks;
@@ -25,14 +26,14 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
+                cfg.AddProfile<InfrastructureProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;
 
             ScdRepositories repositories = new ScdRepositories(mapper);
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
             IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
 
@@ -44,7 +45,9 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
 
-            _core = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
+            EFScdRepositories scdRepositories = new EFScdRepositories(mapper);
+
+            _core = new PlanoClassificacaoCore(scdRepositories, mapper, organogramaService, organizacaoCore);
         }
 
         #region Id
@@ -149,7 +152,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             try
             {
-                _core.Search(planoClassificacaoModel.Id);
+                await _core.Search(planoClassificacaoModel.Id);
 
                 ok = true;
             }

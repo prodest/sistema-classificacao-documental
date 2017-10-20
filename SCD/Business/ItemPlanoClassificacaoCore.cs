@@ -33,7 +33,7 @@ namespace Prodest.Scd.Business
 
             itemPlanoClassificacaoModel =  await _itensPlanoClassificacao.AddAsync(itemPlanoClassificacaoModel);
 
-            await _unitOfWork.SaveAsync();
+            //await _unitOfWork.SaveAsync();
 
             return itemPlanoClassificacaoModel;
         }
@@ -71,7 +71,7 @@ namespace Prodest.Scd.Business
 
             //_validation.CanUpdate(itemPlanoClassificacaoModel, itemPlanoClassificacao);
 
-            _itensPlanoClassificacao.Update(itemPlanoClassificacaoModel);
+            await _itensPlanoClassificacao.Update(itemPlanoClassificacaoModel);
 
             await _unitOfWork.SaveAsync();
         }

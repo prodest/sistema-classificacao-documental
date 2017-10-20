@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Integration.Organograma.Model;
-using Prodest.Scd.Persistence.Base;
-using Prodest.Scd.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,42 +15,39 @@ namespace Prodest.Scd.Business
 {
     public class PlanoClassificacaoCore : IPlanoClassificacaoCore
     {
-        private IUnitOfWork _unitOfWork;
-        private IGenericRepository<PlanoClassificacao> _planosClassificacao;
         private PlanoClassificacaoValidation _validation;
+
+        private IPlanoClassificacaoRepository _planosClassificacao;
         private IMapper _mapper;
         private IOrganogramaService _organogramaService;
         private IOrganizacaoCore _organizacaoCore;
 
-        public PlanoClassificacaoCore(IScdRepositories repositories, PlanoClassificacaoValidation validation, IMapper mapper, IOrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
+        public PlanoClassificacaoCore(IScdRepositories repositories, IMapper mapper, IOrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
         {
-            _unitOfWork = repositories.UnitOfWork;
-            _planosClassificacao = repositories.PlanosClassificacao;
-            _validation = validation;
+            _validation = new PlanoClassificacaoValidation();
+
+            _planosClassificacao = repositories.PlanosClassificacaoSpecific;
             _mapper = mapper;
             _organogramaService = organogramaService;
             _organizacaoCore = organizacaoCore;
         }
 
-        public int Count(Guid guidOrganizacao)
+        public async Task<int> Count(Guid guidOrganizacao)
         {
             _validation.OrganizacaoValid(guidOrganizacao);
 
-            var count = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guidOrganizacao))
-                                            .Count();
+            var count = await _planosClassificacao.CountByOrganizacaoAsync(guidOrganizacao);
 
             return count;
         }
 
         public async Task DeleteAsync(int id)
         {
-            PlanoClassificacao planoClassificacao = SearchPersistence(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await Search(id);
 
-            _validation.CanDelete(planoClassificacao);
+            _validation.CanDelete(planoClassificacaoModel);
 
-            _planosClassificacao.Remove(planoClassificacao);
-
-            await _unitOfWork.SaveAsync();
+            await _planosClassificacao.RemoveAsync(planoClassificacaoModel.Id);
         }
 
         public async Task<PlanoClassificacaoModel> InsertAsync(PlanoClassificacaoModel planoClassificacaoModel)
@@ -68,27 +65,23 @@ namespace Prodest.Scd.Business
             planoClassificacaoModel.GuidOrganizacao = guidProdest;
             planoClassificacaoModel.Organizacao = organizacaoPatriarca;
 
-            PlanoClassificacao planoClassificacao = _mapper.Map<PlanoClassificacao>(planoClassificacaoModel);
-
-            await _planosClassificacao.AddAsync(planoClassificacao);
-
-            await _unitOfWork.SaveAsync();
-
-            planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
+            planoClassificacaoModel = await _planosClassificacao.AddAsync(planoClassificacaoModel);
 
             return planoClassificacaoModel;
         }
 
-        public PlanoClassificacaoModel Search(int id)
+        public async Task<PlanoClassificacaoModel> Search(int id)
         {
-            PlanoClassificacao planoClassificacao = SearchPersistence(id);
+            _validation.IdValid(id);
 
-            PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(id);
+
+            _validation.Found(planoClassificacaoModel);
 
             return planoClassificacaoModel;
         }
 
-        public List<PlanoClassificacaoModel> Search(Guid guidOrganizacao, int page, int count)
+        public async Task<ICollection<PlanoClassificacaoModel>> Search(Guid guidOrganizacao, int page, int count)
         {
             _validation.OrganizacaoValid(guidOrganizacao);
 
@@ -96,15 +89,7 @@ namespace Prodest.Scd.Business
 
             int skip = (page - 1) * count;
 
-            List<PlanoClassificacao> planosClassificacao = _planosClassificacao.Where(pc => pc.GuidOrganizacao.Equals(guidOrganizacao))
-                                                                               .OrderBy(pc => pc.InicioVigencia.HasValue)
-                                                                               .ThenByDescending(pc => pc.InicioVigencia)
-                                                                               .ThenByDescending(pc => pc.Codigo)
-                                                                               .Skip(skip)
-                                                                               .Take(count)
-                                                                               .ToList();
-
-            List<PlanoClassificacaoModel> planosClassificacaoModel = _mapper.Map<List<PlanoClassificacaoModel>>(planosClassificacao);
+            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _planosClassificacao.SearchByOrganizacaoAsync(guidOrganizacao, page, count);
 
             return planosClassificacaoModel;
         }
@@ -113,9 +98,9 @@ namespace Prodest.Scd.Business
         {
             _validation.Valid(planoClassificacaoModel);
 
-            PlanoClassificacao planoClassificacao = SearchPersistence(planoClassificacaoModel.Id);
+            PlanoClassificacaoModel planoClassificacaoModelOld = await Search(planoClassificacaoModel.Id);
 
-            _validation.CanUpdate(planoClassificacaoModel, planoClassificacao);
+            _validation.CanUpdate(planoClassificacaoModel, planoClassificacaoModelOld);
 
             //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
             Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
@@ -126,33 +111,18 @@ namespace Prodest.Scd.Business
             planoClassificacaoModel.GuidOrganizacao = guidProdest;
             planoClassificacaoModel.Organizacao = organizacaoPatriarca;
 
-            _mapper.Map(planoClassificacaoModel, planoClassificacao);
-
-            await _unitOfWork.SaveAsync();
+            await _planosClassificacao.Update(planoClassificacaoModel);
         }
 
         public async Task UpdateFimVigenciaAsync(int id, DateTime fimVigencia)
         {
-            //TODO: Verificar se pode alterar fim de vigencia
-            PlanoClassificacao planoClassificacao = SearchPersistence(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await Search(id);
 
-            _validation.FimVigenciaValid(fimVigencia, planoClassificacao.InicioVigencia);
+            _validation.FimVigenciaValid(fimVigencia, planoClassificacaoModel.InicioVigencia);
 
-            planoClassificacao.FimVigencia = fimVigencia;
+            planoClassificacaoModel.FimVigencia = fimVigencia;
 
-            await _unitOfWork.SaveAsync();
-        }
-
-        private PlanoClassificacao SearchPersistence(int id)
-        {
-            _validation.IdValid(id);
-
-            PlanoClassificacao planoClassificacao = _planosClassificacao.Where(pc => pc.Id == id)
-                                                                              .SingleOrDefault();
-
-            _validation.Found(planoClassificacao);
-
-            return planoClassificacao;
+            await _planosClassificacao.Update(planoClassificacaoModel);
         }
     }
 }

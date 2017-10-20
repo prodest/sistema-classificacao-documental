@@ -1,21 +1,12 @@
 ﻿using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation.Common;
-using Prodest.Scd.Persistence.Base;
-using Prodest.Scd.Persistence.Model;
 using System;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class PlanoClassificacaoValidation : CommonValidation
     {
-        private IGenericRepository<PlanoClassificacao>  _planosClassificacao;
-
-        public PlanoClassificacaoValidation(IScdRepositories repositories)
-        {
-            _planosClassificacao = repositories.PlanosClassificacao;
-        }
-
         #region Valid
         internal void Valid(PlanoClassificacaoModel planoClassificacao)
         {
@@ -96,15 +87,15 @@ namespace Prodest.Scd.Business.Validation
         }
         #endregion
 
-        internal void Found(PlanoClassificacao planoClassificacao)
+        internal void Found(PlanoClassificacaoModel planoClassificacaoModel)
         {
-            if (planoClassificacao == null)
+            if (planoClassificacaoModel == null)
                 throw new ScdException("Plano de Classificação não encontrado.");
         }
 
-        internal void CanUpdate(PlanoClassificacaoModel newPlanoClassificacaoModel, PlanoClassificacao oldPlanoClassificacao)
+        internal void CanUpdate(PlanoClassificacaoModel newPlanoClassificacaoModel, PlanoClassificacaoModel oldPlanoClassificacaoModel)
         {
-            if (oldPlanoClassificacao.Publicacao.HasValue)
+            if (oldPlanoClassificacaoModel.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
 
             if (newPlanoClassificacaoModel.Organizacao != null)
@@ -113,9 +104,9 @@ namespace Prodest.Scd.Business.Validation
             }
         }
 
-        internal void CanDelete(PlanoClassificacao planoClassificacao)
+        internal void CanDelete(PlanoClassificacaoModel planoClassificacaoModel)
         {
-            if (planoClassificacao.Publicacao.HasValue)
+            if (planoClassificacaoModel.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser excluído.");
         }
 

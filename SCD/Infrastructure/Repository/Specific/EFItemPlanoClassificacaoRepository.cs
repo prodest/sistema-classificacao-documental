@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
+using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Persistence.Model;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +13,18 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 {
     public class EFItemPlanoClassificacaoRepository : IItemPlanoClassificacaoRepository
     {
-        protected DbSet<ItemPlanoClassificacao> _set;
-        private IMapper _mapper;
+        private ScdContext _context;
+        private DbSet<ItemPlanoClassificacao> _set;
 
-        public EFItemPlanoClassificacaoRepository(DbSet<ItemPlanoClassificacao> set, IMapper mapper)
+        private IMapper _mapper;
+        private IUnitOfWork _unitOfWork;
+
+        public EFItemPlanoClassificacaoRepository(ScdContext context, IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _set = set;
+            _context = context;
+            _set = _context.ItemPlanoClassificacao;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ItemPlanoClassificacaoModel> AddAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
@@ -25,6 +32,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             ItemPlanoClassificacao itemPlanoClassificacao = _mapper.Map<ItemPlanoClassificacao>(itemPlanoClassificacaoModel);
 
             var entityEntry = await _set.AddAsync(itemPlanoClassificacao);
+
+            await _unitOfWork.SaveAsync();
 
             itemPlanoClassificacaoModel = _mapper.Map<ItemPlanoClassificacaoModel>(entityEntry.Entity);
 
@@ -68,11 +77,15 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return count;
         }
 
-        public void Update(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
+        public async Task Update(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
         {
-            ItemPlanoClassificacao itemPlanoClassificacao = _mapper.Map<ItemPlanoClassificacao>(itemPlanoClassificacaoModel);
+            ItemPlanoClassificacao itemPlanoClassificacaoNew = _mapper.Map<ItemPlanoClassificacao>(itemPlanoClassificacaoModel);
 
-            _set.Update(itemPlanoClassificacao);
+            ItemPlanoClassificacao itemPlanoClassificacaoOld = await SearchPersistenceAsync(itemPlanoClassificacaoNew.Id);
+
+            _context.Entry(itemPlanoClassificacaoOld).CurrentValues.SetValues(itemPlanoClassificacaoNew);
+
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task RemoveAsync(int id)

@@ -7,5 +7,7 @@ namespace Prodest.Scd.Business.Repository.Base
         IUnitOfWork UnitOfWork { get; }
 
         IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; }
+
+        IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; }
     }
 }

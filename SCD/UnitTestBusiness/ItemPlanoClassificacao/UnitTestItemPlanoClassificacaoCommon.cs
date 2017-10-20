@@ -127,9 +127,9 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation, _mapper);
 
-            _core = new ItemPlanoClassificacaoCore(new Infrastructure.Repository.Specific.ScdRepositories(_mapper), itemPlanoClassificacaoValidation, organizacaoCore);
+            _core = new ItemPlanoClassificacaoCore(new Infrastructure.Repository.Specific.EFScdRepositories(_mapper), itemPlanoClassificacaoValidation, organizacaoCore);
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(_repositories);
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
             IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
 
