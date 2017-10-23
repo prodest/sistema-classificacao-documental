@@ -324,9 +324,9 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
             string codigo = "01";
             string descricao = "ItemPlanoClassificacaoTestInsert";
 
-            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoModelAsync();
+            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
 
-            NivelClassificacaoModel nivelClassificacaoModel = await InsertNivelClassificacaoModelAsync();
+            NivelClassificacaoModel nivelClassificacaoModel = await InsertNivelClassificacaoAsync();
 
             ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = new ItemPlanoClassificacaoModel
             {
@@ -336,6 +336,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
                 Descricao = descricao
             };
             itemPlanoClassificacaoModel = await _core.InsertAsync(itemPlanoClassificacaoModel);
+            _idsItensPlanoClassificacaoTestados.Add(itemPlanoClassificacaoModel.Id);
 
             Assert.IsTrue(itemPlanoClassificacaoModel.Id > 0);
             Assert.AreEqual(itemPlanoClassificacaoModel.Codigo, codigo);

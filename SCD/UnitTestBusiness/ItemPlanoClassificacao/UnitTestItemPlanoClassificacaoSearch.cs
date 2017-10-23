@@ -60,7 +60,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestMethod]
         public async Task ItemPlanoClassificacaoTestSearchWithIdCorrect()
         {
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertAsync();
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertItemPlanoClassificacaoAsync();
 
             ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = await _core.SearchAsync(itemPlanoClassificacaoModel.Id);
 
@@ -163,7 +163,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             for (int i = 0; i < (page * count); i++)
             {
-                await InsertAsync();
+                await InsertItemPlanoClassificacaoAsync();
             }
 
             ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(0, page, count);
