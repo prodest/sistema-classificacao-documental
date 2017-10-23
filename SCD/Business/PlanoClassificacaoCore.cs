@@ -18,21 +18,19 @@ namespace Prodest.Scd.Business
         private PlanoClassificacaoValidation _validation;
 
         private IPlanoClassificacaoRepository _planosClassificacao;
-        private IMapper _mapper;
         private IOrganogramaService _organogramaService;
         private IOrganizacaoCore _organizacaoCore;
 
-        public PlanoClassificacaoCore(IScdRepositories repositories, IMapper mapper, IOrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
+        public PlanoClassificacaoCore(IScdRepositories repositories, IOrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
         {
             _validation = new PlanoClassificacaoValidation();
 
             _planosClassificacao = repositories.PlanosClassificacaoSpecific;
-            _mapper = mapper;
             _organogramaService = organogramaService;
             _organizacaoCore = organizacaoCore;
         }
 
-        public async Task<int> Count(Guid guidOrganizacao)
+        public async Task<int> CountAsync(Guid guidOrganizacao)
         {
             _validation.OrganizacaoValid(guidOrganizacao);
 
@@ -43,7 +41,7 @@ namespace Prodest.Scd.Business
 
         public async Task DeleteAsync(int id)
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await Search(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await SearchAsync(id);
 
             _validation.CanDelete(planoClassificacaoModel);
 
@@ -56,21 +54,15 @@ namespace Prodest.Scd.Business
 
             _validation.IdInsertValid(planoClassificacaoModel.Id);
 
-            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
-            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
-            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(guidProdest);
-
-            OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid);
-
-            planoClassificacaoModel.GuidOrganizacao = guidProdest;
-            planoClassificacaoModel.Organizacao = organizacaoPatriarca;
+            planoClassificacaoModel.GuidOrganizacao = GetGuidOrganizacao();
+            planoClassificacaoModel.Organizacao = await GetOrganizacaoPatricarcaModel();
 
             planoClassificacaoModel = await _planosClassificacao.AddAsync(planoClassificacaoModel);
 
             return planoClassificacaoModel;
         }
 
-        public async Task<PlanoClassificacaoModel> Search(int id)
+        public async Task<PlanoClassificacaoModel> SearchAsync(int id)
         {
             _validation.IdValid(id);
 
@@ -81,13 +73,11 @@ namespace Prodest.Scd.Business
             return planoClassificacaoModel;
         }
 
-        public async Task<ICollection<PlanoClassificacaoModel>> Search(Guid guidOrganizacao, int page, int count)
+        public async Task<ICollection<PlanoClassificacaoModel>> SearchAsync(Guid guidOrganizacao, int page, int count)
         {
             _validation.OrganizacaoValid(guidOrganizacao);
 
             _validation.PaginationSearch(page, count);
-
-            int skip = (page - 1) * count;
 
             ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _planosClassificacao.SearchByOrganizacaoAsync(guidOrganizacao, page, count);
 
@@ -98,31 +88,43 @@ namespace Prodest.Scd.Business
         {
             _validation.Valid(planoClassificacaoModel);
 
-            PlanoClassificacaoModel planoClassificacaoModelOld = await Search(planoClassificacaoModel.Id);
+            PlanoClassificacaoModel planoClassificacaoModelOld = await SearchAsync(planoClassificacaoModel.Id);
 
             _validation.CanUpdate(planoClassificacaoModel, planoClassificacaoModelOld);
 
-            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
-            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
-            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(guidProdest);
+            planoClassificacaoModel.GuidOrganizacao = GetGuidOrganizacao();
+            planoClassificacaoModel.Organizacao = await GetOrganizacaoPatricarcaModel();
 
-            OrganizacaoModel organizacaoPatriarca = _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid);
-
-            planoClassificacaoModel.GuidOrganizacao = guidProdest;
-            planoClassificacaoModel.Organizacao = organizacaoPatriarca;
-
-            await _planosClassificacao.Update(planoClassificacaoModel);
+            await _planosClassificacao.UpdateAsync(planoClassificacaoModel);
         }
 
         public async Task UpdateFimVigenciaAsync(int id, DateTime fimVigencia)
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await Search(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await SearchAsync(id);
 
             _validation.FimVigenciaValid(fimVigencia, planoClassificacaoModel.InicioVigencia);
 
             planoClassificacaoModel.FimVigencia = fimVigencia;
 
-            await _planosClassificacao.Update(planoClassificacaoModel);
+            await _planosClassificacao.UpdateAsync(planoClassificacaoModel);
+        }
+
+        private Guid GetGuidOrganizacao()
+        {
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
+
+            return guidProdest;
+        }
+
+        private async Task<OrganizacaoModel> GetOrganizacaoPatricarcaModel()
+        {
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(GetGuidOrganizacao());
+
+            OrganizacaoModel organizacaoPatriarca = await _organizacaoCore.SearchAsync(organogramaOrganizacaoPatriarca.Guid);
+
+            return organizacaoPatriarca;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             IMapper mapper = Mapper.Instance;
 
-            ScdRepositories repositories = new ScdRepositories(mapper);
+            EFScdRepositories repositories = new EFScdRepositories(mapper);
 
             PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
@@ -43,11 +43,11 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation);
 
             EFScdRepositories scdRepositories = new EFScdRepositories(mapper);
 
-            _core = new PlanoClassificacaoCore(scdRepositories, mapper, organogramaService, organizacaoCore);
+            _core = new PlanoClassificacaoCore(scdRepositories, organogramaService, organizacaoCore);
         }
 
         #region Id
@@ -152,7 +152,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             try
             {
-                await _core.Search(planoClassificacaoModel.Id);
+                await _core.SearchAsync(planoClassificacaoModel.Id);
 
                 ok = true;
             }

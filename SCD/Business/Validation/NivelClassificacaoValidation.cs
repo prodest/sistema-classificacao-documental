@@ -1,21 +1,12 @@
 ﻿using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation.Common;
-using Prodest.Scd.Persistence.Base;
-using Prodest.Scd.Persistence.Model;
 using System;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class NivelClassificacaoValidation : CommonValidation
     {
-        private IGenericRepository<NivelClassificacao>  _niveisClassificacao;
-
-        public NivelClassificacaoValidation(IScdRepositories repositories)
-        {
-            _niveisClassificacao = repositories.NiveisClassificacao;
-        }
-
         #region Valid
         internal void Valid(NivelClassificacaoModel nivelClassificacao)
         {
@@ -61,21 +52,21 @@ namespace Prodest.Scd.Business.Validation
         #endregion
         #endregion
 
-        internal void Found(NivelClassificacao nivelClassificacao)
+        internal void Found(NivelClassificacaoModel nivelClassificacaoModel)
         {
-            if (nivelClassificacao == null)
+            if (nivelClassificacaoModel == null)
                 throw new ScdException("Nivel de Classificação não encontrado.");
         }
 
-        internal void CanDelete(NivelClassificacao nivelClassificacao)
+        internal void CanDelete(NivelClassificacaoModel nivelClassificacaoModel)
         {
-            if (nivelClassificacao.ItensPlanoClassificacao != null && nivelClassificacao.ItensPlanoClassificacao.Count > 0)
+            if (nivelClassificacaoModel.ItensPlanoClassificacao != null && nivelClassificacaoModel.ItensPlanoClassificacao.Count > 0)
                 throw new ScdException("O Nivel de Classificação possui itens e não pode ser excluído.");
         }
 
-        internal void CanUpdate(NivelClassificacaoModel newNivelClassificacaoModel, NivelClassificacao oldNivelClassificacao)
+        internal void CanUpdate(NivelClassificacaoModel newNivelClassificacaoModel, NivelClassificacaoModel oldNivelClassificacaoModel)
         {
-            if (newNivelClassificacaoModel.Organizacao != null && (oldNivelClassificacao.Organizacao.Id != newNivelClassificacaoModel.Organizacao.Id || !oldNivelClassificacao.Organizacao.GuidOrganizacao.Equals(newNivelClassificacaoModel.Organizacao.GuidOrganizacao)))
+            if (newNivelClassificacaoModel.Organizacao != null && (oldNivelClassificacaoModel.Organizacao.Id != newNivelClassificacaoModel.Organizacao.Id || !oldNivelClassificacaoModel.Organizacao.GuidOrganizacao.Equals(newNivelClassificacaoModel.Organizacao.GuidOrganizacao)))
             {
                 throw new ScdException("Não é possível atualizar a Organização do Nível de Classificação.");
             }

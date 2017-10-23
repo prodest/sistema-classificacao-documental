@@ -11,7 +11,7 @@ namespace Prodest.Scd.Business.Repository
         Task<PlanoClassificacaoModel> SearchAsync(int id);
         Task<ICollection<PlanoClassificacaoModel>> SearchByOrganizacaoAsync(Guid guidOrganizacao, int page, int count);
         Task<int> CountByOrganizacaoAsync(Guid guidOrganizacao);
-        Task Update(PlanoClassificacaoModel planoClassificacaoModel);
+        Task UpdateAsync(PlanoClassificacaoModel planoClassificacaoModel);
         Task RemoveAsync(int id);
     }
 }

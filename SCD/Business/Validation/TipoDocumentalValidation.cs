@@ -1,19 +1,11 @@
 ﻿using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation.Common;
-using Prodest.Scd.Persistence.Model;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class TipoDocumentalValidation : CommonValidation
     {
-        //private IGenericRepository<TipoDocumental>  _tiposDocumental;
-
-        //public TipoDocumentalValidation(IScdRepositories repositories)
-        //{
-        //    _tiposDocumental = repositories.TiposDocumentais;
-        //}
-
         #region Valid
         internal void Valid(TipoDocumentalModel tipoDocumental)
         {
@@ -59,19 +51,19 @@ namespace Prodest.Scd.Business.Validation
         #endregion
         #endregion
 
-        internal void Found(TipoDocumental tipoDocumental)
+        internal void Found(TipoDocumentalModel tipoDocumentalModel)
         {
-            if (tipoDocumental == null)
+            if (tipoDocumentalModel == null)
                 throw new ScdException("Tipo Documental não encontrado.");
         }
-        internal void CanDelete(TipoDocumental tipoDocumental)
+        internal void CanDelete(TipoDocumentalModel tipoDocumentalModel)
         {
             //TODO: Após a inserção de Itens de Plano de Classificação verificar se existem algum associado
             //if (tipoDocumental.ItensPlanoClassificacao != null && tipoDocumental.ItensPlanoClassificacao.Count > 0)
             //    throw new ScdException("O Nivel de Classificação possui itens e não pode ser excluído.");
         }
 
-        internal void CanUpdate(TipoDocumentalModel newTipoDocumentalModel, TipoDocumental oldTipoDocumental)
+        internal void CanUpdate(TipoDocumentalModel newTipoDocumentalModel, TipoDocumentalModel oldTipoDocumentalModel)
         {
             //TODO: Verificar após desacoplar o repositório do Negócio
             if (newTipoDocumentalModel.Organizacao != null /*&& (oldTipoDocumental.Organizacao.Id != newTipoDocumentalModel.Organizacao.Id || !oldTipoDocumental.Organizacao.GuidOrganizacao.Equals(newTipoDocumentalModel.Organizacao.GuidOrganizacao))*/)

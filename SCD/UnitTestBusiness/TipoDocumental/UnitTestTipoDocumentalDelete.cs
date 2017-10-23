@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business.Common.Exceptions;
+using Prodest.Scd.Business.Model;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,13 +61,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         [TestMethod]
         public async Task TipoDocumentalTestDelete()
         {
-            Persistence.Model.TipoDocumental tipoDocumental = await InsertAsync();
+            TipoDocumentalModel tipoDocumentalModel = await InsertAsync();
 
-            await _core.DeleteAsync(tipoDocumental.Id);
+            await _core.DeleteAsync(tipoDocumentalModel.Id);
 
-            tipoDocumental = SearchAsync(tipoDocumental.Id);
+            tipoDocumentalModel = await SearchAsync(tipoDocumentalModel.Id);
 
-            if (tipoDocumental != null)
+            if (tipoDocumentalModel != null)
                 Assert.Fail("O repositório não deveria conter um Tipo Documental excluído.");
         }
     }

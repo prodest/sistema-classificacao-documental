@@ -43,9 +43,9 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(new ScdRepositories(mapper), organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(new EFScdRepositories(mapper), organizacaoValidation);
 
-            _core = new PlanoClassificacaoCore(repositories, mapper, organogramaService, organizacaoCore);
+            _core = new PlanoClassificacaoCore(repositories, organogramaService, organizacaoCore);
 
             string codigo = "01";
             string descricao = "Descrição Teste";
@@ -64,7 +64,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             try
             {
-                await _core.Count(Guid.Empty);
+                await _core.CountAsync(Guid.Empty);
 
                 ok = true;
             }
@@ -83,14 +83,14 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         [TestMethod]
         public async Task PlanoClassificacaoTestCountWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            int count = await _core.Count(Guid.NewGuid());
+            int count = await _core.CountAsync(Guid.NewGuid());
             Assert.IsTrue(count == 0);
         }
 
         [TestMethod]
         public async Task PlanoClassificacaoTestCountWithGuidOrganizacaoCorrect()
         {
-            int count = await _core.Count(_guidProdest);
+            int count = await _core.CountAsync(_guidProdest);
             Assert.IsTrue(count > 0);
         }
     }

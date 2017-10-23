@@ -34,7 +34,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             IMapper mapper = Mapper.Instance;
 
-            ScdRepositories repositories = new ScdRepositories(mapper);
+            EFScdRepositories repositories = new EFScdRepositories(mapper);
 
             PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
@@ -46,11 +46,9 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation);
 
-            EFScdRepositories scdRepositories = new EFScdRepositories(mapper);
-
-            _core = new PlanoClassificacaoCore(scdRepositories, mapper, organogramaService, organizacaoCore);
+            _core = new PlanoClassificacaoCore(repositories, organogramaService, organizacaoCore);
 
             string codigo = "01";
             string descricao = "Descrição Teste";
@@ -432,7 +430,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = await _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -474,7 +472,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = await _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -520,7 +518,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = await _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -568,7 +566,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = await _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -607,7 +605,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             if (ok)
                 Assert.Fail("Não deveria ter atualizado a data de fim de vigência sem a data de início de vigência.");
 
-            PlanoClassificacaoModel planoClassificacaoModel = await _core.Search(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await _core.SearchAsync(id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, _planoClassificacaoModel.Codigo);
@@ -646,7 +644,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             if (ok)
                 Assert.Fail("Não deveria ter atualizado com data de fim de vigência anterior à data de início de vigência.");
 
-            PlanoClassificacaoModel planoClassificacaoModel = await _core.Search(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await _core.SearchAsync(id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, _planoClassificacaoPublicadoModel.Codigo);
@@ -688,7 +686,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateFimVigenciaAsync(id, fimVigencia);
 
-            planoClassificacaoModel = await _core.Search(id);
+            planoClassificacaoModel = await _core.SearchAsync(id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);

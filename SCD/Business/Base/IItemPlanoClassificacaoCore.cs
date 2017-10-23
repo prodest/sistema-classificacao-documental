@@ -9,9 +9,9 @@ namespace Prodest.Scd.Business.Base
     {
         Task<ItemPlanoClassificacaoModel> InsertAsync(ItemPlanoClassificacaoModel itemPlanoClassificacao);
 
-        Task<ItemPlanoClassificacaoModel> Search(int id);
+        Task<ItemPlanoClassificacaoModel> SearchAsync(int id);
 
-        Task<ICollection<ItemPlanoClassificacaoModel>> Search(int idPlanoClassificacao, int page, int count);
+        Task<ICollection<ItemPlanoClassificacaoModel>> SearchAsync(int idPlanoClassificacao, int page, int count);
 
         Task<int> CountAsync(int idPlanoClassificacao);
 

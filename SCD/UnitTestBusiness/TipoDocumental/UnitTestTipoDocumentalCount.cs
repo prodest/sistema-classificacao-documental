@@ -10,13 +10,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
     {
         #region Guid Organização
         [TestMethod]
-        public void TipoDocumentalTestCountWithGuidOrganizacaoGuidEmpty()
+        public async Task TipoDocumentalTestCountWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Count(Guid.Empty);
+                await _core.CountAsync(Guid.Empty);
 
                 ok = true;
             }
@@ -33,9 +33,9 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         #endregion
 
         [TestMethod]
-        public void TipoDocumentalTestCountWithGuidOrganizacaoNonexistentOnDataBase()
+        public async Task TipoDocumentalTestCountWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            int count = _core.Count(Guid.NewGuid());
+            int count = await _core.CountAsync(Guid.NewGuid());
 
             Assert.IsTrue(count == 0);
         }
@@ -45,7 +45,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         {
             await InsertAsync();
 
-            int count = _core.Count(_guidGees);
+            int count = await _core.CountAsync(_guidGees);
 
             Assert.IsTrue(count > 0);
         }
