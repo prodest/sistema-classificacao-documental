@@ -2,10 +2,11 @@ using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Repository;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using System;
 using System.Threading.Tasks;
 
@@ -22,20 +23,20 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
+                cfg.AddProfile<InfrastructureProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;
 
-            ScdRepositories repositories = new ScdRepositories(mapper);
+            EFScdRepositories repositories = new EFScdRepositories(mapper);
 
-            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation();
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation);
 
-            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
+            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, organizacaoCore);
 
             NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Descrição Teste", Organizacao = new OrganizacaoModel { GuidOrganizacao = _guidGees } };
 
@@ -44,13 +45,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
         #region Guid Organização
         [TestMethod]
-        public void NivelClassificacaoTestCountWithGuidOrganizacaoGuidEmpty()
+        public async Task NivelClassificacaoTestCountWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Count(Guid.Empty);
+                await _core.CountAsync(Guid.Empty);
 
                 ok = true;
             }
@@ -67,16 +68,16 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         #endregion
 
         [TestMethod]
-        public void NivelClassificacaoTestCountWithGuidOrganizacaoNonexistentOnDataBase()
+        public async Task NivelClassificacaoTestCountWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            int count = _core.Count(Guid.NewGuid());
+            int count = await _core.CountAsync(Guid.NewGuid());
             Assert.IsTrue(count == 0);
         }
 
         [TestMethod]
-        public void NivelClassificacaoTestCountWithGuidOrganizacaoCorrect()
+        public async Task NivelClassificacaoTestCountWithGuidOrganizacaoCorrect()
         {
-            int count = _core.Count(_guidGees);
+            int count = await _core.CountAsync(_guidGees);
             Assert.IsTrue(count > 0);
         }
     }

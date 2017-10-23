@@ -7,15 +7,15 @@ namespace Prodest.Scd.Business.Base
 {
     public interface INivelClassificacaoCore
     {
-        int Count(Guid guidOrganizacao);
+        Task<int> CountAsync(Guid guidOrganizacao);
 
         Task DeleteAsync(int id);
 
         Task<NivelClassificacaoModel> InsertAsync(NivelClassificacaoModel nivelClassificacao);
 
-        NivelClassificacaoModel Search(int id);
+        Task<NivelClassificacaoModel> SearchAsync(int id);
 
-        List<NivelClassificacaoModel> Search(Guid guidOrganizacao, int page, int count);
+        Task<ICollection<NivelClassificacaoModel>> SearchAsync(Guid guidOrganizacao, int page, int count);
 
         Task UpdateAsync(NivelClassificacaoModel nivelClassificacao);
     }

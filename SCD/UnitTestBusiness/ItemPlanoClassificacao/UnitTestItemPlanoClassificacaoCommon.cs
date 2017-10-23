@@ -8,8 +8,6 @@ using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
 using Prodest.Scd.Infrastructure.Repository.Specific;
-using Prodest.Scd.Integration.Organograma.Base;
-using Prodest.Scd.Integration.Organograma.Model;
 using Prodest.Scd.Web.Configuration;
 using System;
 using System.Collections.Generic;
@@ -21,89 +19,83 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
     public class UnitTestItemPlanoClassificacaoCommon
     {
         private IMapper _mapper;
-        private IOrganogramaService _organogramaService;
-
-        protected EFScdRepositories _efRepositories;
-        protected ScdRepositories _repositories;
+        protected EFScdRepositories _repositories;
         protected List<int> _idsPlanosClassificacaoTestados = new List<int>();
         protected List<int> _idsNiveisClassificacaoTestados = new List<int>();
         protected List<int> _idsItensPlanoClassificacaoTestados = new List<int>();
         protected ItemPlanoClassificacaoCore _core;
         protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
 
-        protected async Task<PlanoClassificacaoModel> InsertPlanoClassificacaoModelAsync()
+        protected async Task<PlanoClassificacaoModel> InsertPlanoClassificacaoAsync()
         {
-            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel
-            {
-                Codigo = "01",
-                Descricao = "Plano Classificação Teste",
-                AreaFim = true
-            };
-
-            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
-            OrganogramaOrganizacao organogramaOrganizacaoPatriarca = await _organogramaService.SearchPatriarcaAsync(guidProdest);
-
-            Persistence.Model.Organizacao organizacaoPatriarca = _repositories.Organizacoes.Where(o => o.GuidOrganizacao.Equals(organogramaOrganizacaoPatriarca.Guid))
-                                                                                           .SingleOrDefault();
-
-            OrganizacaoModel organizacaoPatriarcaModel = _mapper.Map<OrganizacaoModel>(organizacaoPatriarca);
-
-            planoClassificacaoModel.GuidOrganizacao = guidProdest;
-            planoClassificacaoModel.Organizacao = organizacaoPatriarcaModel;
-
-            planoClassificacaoModel = await _efRepositories.PlanosClassificacaoSpecific.AddAsync(planoClassificacaoModel);
-
-            await _efRepositories.UnitOfWork.SaveAsync();
+            PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = "01", Descricao = "Plano Classificação Teste", AreaFim = true };
+            planoClassificacaoModel = await _repositories.PlanosClassificacaoSpecific.AddAsync(planoClassificacaoModel);
 
             _idsItensPlanoClassificacaoTestados.Add(planoClassificacaoModel.Id);
 
             return planoClassificacaoModel;
         }
 
-        protected async Task<Persistence.Model.NivelClassificacao> InsertNivelClassificacaoAsync()
+        protected async Task<NivelClassificacaoModel> InsertNivelClassificacaoAsync()
         {
-            Persistence.Model.NivelClassificacao nivelClassificacao = new Persistence.Model.NivelClassificacao { Descricao = "Nivel Classificação Teste", Ativo = true };
-            nivelClassificacao = await _repositories.NiveisClassificacao.AddAsync(nivelClassificacao);
+            NivelClassificacaoModel nivelClassificacaoModel = new NivelClassificacaoModel { Descricao = "Nivel Classificação Teste", Ativo = true };
+            nivelClassificacaoModel = await _repositories.NiveisClassificacaoSpecific.AddAsync(nivelClassificacaoModel);
 
-            await _efRepositories.UnitOfWork.SaveAsync();
+            _idsNiveisClassificacaoTestados.Add(nivelClassificacaoModel.Id);
 
-            _idsNiveisClassificacaoTestados.Add(nivelClassificacao.Id);
-
-            return nivelClassificacao;
+            return nivelClassificacaoModel;
         }
 
-        protected async Task<ItemPlanoClassificacaoModel> InsertModelAsync()
+        protected async Task<ItemPlanoClassificacaoModel> InsertAsync()
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoModelAsync();
+            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
 
-            Persistence.Model.NivelClassificacao nivelClassificacao = await InsertNivelClassificacaoAsync();
+            NivelClassificacaoModel nivelClassificacaoModel = await InsertNivelClassificacaoAsync();
 
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = new ItemPlanoClassificacaoModel { Codigo = "02", Descricao = "Item do Plano Classificação Teste", PlanoClassificacao = planoClassificacaoModel, NivelClassificacao = new NivelClassificacaoModel { Id = nivelClassificacao.Id } };
-            itemPlanoClassificacaoModel = await _efRepositories.ItensPlanoClassificacaoSpecific.AddAsync(itemPlanoClassificacaoModel);
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = new ItemPlanoClassificacaoModel { Codigo = "02", Descricao = "Item do Plano Classificação Teste", PlanoClassificacao = planoClassificacaoModel, NivelClassificacao = nivelClassificacaoModel };
+            itemPlanoClassificacaoModel = await _repositories.ItensPlanoClassificacaoSpecific.AddAsync(itemPlanoClassificacaoModel);
 
-            await _efRepositories.UnitOfWork.SaveAsync();
+            await _repositories.UnitOfWork.SaveAsync();
 
             _idsItensPlanoClassificacaoTestados.Add(itemPlanoClassificacaoModel.Id);
 
             return itemPlanoClassificacaoModel;
         }
 
+        protected async Task<PlanoClassificacaoModel> InsertPlanoClassificacaoModelAsync()
+        {
+            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
+
+            return planoClassificacaoModel;
+        }
+
         protected async Task<NivelClassificacaoModel> InsertNivelClassificacaoModelAsync()
         {
-            Persistence.Model.NivelClassificacao nivelClassificacao = await InsertNivelClassificacaoAsync();
-
-            NivelClassificacaoModel nivelClassificacaoModel = _mapper.Map<NivelClassificacaoModel>(nivelClassificacao);
+            NivelClassificacaoModel nivelClassificacaoModel = await InsertNivelClassificacaoAsync();
 
             return nivelClassificacaoModel;
         }
 
-        protected async Task<ItemPlanoClassificacaoModel> SearchModelAsync(int id)
+        protected async Task<ItemPlanoClassificacaoModel> InsertModelAsync()
         {
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _efRepositories.ItensPlanoClassificacaoSpecific.SearchAsync(id);
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertAsync();
 
             return itemPlanoClassificacaoModel;
         }
 
+        protected async Task<ItemPlanoClassificacaoModel> SearchAsync(int id)
+        {
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _repositories.ItensPlanoClassificacaoSpecific.SearchAsync(id);
+
+            return itemPlanoClassificacaoModel;
+        }
+
+        protected async Task<ItemPlanoClassificacaoModel> SearchModelAsync(int id)
+        {
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await SearchAsync(id);
+
+            return itemPlanoClassificacaoModel;
+        }
 
         [TestInitialize]
         public void Setup()
@@ -115,17 +107,17 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             _mapper = Mapper.Instance;
 
-            _efRepositories = new EFScdRepositories(_mapper);
+            _repositories = new EFScdRepositories(_mapper);
 
-            _repositories = new ScdRepositories(_mapper);
+            _repositories = new EFScdRepositories(_mapper);
 
             ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation();
 
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation, _mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation);
 
-            _core = new ItemPlanoClassificacaoCore(new Infrastructure.Repository.Specific.EFScdRepositories(_mapper), itemPlanoClassificacaoValidation, organizacaoCore);
+            _core = new ItemPlanoClassificacaoCore(_repositories, itemPlanoClassificacaoValidation, organizacaoCore);
 
             PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
@@ -133,11 +125,11 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             AcessoCidadaoClientAccessToken acessoCidadaoClientAccessToken = new AcessoCidadaoClientAccessToken(autenticacaoIdentityServerConfig);
 
-            _organogramaService = new OrganogramaService(acessoCidadaoClientAccessToken);
+            OrganogramaService organogramaService = new OrganogramaService(acessoCidadaoClientAccessToken);
 
             //_planoClassificacaoCore = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
 
-            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(_repositories);
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation();
 
             //_nivelClassificacaoCore = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
         }
@@ -147,29 +139,29 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         {
             foreach (int idPlanoClassificacao in _idsPlanosClassificacaoTestados)
             {
-                PlanoClassificacaoModel planoClassificacaoModel = await _efRepositories.PlanosClassificacaoSpecific.SearchAsync(idPlanoClassificacao);
+                PlanoClassificacaoModel planoClassificacaoModel = await _repositories.PlanosClassificacaoSpecific.SearchAsync(idPlanoClassificacao);
 
                 if (planoClassificacaoModel != null)
-                    await _efRepositories.PlanosClassificacaoSpecific.RemoveAsync(planoClassificacaoModel.Id);
+                    await _repositories.PlanosClassificacaoSpecific.RemoveAsync(planoClassificacaoModel.Id);
             }
 
             foreach (int idNivelClassificacao in _idsNiveisClassificacaoTestados)
             {
-                Persistence.Model.NivelClassificacao nivelClassificacao = _repositories.NiveisClassificacao.SingleOrDefault(nc => nc.Id == idNivelClassificacao);
+                NivelClassificacaoModel nivelClassificacaoModel = await _repositories.NiveisClassificacaoSpecific.SearchAsync(idNivelClassificacao);
 
-                if (nivelClassificacao != null)
-                    _repositories.NiveisClassificacao.Remove(nivelClassificacao);
+                if (nivelClassificacaoModel != null)
+                    await _repositories.NiveisClassificacaoSpecific.RemoveAsync(nivelClassificacaoModel.Id);
             }
 
             foreach (int idItemPlanoClassificacao in _idsItensPlanoClassificacaoTestados)
             {
-                ItemPlanoClassificacaoModel itemPlanoClassificacao = await _efRepositories.ItensPlanoClassificacaoSpecific.SearchAsync(idItemPlanoClassificacao);
+                ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _repositories.ItensPlanoClassificacaoSpecific.SearchAsync(idItemPlanoClassificacao);
 
-                if (itemPlanoClassificacao != null)
-                    await _efRepositories.ItensPlanoClassificacaoSpecific.RemoveAsync(itemPlanoClassificacao.Id);
+                if (itemPlanoClassificacaoModel != null)
+                    await _repositories.ItensPlanoClassificacaoSpecific.RemoveAsync(itemPlanoClassificacaoModel.Id);
             }
 
-            await _efRepositories.UnitOfWork.SaveAsync();
+            await _repositories.UnitOfWork.SaveAsync();
         }
     }
 }

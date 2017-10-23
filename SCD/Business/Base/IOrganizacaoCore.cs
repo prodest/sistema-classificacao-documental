@@ -6,7 +6,6 @@ namespace Prodest.Scd.Business.Base
 {
     public interface IOrganizacaoCore
     {
-        OrganizacaoModel SearchAsync(Guid guidOrganizacao);
-        OrganizacaoModel SearchAsync(int id, Guid guidOrganizacao);
+        Task<OrganizacaoModel> SearchAsync(Guid guidOrganizacao);
     }
 }

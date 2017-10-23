@@ -36,14 +36,14 @@ namespace Prodest.Scd.Business
             return itemPlanoClassificacaoModel;
         }
 
-        public async Task<ItemPlanoClassificacaoModel> Search(int id)
+        public async Task<ItemPlanoClassificacaoModel> SearchAsync(int id)
         {
             ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _itensPlanoClassificacao.SearchAsync(id);
 
             return itemPlanoClassificacaoModel;
         }
 
-        public async Task<ICollection<ItemPlanoClassificacaoModel>> Search(int idPlanoClassificacao, int page, int count)
+        public async Task<ICollection<ItemPlanoClassificacaoModel>> SearchAsync(int idPlanoClassificacao, int page, int count)
         {
             _validation.PaginationSearch(page, count);
 
@@ -69,7 +69,7 @@ namespace Prodest.Scd.Business
 
             //_validation.CanUpdate(itemPlanoClassificacaoModel, itemPlanoClassificacao);
 
-            await _itensPlanoClassificacao.Update(itemPlanoClassificacaoModel);
+            await _itensPlanoClassificacao.UpdateAsync(itemPlanoClassificacaoModel);
 
             await _unitOfWork.SaveAsync();
         }

@@ -1,10 +1,10 @@
 ﻿using Prodest.Scd.Business;
 using Prodest.Scd.Business.Base;
+using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Integration;
-using Prodest.Scd.Infrastructure.Repository;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using Prodest.Scd.Integration.Organograma.Base;
-using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Presentation;
 using Prodest.Scd.Presentation.Base;
 using System;
@@ -37,7 +37,7 @@ namespace Prodest.Scd.Dependency
             #endregion
 
             #region Persistence
-            dependencies.Add(typeof(IScdRepositories), typeof(ScdRepositories));
+            dependencies.Add(typeof(IScdRepositories), typeof(EFScdRepositories));
             #endregion
 
             #region Presentation

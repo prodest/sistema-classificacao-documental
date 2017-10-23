@@ -76,7 +76,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return count;
         }
 
-        public async Task Update(PlanoClassificacaoModel planoClassificacaoModel)
+        public async Task UpdateAsync(PlanoClassificacaoModel planoClassificacaoModel)
         {
             PlanoClassificacao planoClassificacaoNew = _mapper.Map<PlanoClassificacao>(planoClassificacaoModel);
 

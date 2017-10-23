@@ -15,14 +15,26 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             ItensPlanoClassificacaoSpecific = new EFItemPlanoClassificacaoRepository(context, mapper, UnitOfWork);
 
+            NiveisClassificacaoSpecific = new EFNivelClassificacaoRepository(context, mapper, UnitOfWork);
+
+            OrganizacoesSpecific = new EFOrganizacaoRepository(context, mapper, UnitOfWork);
+
             PlanosClassificacaoSpecific = new EFPlanoClassificacaoRepository(context, mapper, UnitOfWork);
+
+            TiposDocumentaisSpecific = new EFTipoDocumentalRepository(context, mapper, UnitOfWork);
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
 
         public IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; private set; }
 
+        public INivelClassificacaoRepository NiveisClassificacaoSpecific { get; private set; }
+
+        public IOrganizacaoRepository OrganizacoesSpecific { get; private set; }
+
         public IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; private set; }
+
+        public ITipoDocumentalRepository TiposDocumentaisSpecific { get; private set; }
 
         public void Dispose()
         {

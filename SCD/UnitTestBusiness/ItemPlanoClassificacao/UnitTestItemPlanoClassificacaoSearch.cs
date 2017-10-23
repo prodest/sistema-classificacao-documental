@@ -19,7 +19,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             try
             {
-                await _core.Search(default(int));
+                await _core.SearchAsync(default(int));
 
                 ok = true;
             }
@@ -42,7 +42,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             try
             {
-                await _core.Search(-1);
+                await _core.SearchAsync(-1);
 
                 ok = true;
             }
@@ -60,9 +60,9 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestMethod]
         public async Task ItemPlanoClassificacaoTestSearchWithIdCorrect()
         {
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertModelAsync();
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertAsync();
 
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = await _core.Search(itemPlanoClassificacaoModel.Id);
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelSearched = await _core.SearchAsync(itemPlanoClassificacaoModel.Id);
 
             Assert.AreEqual(itemPlanoClassificacaoModel.Id, itemPlanoClassificacaoModelSearched.Id);
             Assert.AreEqual(itemPlanoClassificacaoModel.Codigo, itemPlanoClassificacaoModelSearched.Codigo);
@@ -149,7 +149,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestMethod]
         public async Task ItemPlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.Search(0, 1, 1);
+            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(0, 1, 1);
 
             Assert.IsNotNull(itensPlanoClassificacaoModel);
             Assert.IsTrue(itensPlanoClassificacaoModel.Count == 0);
@@ -163,10 +163,10 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
             for (int i = 0; i < (page * count); i++)
             {
-                await InsertModelAsync();
+                await InsertAsync();
             }
 
-            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.Search(0, page, count);
+            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(0, page, count);
             Assert.IsNotNull(itensPlanoClassificacaoModel);
             Assert.IsTrue(itensPlanoClassificacaoModel.Count == count);
 

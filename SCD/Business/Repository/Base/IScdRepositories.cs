@@ -8,6 +8,12 @@ namespace Prodest.Scd.Business.Repository.Base
 
         IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; }
 
+        INivelClassificacaoRepository NiveisClassificacaoSpecific { get; }
+
+        IOrganizacaoRepository OrganizacoesSpecific { get; }
+
         IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; }
+
+        ITipoDocumentalRepository TiposDocumentaisSpecific { get; }
     }
 }

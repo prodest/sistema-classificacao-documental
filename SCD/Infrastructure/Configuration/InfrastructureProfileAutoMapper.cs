@@ -23,8 +23,8 @@ namespace Prodest.Scd.Infrastructure.Configuration
                     {
                         return (destMember == null);
                     });
-                });
-            ;
+                })
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)));
             #endregion
 
             #region Organização
@@ -56,14 +56,15 @@ namespace Prodest.Scd.Infrastructure.Configuration
             CreateMap<TipoDocumental, TipoDocumentalModel>();
 
             CreateMap<TipoDocumentalModel, TipoDocumental>()
-                .ForMember(dest => dest.Organizacao,
-                opt =>
+                .ForMember(dest => dest.Id, opt =>
                 {
                     opt.Condition((src, dest, srcMember, destMember) =>
                     {
-                        return (destMember == null);
+                        return (destMember == default(int));
                     });
-                });
+                })
+                .ForMember(dest => dest.Organizacao, opt => opt.Ignore())
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)));
             #endregion
         }
     }

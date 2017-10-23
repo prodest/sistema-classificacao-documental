@@ -1,9 +1,6 @@
-﻿using System;
-using Prodest.Scd.Business.Common.Exceptions;
+﻿using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation.Common;
-using Prodest.Scd.Persistence.Base;
-using Prodest.Scd.Persistence.Model;
 
 namespace Prodest.Scd.Business.Validation
 {
@@ -15,6 +12,7 @@ namespace Prodest.Scd.Business.Validation
 
             BasicValid(itemPlanoClassificacaoModel);
         }
+
         #region Basic Valid
         internal void BasicValid(ItemPlanoClassificacaoModel itemPlanoClassificacao)
         {
