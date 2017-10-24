@@ -56,7 +56,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             List<ItemPlanoClassificacao> itensPlanosClassificacao = await _set.Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
                                                                               .Include(ipc => ipc.PlanoClassificacao)
                                                                               .Include(ipc => ipc.NivelClassificacao)
-                                                                              .Include(ipc => ipc.ItemPlanoClassificacaoPai)
+                                                                              .Include(ipc => ipc.ItemPlanoClassificacaoParent)
                                                                               .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
                                                                               .ThenBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
                                                                               .ThenBy(pc => pc.Descricao)
@@ -111,7 +111,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             if (getRelationship)
                 queryable = queryable.Include(ipc => ipc.PlanoClassificacao)
                                      .Include(ipc => ipc.NivelClassificacao)
-                                     .Include(ipc => ipc.ItemPlanoClassificacaoPai);
+                                     .Include(ipc => ipc.ItemPlanoClassificacaoParent);
 
             ItemPlanoClassificacao itemPlanoClassificacao = await queryable.SingleOrDefaultAsync();
 
@@ -123,7 +123,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         {
             IQueryable<ItemPlanoClassificacao> queryable = _set.Include(ipc => ipc.PlanoClassificacao)
                                                                .Include(ipc => ipc.NivelClassificacao)
-                                                               .Include(ipc => ipc.ItemPlanoClassificacaoPai);
+                                                               .Include(ipc => ipc.ItemPlanoClassificacaoParent);
 
             return queryable;
         }

@@ -1,0 +1,51 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.ItemPlanoClassificacaoViewModel
+<div class=" mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+    <div class="mdl-card TelaCheia">
+        @*<button title="Novo" class="mdl-button BotaoGrande mdl-js-button mdl-button--fab mdl-color--blue BotaoFlutuante BotaoAjax" data-url="/ItemPlanoClassificacao/New">
+            <i class="material-icons">add</i>
+        </button>*@
+        @*<div class="mdc-form-field">
+            <aside>
+                <label class="mdc-typography--body1"><strong>Código: </strong></label>
+                <label class="mdc-typography--body1">@Model.plano.Codigo</label>
+            </aside>
+        </div>
+        <div class="mdc-form-field">
+            <aside>
+                <label class="mdc-typography--body1"><strong>Descrição: </strong></label>
+                <label class="mdc-typography--body1">@Model.plano.Descricao</label>
+            </aside>
+        </div>
+        <div class="mdc-form-field">
+            <aside>
+                <label class="mdc-typography--body1"><strong>Área: </strong></label>
+                <label class="mdc-typography--body1">@Model.plano.AreaFimDescricao</label>
+            </aside>
+        </div>*@
+        <br />
+        <ul class="mdc-list mdc-list--two-line">
+            <li class="mdc-list-item mdc-list-item-BotoesAcoes">
+                <span class="mdc-list-item__text">
+                    @Model.plano.Codigo - @Model.plano.Descricao (@Model.plano.AreaFimDescricao)
+                    <span class="mdc-list-item__text__secondary">Plano de Classificação</span>
+                </span>
+                <span class="">
+                    <button title="Adicionar Item" class="mdc-button mdc-button-BotoesAcoes BotaoAjax" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.plano.Id">
+                        <i class="material-icons" aria-hidden="true">add</i>
+                    </button>
+                </span>
+            </li>
+            @foreach (var item in Model.entidades.OrderBy(p => p.Codigo))
+            {
+                @Html.Partial("_ItemPlano", item)
+            }
+        </ul>
+
+    </div>
+</div>
+<script>
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+
+    document.querySelectorAll('#acoes-menu').forEach(AdicionarAcaoMenu);
+
+</script>
