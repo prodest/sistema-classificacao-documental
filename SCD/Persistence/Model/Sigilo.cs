@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Prodest.Scd.Persistence.Model
 {
-    public partial class TipoDocumental
+    public partial class Sigilo
     {
-        public TipoDocumental()
+        public Sigilo()
         {
             Documentos = new HashSet<Documento>();
         }
 
         public int Id { get; set; }
+        public string Codigo { get; set; }
         public string Descricao { get; set; }
-        public bool Ativo { get; set; }
-        public int IdOrganizacao { get; set; }
 
-        public Organizacao Organizacao { get; set; }
         public ICollection<Documento> Documentos { get; set; }
     }
 }

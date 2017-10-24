@@ -6,6 +6,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public ItemPlanoClassificacao()
         {
+            Documentos = new HashSet<Documento>();
             ItensPlanoClassificacaoFilhos = new HashSet<ItemPlanoClassificacao>();
         }
 
@@ -19,6 +20,7 @@ namespace Prodest.Scd.Persistence.Model
         public ItemPlanoClassificacao ItemPlanoClassificacaoPai { get; set; }
         public NivelClassificacao NivelClassificacao { get; set; }
         public PlanoClassificacao PlanoClassificacao { get; set; }
+        public ICollection<Documento> Documentos { get; set; }
         public ICollection<ItemPlanoClassificacao> ItensPlanoClassificacaoFilhos { get; set; }
     }
 }

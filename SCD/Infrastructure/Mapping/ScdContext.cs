@@ -6,10 +6,12 @@ namespace Prodest.Scd.Infrastructure.Mapping
 {
     public partial class ScdContext : DbContext
     {
+        public virtual DbSet<Documento> Documento { get; set; }
         public virtual DbSet<ItemPlanoClassificacao> ItemPlanoClassificacao { get; set; }
         public virtual DbSet<NivelClassificacao> NivelClassificacao { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
         public virtual DbSet<PlanoClassificacao> PlanoClassificacao { get; set; }
+        public virtual DbSet<Sigilo> Sigilo { get; set; }
         public virtual DbSet<TipoDocumental> TipoDocumental { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,6 +29,48 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Documento>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasColumnName("codigo")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdItemPlanoClassificacao).HasColumnName("idItemPlanoClassificacao");
+
+                entity.Property(e => e.IdSigilo).HasColumnName("idSigilo");
+
+                entity.Property(e => e.IdTemporalidade).HasColumnName("idTemporalidade");
+
+                entity.Property(e => e.IdTipoDocumental).HasColumnName("idTipoDocumental");
+
+                entity.HasOne(d => d.ItensPlanoClassificacao)
+                    .WithMany(p => p.Documentos)
+                    .HasForeignKey(d => d.IdItemPlanoClassificacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Documento_ItemPlanoClassificacao");
+
+                entity.HasOne(d => d.Sigilo)
+                    .WithMany(p => p.Documentos)
+                    .HasForeignKey(d => d.IdSigilo)
+                    .HasConstraintName("FK_Documento_Sigilo");
+
+                entity.HasOne(d => d.TipoDocumental)
+                    .WithMany(p => p.Documentos)
+                    .HasForeignKey(d => d.IdTipoDocumental)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Documento_TipoDocumental");
+            });
+
             modelBuilder.Entity<ItemPlanoClassificacao>(entity =>
             {
                 entity.ToTable("ItemPlanoClassificacao");
@@ -150,6 +194,23 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PlanoClassificacao_Organizacao");
+            });
+
+            modelBuilder.Entity<Sigilo>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasColumnName("codigo")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<TipoDocumental>(entity =>
