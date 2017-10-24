@@ -1,4 +1,5 @@
-﻿using Prodest.Scd.Infrastructure.Mapping;
+﻿using AutoMapper;
+using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Persistence.Base;
 using Prodest.Scd.Persistence.Model;
 
@@ -6,7 +7,7 @@ namespace Prodest.Scd.Infrastructure.Repository
 {
     public class ScdRepositories : IScdRepositories
     {
-        public ScdRepositories()
+        public ScdRepositories(IMapper mapper)
         {
             UnitOfWork = new EFUnitOfWork(new ScdContext());
 

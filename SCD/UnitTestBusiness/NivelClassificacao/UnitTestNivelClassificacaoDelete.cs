@@ -2,10 +2,11 @@ using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Repository;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using System;
 using System.Threading.Tasks;
 
@@ -20,22 +21,22 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         [TestInitialize]
         public void Setup()
         {
-            ScdRepositories repositories = new ScdRepositories();
-
-            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
-
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
+                cfg.AddProfile<InfrastructureProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;
 
+            EFScdRepositories repositories = new EFScdRepositories(mapper);
+
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation();
+
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation);
 
-            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
+            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, organizacaoCore);
         }
 
         #region Id
@@ -103,7 +104,7 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
             try
             {
-                _core.Search(nivelClassificacaoModel.Id);
+                await _core.SearchAsync(nivelClassificacaoModel.Id);
 
                 ok = true;
             }

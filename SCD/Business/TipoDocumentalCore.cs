@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using Prodest.Scd.Business.Base;
+﻿using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Persistence.Base;
-using Prodest.Scd.Persistence.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
@@ -15,39 +13,33 @@ namespace Prodest.Scd.Business
     {
         private TipoDocumentalValidation _validation;
         private IUnitOfWork _unitOfWork;
-        private IGenericRepository<TipoDocumental> _tiposDocumentais;
+        private ITipoDocumentalRepository _tiposDocumentais;
         private IOrganizacaoCore _organizacaoCore;
-        private IMapper _mapper;
 
-
-        public TipoDocumentalCore(TipoDocumentalValidation validation, IScdRepositories repositories, IOrganizacaoCore organizacaoCore, IMapper mapper)
+        public TipoDocumentalCore(TipoDocumentalValidation validation, IScdRepositories repositories, IOrganizacaoCore organizacaoCore)
         {
             _validation = validation;
             _unitOfWork = repositories.UnitOfWork;
-            _tiposDocumentais = repositories.TiposDocumentais;
+            _tiposDocumentais = repositories.TiposDocumentaisSpecific;
             _organizacaoCore = organizacaoCore;
-            _mapper = mapper;
         }
 
-        public int Count(Guid guidOrganizacao)
+        public async Task<int> CountAsync(Guid guidOrganizacao)
         {
             _validation.OrganizacaoValid(guidOrganizacao);
 
-            var count = _tiposDocumentais.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
-                                         .Count();
+            var count = await _tiposDocumentais.CountByOrganizacaoAsync(guidOrganizacao);
 
             return count;
         }
 
         public async Task DeleteAsync(int id)
         {
-            TipoDocumental tipoDocumental = SearchPersistence(id);
+            TipoDocumentalModel tipoDocumentalModel = await SearchAsync(id);
 
-            _validation.CanDelete(tipoDocumental);
+            _validation.CanDelete(tipoDocumentalModel);
 
-            _tiposDocumentais.Remove(tipoDocumental);
-
-            await _unitOfWork.SaveAsync();
+            await _tiposDocumentais.RemoveAsync(tipoDocumentalModel.Id);
         }
 
         public async Task<TipoDocumentalModel> InsertAsync(TipoDocumentalModel tipoDocumentalModel)
@@ -56,76 +48,57 @@ namespace Prodest.Scd.Business
 
             _validation.IdInsertValid(tipoDocumentalModel.Id);
 
-            ////TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
-            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidGEES"));
-            OrganizacaoModel organizacao = _organizacaoCore.SearchAsync(guidProdest);
-
-            tipoDocumentalModel.Organizacao = organizacao;
+            tipoDocumentalModel.Organizacao = await GetOrganizacao();
             tipoDocumentalModel.Ativo = true;
 
-            TipoDocumental tipoDocumental = _mapper.Map<TipoDocumental>(tipoDocumentalModel);
-
-            await _tiposDocumentais.AddAsync(tipoDocumental);
-
-            await _unitOfWork.SaveAsync();
-
-            tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
+            tipoDocumentalModel = await _tiposDocumentais.AddAsync(tipoDocumentalModel);
 
             return tipoDocumentalModel;
         }
 
-        public TipoDocumentalModel Search(int id)
+        public async Task<TipoDocumentalModel> SearchAsync(int id)
         {
-            TipoDocumental tipoDocumental = SearchPersistence(id);
+            _validation.IdValid(id);
 
-            TipoDocumentalModel tipoDocumentalModel = _mapper.Map<TipoDocumentalModel>(tipoDocumental);
+            TipoDocumentalModel tipoDocumentalModel = await _tiposDocumentais.SearchAsync(id);
+
+            _validation.Found(tipoDocumentalModel);
 
             return tipoDocumentalModel;
         }
 
-        public List<TipoDocumentalModel> Search(Guid guidOrganizacao, int page, int count)
+        public async Task<ICollection<TipoDocumentalModel>> SearchAsync(Guid guidOrganizacao, int page, int count)
         {
             _validation.OrganizacaoValid(guidOrganizacao);
 
             _validation.PaginationSearch(page, count);
 
-            int skip = (page - 1) * count;
+            ICollection<TipoDocumentalModel> tiposDocumentaisModel = await _tiposDocumentais.SearchByOrganizacaoAsync(guidOrganizacao, page, count);
 
-            List<TipoDocumental> nivelsClassificacao = _tiposDocumentais.Where(pc => pc.Organizacao.GuidOrganizacao.Equals(guidOrganizacao))
-                                                                        .OrderBy(pc => pc.Ativo)
-                                                                        .ThenBy(pc => pc.Descricao)
-                                                                        .Skip(skip)
-                                                                        .Take(count)
-                                                                        .ToList();
-
-            List<TipoDocumentalModel> nivelsClassificacaoModel = _mapper.Map<List<TipoDocumentalModel>>(nivelsClassificacao);
-
-            return nivelsClassificacaoModel;
+            return tiposDocumentaisModel;
         }
 
         public async Task UpdateAsync(TipoDocumentalModel tipoDocumentalModel)
         {
             _validation.Valid(tipoDocumentalModel);
 
-            TipoDocumental tipoDocumental = SearchPersistence(tipoDocumentalModel.Id);
+            TipoDocumentalModel tipoDocumentalModelOld = await SearchAsync(tipoDocumentalModel.Id);
 
-            _validation.CanUpdate(tipoDocumentalModel, tipoDocumental);
+            _validation.CanUpdate(tipoDocumentalModel, tipoDocumentalModelOld);
 
-            _mapper.Map(tipoDocumentalModel, tipoDocumental);
+            tipoDocumentalModel.Organizacao = await GetOrganizacao();
 
-            await _unitOfWork.SaveAsync();
+            await _tiposDocumentais.UpdateAsync(tipoDocumentalModel);
         }
 
-        private TipoDocumental SearchPersistence(int id)
+        private async Task<OrganizacaoModel> GetOrganizacao()
         {
-            _validation.IdValid(id);
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidGEES"));
 
-            TipoDocumental tipoDocumental = _tiposDocumentais.Where(pc => pc.Id == id)
-                                                             .SingleOrDefault();
+            OrganizacaoModel organizacaoModel = await _organizacaoCore.SearchAsync(guidProdest);
 
-            _validation.Found(tipoDocumental);
-
-            return tipoDocumental;
+            return organizacaoModel;
         }
     }
 }

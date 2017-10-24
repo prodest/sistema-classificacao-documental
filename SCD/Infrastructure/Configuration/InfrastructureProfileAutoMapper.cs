@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Persistence.Model;
-using System;
 
-namespace Prodest.Scd.Business.Configuration
+namespace Prodest.Scd.Infrastructure.Configuration
 {
-    public class BusinessProfileAutoMapper : Profile
+    public class InfrastructureProfileAutoMapper : Profile
     {
-
-        public BusinessProfileAutoMapper()
+        public InfrastructureProfileAutoMapper()
         {
             #region Item do Plano de Classificação
             CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>().ReverseMap();
@@ -25,8 +23,8 @@ namespace Prodest.Scd.Business.Configuration
                     {
                         return (destMember == null);
                     });
-                });
-            ;
+                })
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)));
             #endregion
 
             #region Organização
@@ -48,24 +46,26 @@ namespace Prodest.Scd.Business.Configuration
                     {
                         return (destMember == default(int));
                     });
-                });
+                })
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)))
+                .ForMember(dest => dest.Organizacao, opt => opt.Ignore())
+                .ForMember(dest => dest.ItensPlanoClassificacao, opt => opt.Ignore());
             #endregion
-
 
             #region Tipo Documental
             CreateMap<TipoDocumental, TipoDocumentalModel>();
 
             CreateMap<TipoDocumentalModel, TipoDocumental>()
-                .ForMember(dest => dest.Organizacao,
-                opt =>
+                .ForMember(dest => dest.Id, opt =>
                 {
                     opt.Condition((src, dest, srcMember, destMember) =>
                     {
-                        return (destMember == null);
+                        return (destMember == default(int));
                     });
-                });
+                })
+                .ForMember(dest => dest.Organizacao, opt => opt.Ignore())
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)));
             #endregion
-
         }
     }
 }
