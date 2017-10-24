@@ -1,14 +1,12 @@
 using AutoMapper;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Infrastructure.Integration;
+using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Repository;
-using Prodest.Scd.Web.Configuration;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,22 +22,22 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         [TestInitialize]
         public async Task Setup()
         {
-            ScdRepositories repositories = new ScdRepositories();
-
-            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation(repositories);
-
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
+                cfg.AddProfile<InfrastructureProfileAutoMapper>();
             });
 
             IMapper mapper = Mapper.Instance;
 
+            EFScdRepositories repositories = new EFScdRepositories(mapper);
+
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation();
+
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation);
 
-            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, mapper, organizacaoCore);
+            _core = new NivelClassificacaoCore(repositories, nivelClassificacaoValidation, organizacaoCore);
 
             string descricao = "Descrição Teste";
             Guid guidOrganizacao = _guidGees;
@@ -52,13 +50,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         #region Search by Id
         #region Id
         [TestMethod]
-        public void NivelClassificacaoTestSearchWithInvalidId()
+        public async Task NivelClassificacaoTestSearchWithInvalidId()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(default(int));
+                await _core.SearchAsync(default(int));
 
                 ok = true;
             }
@@ -75,13 +73,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         #endregion
 
         [TestMethod]
-        public void NivelClassificacaoTestSearchWithIdNonexistentOnDataBase()
+        public async Task ivelClassificacaoTestSearchWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(-1);
+                await _core.SearchAsync(-1);
 
                 ok = true;
             }
@@ -107,7 +105,7 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
             nivelClassificacaoModel = await _core.InsertAsync(nivelClassificacaoModel);
 
-            NivelClassificacaoModel nivelClassificacaoModelSearched = _core.Search(nivelClassificacaoModel.Id);
+            NivelClassificacaoModel nivelClassificacaoModelSearched = await _core.SearchAsync(nivelClassificacaoModel.Id);
 
             Assert.AreEqual(nivelClassificacaoModel.Id, nivelClassificacaoModelSearched.Id);
             Assert.AreEqual(nivelClassificacaoModel.Descricao, nivelClassificacaoModelSearched.Descricao);
@@ -119,13 +117,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         #region Pagination Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public void NivelClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
+        public async Task NivelClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(Guid.Empty, default(int), default(int));
+                await _core.SearchAsync(Guid.Empty, default(int), default(int));
 
                 ok = true;
             }
@@ -143,13 +141,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
         #region Page
         [TestMethod]
-        public void NivelClassificacaoTestPaginationSearchWithInvalidPage()
+        public async Task NivelClassificacaoTestPaginationSearchWithInvalidPage()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidGees, default(int), default(int));
+                await _core.SearchAsync(_guidGees, default(int), default(int));
 
                 ok = true;
             }
@@ -167,13 +165,13 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
 
         #region Count
         [TestMethod]
-        public void NivelClassificacaoTestPaginationSearchWithInvalidCount()
+        public async Task NivelClassificacaoTestPaginationSearchWithInvalidCount()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidGees, 1, default(int));
+                await _core.SearchAsync(_guidGees, 1, default(int));
 
                 ok = true;
             }
@@ -190,9 +188,9 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         #endregion
 
         [TestMethod]
-        public void NivelClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public async Task NivelClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<NivelClassificacaoModel> niveisClassificacaoModel = _core.Search(Guid.NewGuid(), 1, 1);
+            ICollection<NivelClassificacaoModel> niveisClassificacaoModel = await _core.SearchAsync(Guid.NewGuid(), 1, 1);
             Assert.IsNotNull(niveisClassificacaoModel);
             Assert.IsTrue(niveisClassificacaoModel.Count == 0);
         }
@@ -203,9 +201,9 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
             int page = 2;
             int count = 5;
 
-            await InsertNivelsClassificacao(page * count);
+            await InsertNiveisClassificacao(page * count);
 
-            List<NivelClassificacaoModel> niveisClassificacaoModel = _core.Search(_guidGees, page, count);
+            ICollection<NivelClassificacaoModel> niveisClassificacaoModel = await _core.SearchAsync(_guidGees, page, count);
             Assert.IsNotNull(niveisClassificacaoModel);
             Assert.IsTrue(niveisClassificacaoModel.Count == count);
 
@@ -218,7 +216,7 @@ namespace Prodest.Scd.UnitTestBusiness.NivelClassificacao
         }
         #endregion
 
-        private async Task InsertNivelsClassificacao(int count)
+        private async Task InsertNiveisClassificacao(int count)
         {
             for (int i = 0; i < count; i++)
             {

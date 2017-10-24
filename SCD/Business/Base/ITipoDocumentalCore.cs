@@ -7,15 +7,15 @@ namespace Prodest.Scd.Business.Base
 {
     public interface ITipoDocumentalCore
     {
-        int Count(Guid guidOrganizacao);
+        Task<int> CountAsync(Guid guidOrganizacao);
 
         Task DeleteAsync(int id);
 
         Task<TipoDocumentalModel> InsertAsync(TipoDocumentalModel tipoDocumental);
 
-        TipoDocumentalModel Search(int id);
+        Task<TipoDocumentalModel> SearchAsync(int id);
 
-        List<TipoDocumentalModel> Search(Guid guidOrganizacao, int page, int count);
+        Task<ICollection<TipoDocumentalModel>> SearchAsync(Guid guidOrganizacao, int page, int count);
 
         Task UpdateAsync(TipoDocumentalModel tipoDocumental);
     }

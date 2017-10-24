@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Prodest.Scd.Business.Base;
+﻿using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
-using Prodest.Scd.Persistence.Base;
-using Prodest.Scd.Persistence.Model;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
@@ -14,112 +11,83 @@ namespace Prodest.Scd.Business
     public class ItemPlanoClassificacaoCore : IItemPlanoClassificacaoCore
     {
         private IUnitOfWork _unitOfWork;
-        private IGenericRepository<ItemPlanoClassificacao> _itensPlanoClassificacao;
+        private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
         private ItemPlanoClassificacaoValidation _validation;
-        private IMapper _mapper;
         private IOrganizacaoCore _organizacaoCore;
 
-        public ItemPlanoClassificacaoCore(IScdRepositories repositories, ItemPlanoClassificacaoValidation validation, IMapper mapper, IOrganizacaoCore organizacaoCore)
+        public ItemPlanoClassificacaoCore(IScdRepositories repositories, ItemPlanoClassificacaoValidation validation, IOrganizacaoCore organizacaoCore)
         {
             _unitOfWork = repositories.UnitOfWork;
-            _itensPlanoClassificacao = repositories.ItensPlanoClassificacao;
+            _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
             _validation = validation;
-            _mapper = mapper;
             _organizacaoCore = organizacaoCore;
-        }
-
-        public int Count(int idPlanoClassificacao)
-        {
-            var count = _itensPlanoClassificacao.Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
-                                                .Count();
-
-            return count;
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            ItemPlanoClassificacao itemPlanoClassificacao = SearchPersistence(id);
-
-            _validation.Found(itemPlanoClassificacao);
-
-            _validation.CanDelete(itemPlanoClassificacao);
-
-            _itensPlanoClassificacao.Remove(itemPlanoClassificacao);
-
-            await _unitOfWork.SaveAsync();
         }
 
         public async Task<ItemPlanoClassificacaoModel> InsertAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
         {
-            _validation.BasicValid(itemPlanoClassificacaoModel);
+            await _validation.BasicValid(itemPlanoClassificacaoModel);
 
             _validation.IdInsertValid(itemPlanoClassificacaoModel.Id);
 
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
-
-            ItemPlanoClassificacao itemPlanoClassificacao = _mapper.Map<ItemPlanoClassificacao>(itemPlanoClassificacaoModel);
-
-            await _itensPlanoClassificacao.AddAsync(itemPlanoClassificacao);
-
-            await _unitOfWork.SaveAsync();
-
-            itemPlanoClassificacaoModel = _mapper.Map<ItemPlanoClassificacaoModel>(itemPlanoClassificacao);
+            itemPlanoClassificacaoModel = await _itensPlanoClassificacao.AddAsync(itemPlanoClassificacaoModel);
 
             return itemPlanoClassificacaoModel;
         }
 
-        public ItemPlanoClassificacaoModel Search(int id)
+        public async Task<ItemPlanoClassificacaoModel> SearchAsync(int id)
         {
-            ItemPlanoClassificacao itemPlanoClassificacao = SearchPersistence(id);
+            _validation.IdValid(id);
 
-            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = _mapper.Map<ItemPlanoClassificacaoModel>(itemPlanoClassificacao);
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _itensPlanoClassificacao.SearchAsync(id);
+
+            _validation.Found(itemPlanoClassificacaoModel);
 
             return itemPlanoClassificacaoModel;
         }
 
-        public List<ItemPlanoClassificacaoModel> Search(int idPlanoClassificacao, int page, int count)
+        public async Task<ICollection<ItemPlanoClassificacaoModel>> SearchAsync(int idPlanoClassificacao, int page, int count)
         {
+            _validation.IdValid(idPlanoClassificacao);
+
             _validation.PaginationSearch(page, count);
 
-            int skip = (page - 1) * count;
-
-            List<ItemPlanoClassificacao> itemPlanosClassificacao = _itensPlanoClassificacao.Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
-                                                                                           .Include(ipc => ipc.NivelClassificacao)
-                                                                                           .Include(ipc => ipc.PlanoClassificacao)
-                                                                                           .Include(ipc => ipc.ItemPlanoClassificacaoParent)
-                                                                                           .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
-                                                                                           .ThenBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
-                                                                                           .ThenBy(pc => pc.Descricao)
-                                                                                           .Skip(skip)
-                                                                                           .Take(count)
-                                                                                           .ToList();
-
-            List<ItemPlanoClassificacaoModel> itemPlanosClassificacaoModel = _mapper.Map<List<ItemPlanoClassificacaoModel>>(itemPlanosClassificacao);
+            ICollection<ItemPlanoClassificacaoModel> itemPlanosClassificacaoModel = await _itensPlanoClassificacao.SearchByPlanoClassificacaoAsync(idPlanoClassificacao, page, count);
 
             return itemPlanosClassificacaoModel;
         }
 
-        public async Task UpdateAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
+        public async Task<int> CountAsync(int idPlanoClassificacao)
         {
-            _validation.Valid(itemPlanoClassificacaoModel);
+            var count = await _itensPlanoClassificacao.CountByPlanoClassificacao(idPlanoClassificacao);
 
-            ItemPlanoClassificacao itemPlanoClassificacao = SearchPersistence(itemPlanoClassificacaoModel.Id);
-
-            _validation.Found(itemPlanoClassificacao);
-
-            //_validation.CanUpdate(itemPlanoClassificacaoModel, itemPlanoClassificacao);
-
-            _mapper.Map(itemPlanoClassificacaoModel, itemPlanoClassificacao);
-
-            await _unitOfWork.SaveAsync();
+            return count;
         }
 
-        private ItemPlanoClassificacao SearchPersistence(int id)
+        public async Task UpdateAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
         {
-            ItemPlanoClassificacao itemPlanoClassificacao = _itensPlanoClassificacao.Where(ipc => ipc.Id == id)
-                                                                                    .SingleOrDefault();
+            await _validation.Valid(itemPlanoClassificacaoModel);
 
-            return itemPlanoClassificacao;
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModelOld = await _itensPlanoClassificacao.SearchAsync(itemPlanoClassificacaoModel.Id);
+
+            _validation.Found(itemPlanoClassificacaoModelOld);
+
+            _validation.PlanoClassificacaoEquals(itemPlanoClassificacaoModel, itemPlanoClassificacaoModelOld);
+
+            await _validation.CanUpdate(itemPlanoClassificacaoModelOld);
+
+            await _itensPlanoClassificacao.UpdateAsync(itemPlanoClassificacaoModel);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _itensPlanoClassificacao.SearchAsync(id);
+
+            _validation.Found(itemPlanoClassificacaoModel);
+
+            await _validation.CanDelete(itemPlanoClassificacaoModel);
+
+            await _itensPlanoClassificacao.RemoveAsync(itemPlanoClassificacaoModel.Id);
         }
     }
 }

@@ -151,7 +151,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
             await _core.UpdateAsync(tipoDocumentalModel);
 
-            tipoDocumentalModel = _core.Search(tipoDocumentalModel.Id);
+            tipoDocumentalModel = await _core.SearchAsync(tipoDocumentalModel.Id);
             //tipoDocumentalModel = SearchModelAsync(tipoDocumentalModel.Id);
 
             Assert.AreEqual(tipoDocumentalModel.Id, id);

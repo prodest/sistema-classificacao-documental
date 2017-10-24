@@ -3,11 +3,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business;
 using Prodest.Scd.Business.Common.Exceptions;
-using Prodest.Scd.Business.Configuration;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation;
+using Prodest.Scd.Infrastructure.Configuration;
 using Prodest.Scd.Infrastructure.Integration;
 using Prodest.Scd.Infrastructure.Repository;
+using Prodest.Scd.Infrastructure.Repository.Specific;
 using Prodest.Scd.Web.Configuration;
 using System;
 using System.Threading.Tasks;
@@ -26,9 +27,16 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         [TestInitialize]
         public async Task Setup()
         {
-            ScdRepositories repositories = new ScdRepositories();
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<InfrastructureProfileAutoMapper>();
+            });
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
+            IMapper mapper = Mapper.Instance;
+
+            EFScdRepositories repositories = new EFScdRepositories(mapper);
+
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
 
             IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
 
@@ -36,18 +44,11 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             OrganogramaService organogramaService = new OrganogramaService(acessoCidadaoClientAccessToken);
 
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<BusinessProfileAutoMapper>();
-            });
-
-            IMapper mapper = Mapper.Instance;
-
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
 
-            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation, mapper);
+            OrganizacaoCore organizacaoCore = new OrganizacaoCore(repositories, organizacaoValidation);
 
-            _core = new PlanoClassificacaoCore(repositories, planoClassificacaoValidation, mapper, organogramaService, organizacaoCore);
+            _core = new PlanoClassificacaoCore(repositories, organogramaService, organizacaoCore);
 
             string codigo = "01";
             string descricao = "Descrição Teste";
@@ -429,7 +430,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -471,7 +472,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -517,7 +518,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -565,7 +566,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateAsync(planoClassificacaoModel);
 
-            planoClassificacaoModel = _core.Search(planoClassificacaoModel.Id);
+            planoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);
@@ -604,7 +605,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             if (ok)
                 Assert.Fail("Não deveria ter atualizado a data de fim de vigência sem a data de início de vigência.");
 
-            PlanoClassificacaoModel planoClassificacaoModel = _core.Search(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await _core.SearchAsync(id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, _planoClassificacaoModel.Codigo);
@@ -643,7 +644,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             if (ok)
                 Assert.Fail("Não deveria ter atualizado com data de fim de vigência anterior à data de início de vigência.");
 
-            PlanoClassificacaoModel planoClassificacaoModel = _core.Search(id);
+            PlanoClassificacaoModel planoClassificacaoModel = await _core.SearchAsync(id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, _planoClassificacaoPublicadoModel.Codigo);
@@ -685,7 +686,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await _core.UpdateFimVigenciaAsync(id, fimVigencia);
 
-            planoClassificacaoModel = _core.Search(id);
+            planoClassificacaoModel = await _core.SearchAsync(id);
 
             Assert.IsTrue(planoClassificacaoModel.Id == id);
             Assert.AreEqual(planoClassificacaoModel.Codigo, codigo);

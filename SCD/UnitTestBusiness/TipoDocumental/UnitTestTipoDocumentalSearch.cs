@@ -13,13 +13,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         #region Search by Id
         #region Id
         [TestMethod]
-        public void TipoDocumentalTestSearchWithInvalidId()
+        public async Task TipoDocumentalTestSearchWithInvalidId()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(default(int));
+                await _core.SearchAsync(default(int));
 
                 ok = true;
             }
@@ -36,13 +36,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         #endregion
 
         [TestMethod]
-        public void TipoDocumentalTestSearchWithIdNonexistentOnDataBase()
+        public async Task TipoDocumentalTestSearchWithIdNonexistentOnDataBase()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(-1);
+                await _core.SearchAsync(-1);
 
                 ok = true;
             }
@@ -60,13 +60,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         [TestMethod]
         public async Task TipoDocumentalTestSearchWithIdCorrect()
         {
-            Persistence.Model.TipoDocumental tipoDocumental = await InsertAsync();
+            TipoDocumentalModel tipoDocumentalModel = await InsertAsync();
 
-            TipoDocumentalModel tipoDocumentalModelSearched = _core.Search(tipoDocumental.Id);
+            TipoDocumentalModel tipoDocumentalModelSearched = await _core.SearchAsync(tipoDocumentalModel.Id);
 
-            Assert.AreEqual(tipoDocumental.Id, tipoDocumentalModelSearched.Id);
-            Assert.AreEqual(tipoDocumental.Descricao, tipoDocumentalModelSearched.Descricao);
-            Assert.IsTrue(tipoDocumental.Ativo);
+            Assert.AreEqual(tipoDocumentalModel.Id, tipoDocumentalModelSearched.Id);
+            Assert.AreEqual(tipoDocumentalModel.Descricao, tipoDocumentalModelSearched.Descricao);
+            Assert.IsTrue(tipoDocumentalModel.Ativo);
             //Assert.AreEqual(tipoDocumental.Organizacao.GuidOrganizacao, tipoDocumentalModelSearched.Organizacao.GuidOrganizacao);
         }
         #endregion
@@ -74,13 +74,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         #region Pagination Search by GuidOrganização
         #region Guid Organização
         [TestMethod]
-        public void TipoDocumentalTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
+        public async Task TipoDocumentalTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(Guid.Empty, default(int), default(int));
+                await _core.SearchAsync(Guid.Empty, default(int), default(int));
 
                 ok = true;
             }
@@ -98,13 +98,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
         #region Page
         [TestMethod]
-        public void TipoDocumentalTestPaginationSearchWithInvalidPage()
+        public async Task TipoDocumentalTestPaginationSearchWithInvalidPage()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidGees, default(int), default(int));
+                await _core.SearchAsync(_guidGees, default(int), default(int));
 
                 ok = true;
             }
@@ -122,13 +122,13 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
 
         #region Count
         [TestMethod]
-        public void TipoDocumentalTestPaginationSearchWithInvalidCount()
+        public async Task TipoDocumentalTestPaginationSearchWithInvalidCount()
         {
             bool ok = false;
 
             try
             {
-                _core.Search(_guidGees, 1, default(int));
+                await _core.SearchAsync(_guidGees, 1, default(int));
 
                 ok = true;
             }
@@ -145,9 +145,9 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
         #endregion
 
         [TestMethod]
-        public void TipoDocumentalTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
+        public async Task TipoDocumentalTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            List<TipoDocumentalModel> tiposDocumentaisModel = _core.Search(Guid.NewGuid(), 1, 1);
+            ICollection<TipoDocumentalModel> tiposDocumentaisModel = await _core.SearchAsync(Guid.NewGuid(), 1, 1);
 
             Assert.IsNotNull(tiposDocumentaisModel);
             Assert.IsTrue(tiposDocumentaisModel.Count == 0);
@@ -164,7 +164,7 @@ namespace Prodest.Scd.UnitTestBusiness.TipoDocumental
                 await InsertAsync();
             }
 
-            List<TipoDocumentalModel> tiposDocumentaisModel = _core.Search(_guidGees, page, count);
+            ICollection<TipoDocumentalModel> tiposDocumentaisModel = await _core.SearchAsync(_guidGees, page, count);
             Assert.IsNotNull(tiposDocumentaisModel);
             Assert.IsTrue(tiposDocumentaisModel.Count == count);
 

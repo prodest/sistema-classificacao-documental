@@ -7,16 +7,16 @@ namespace Prodest.Scd.Business.Base
 {
     public interface IItemPlanoClassificacaoCore
     {
-        int Count(int idPlanoClassificacao);
-
-        Task DeleteAsync(int id);
-
         Task<ItemPlanoClassificacaoModel> InsertAsync(ItemPlanoClassificacaoModel itemPlanoClassificacao);
 
-        ItemPlanoClassificacaoModel Search(int id);
+        Task<ItemPlanoClassificacaoModel> SearchAsync(int id);
 
-        List<ItemPlanoClassificacaoModel> Search(int idPlanoClassificacao, int page, int count);
+        Task<ICollection<ItemPlanoClassificacaoModel>> SearchAsync(int idPlanoClassificacao, int page, int count);
+
+        Task<int> CountAsync(int idPlanoClassificacao);
 
         Task UpdateAsync(ItemPlanoClassificacaoModel itemPlanoClassificacao);
+
+        Task DeleteAsync(int id);
     }
 }
