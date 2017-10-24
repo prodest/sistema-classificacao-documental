@@ -71,7 +71,7 @@ namespace Prodest.Scd.Presentation
             try
             {
                 model.Action = "Update";
-                model.entidade = _mapper.Map<ItemPlanoClassificacaoEntidade>(_core.Search(id));
+                model.entidade = _mapper.Map<ItemPlanoClassificacaoEntidade>(await _core.SearchAsync(id));
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -179,11 +179,11 @@ namespace Prodest.Scd.Presentation
         {
             var model = new ItemPlanoClassificacaoViewModel();
 
-            var plano = _corePlanoClassificacao.Search(filtro.IdPlanoClassificacao);
+            var plano = await _corePlanoClassificacao.SearchAsync(filtro.IdPlanoClassificacao);
             model.plano = _mapper.Map<PlanoClassificacaoEntidade>(plano);
 
 
-            var entidades = _core.Search(filtro.IdPlanoClassificacao, 1, 1000);
+            var entidades = await _core.SearchAsync(filtro.IdPlanoClassificacao, 1, 1000);
 
             //Preciso apenas do primeiro nível, pois os filhos já estão mapeados dentro de cada item
             entidades = entidades.Where(p => p.ItemPlanoClassificacaoParent == null).ToList();
@@ -211,7 +211,7 @@ namespace Prodest.Scd.Presentation
             };
 
             var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-            var niveis = _coreNivelClassificacao.Search(guid, 1, 1000);
+            var niveis = await _coreNivelClassificacao.SearchAsync(guid, 1, 1000);
             model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
 
             return model;
