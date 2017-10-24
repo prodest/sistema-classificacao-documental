@@ -90,7 +90,14 @@ namespace Prodest.Scd.UnitTestBusiness.Common
 
         protected async Task<ItemPlanoClassificacaoModel> InsertItemPlanoClassificacaoAsync()
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertItemPlanoClassificacaoAsync(null);
+
+            return itemPlanoClassificacaoModel;
+        }
+
+        protected async Task<ItemPlanoClassificacaoModel> InsertItemPlanoClassificacaoAsync(PlanoClassificacaoModel planoClassificacaoModel)
+        {
+            planoClassificacaoModel = planoClassificacaoModel ?? await InsertPlanoClassificacaoAsync();
 
             NivelClassificacaoModel nivelClassificacaoModel = await InsertNivelClassificacaoAsync();
 

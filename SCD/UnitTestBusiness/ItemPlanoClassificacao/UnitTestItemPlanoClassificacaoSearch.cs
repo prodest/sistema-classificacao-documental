@@ -50,7 +50,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
             {
                 Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-                Assert.AreEqual(ex.Message, "Tipo Documental não encontrado.");
+                Assert.AreEqual(ex.Message, "Item do Plano de Classificação não encontrado.");
             }
 
             if (ok)
@@ -67,22 +67,21 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
             Assert.AreEqual(itemPlanoClassificacaoModel.Id, itemPlanoClassificacaoModelSearched.Id);
             Assert.AreEqual(itemPlanoClassificacaoModel.Codigo, itemPlanoClassificacaoModelSearched.Codigo);
             Assert.AreEqual(itemPlanoClassificacaoModel.Descricao, itemPlanoClassificacaoModelSearched.Descricao);
-
-            //Assert.IsTrue(itemPlanoClassificacao.Ativo);
-            //Assert.AreEqual(itemPlanoClassificacao.Organizacao.GuidOrganizacao, itemPlanoClassificacaoModelSearched.Organizacao.GuidOrganizacao);
+            Assert.AreEqual(itemPlanoClassificacaoModel.NivelClassificacao.Id, itemPlanoClassificacaoModelSearched.NivelClassificacao.Id);
+            Assert.AreEqual(itemPlanoClassificacaoModel.PlanoClassificacao.Id, itemPlanoClassificacaoModelSearched.PlanoClassificacao.Id);
         }
         #endregion
                 
-        #region Pagination Search by GuidOrganização
+        #region Pagination Search by Plano de Classificação
         #region Guid Organização
         [TestMethod]
-        public void ItemPlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoGuidEmpty()
+        public async Task ItemPlanoClassificacaoTestPaginationSearchWithInvalidIdPlanoClassificacao()
         {
             bool ok = false;
 
             try
             {
-                //_core.Search(Guid.Empty, default(int), default(int));
+                await _core.SearchAsync(default(int), default(int), default(int));
 
                 ok = true;
             }
@@ -90,23 +89,23 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
             {
                 Assert.IsInstanceOfType(ex, typeof(ScdException));
 
-                Assert.AreEqual(ex.Message, "Guid da organização inválido.");
+                Assert.AreEqual(ex.Message, "O id não pode ser nulo ou vazio.");
             }
 
             if (ok)
-                Assert.Fail("Não deveria ter pesquido com o guid da organização sendo um guid vazio.");
+                Assert.Fail("Não deveria ter pesquido com o id do Plano de Classificação inválido.");
         }
         #endregion
 
         #region Page
         [TestMethod]
-        public void ItemPlanoClassificacaoTestPaginationSearchWithInvalidPage()
+        public async Task ItemPlanoClassificacaoTestPaginationSearchWithInvalidPage()
         {
             bool ok = false;
 
             try
             {
-                //_core.Search(_guidGees, default(int), default(int));
+                await _core.SearchAsync(1, default(int), default(int));
 
                 ok = true;
             }
@@ -124,13 +123,13 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
 
         #region Count
         [TestMethod]
-        public void ItemPlanoClassificacaoTestPaginationSearchWithInvalidCount()
+        public async Task ItemPlanoClassificacaoTestPaginationSearchWithInvalidCount()
         {
             bool ok = false;
 
             try
             {
-                //_core.Search(_guidGees, 1, default(int));
+                await _core.SearchAsync(1, 1, default(int));
 
                 ok = true;
             }
@@ -149,7 +148,7 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestMethod]
         public async Task ItemPlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(0, 1, 1);
+            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(-1, 1, 1);
 
             Assert.IsNotNull(itensPlanoClassificacaoModel);
             Assert.IsTrue(itensPlanoClassificacaoModel.Count == 0);
@@ -158,23 +157,26 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestMethod]
         public async Task ItemPlanoClassificacaoTestPaginationSearch()
         {
+            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
+
             int page = 2;
             int count = 5;
 
             for (int i = 0; i < (page * count); i++)
             {
-                await InsertItemPlanoClassificacaoAsync();
+                await InsertItemPlanoClassificacaoAsync(planoClassificacaoModel);
             }
 
-            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(0, page, count);
+            ICollection<ItemPlanoClassificacaoModel> itensPlanoClassificacaoModel = await _core.SearchAsync(planoClassificacaoModel.Id, page, count);
+
             Assert.IsNotNull(itensPlanoClassificacaoModel);
             Assert.IsTrue(itensPlanoClassificacaoModel.Count == count);
 
-            foreach (ItemPlanoClassificacaoModel pcm in itensPlanoClassificacaoModel)
+            foreach (ItemPlanoClassificacaoModel ipc in itensPlanoClassificacaoModel)
             {
-                Assert.IsFalse(pcm.Id == default(int));
-                Assert.IsFalse(string.IsNullOrWhiteSpace(pcm.Descricao));
-                //Assert.IsFalse(Guid.Empty.Equals(pcm.Organizacao.GuidOrganizacao));
+                Assert.IsTrue(ipc.Id > default(int));
+                Assert.IsFalse(string.IsNullOrWhiteSpace(ipc.Descricao));
+                Assert.AreEqual(planoClassificacaoModel.Id, ipc.PlanoClassificacao.Id);
             }
         }
         #endregion

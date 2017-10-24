@@ -38,13 +38,19 @@ namespace Prodest.Scd.Business
 
         public async Task<ItemPlanoClassificacaoModel> SearchAsync(int id)
         {
+            _validation.IdValid(id);
+
             ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _itensPlanoClassificacao.SearchAsync(id);
+
+            _validation.Found(itemPlanoClassificacaoModel);
 
             return itemPlanoClassificacaoModel;
         }
 
         public async Task<ICollection<ItemPlanoClassificacaoModel>> SearchAsync(int idPlanoClassificacao, int page, int count)
         {
+            _validation.IdValid(idPlanoClassificacao);
+
             _validation.PaginationSearch(page, count);
 
             ICollection<ItemPlanoClassificacaoModel> itemPlanosClassificacaoModel = await _itensPlanoClassificacao.SearchByPlanoClassificacaoAsync(idPlanoClassificacao, page, count);
