@@ -324,3 +324,26 @@ body {
 .menu-horizontal a {
     text-decoration: none;
 }
+
+.mdc-list--two-line .mdc-list-item-BotoesAcoes {
+    height: 48px;
+}
+
+.mdc-button-BotoesAcoes:not(:disabled) {
+    min-width: 0px;
+    align-self: flex-start;
+    padding: 0 0;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.mdc-list--two-line .mdc-list-item-MenuAcoes {
+    height: 30px;
+}
+
+.mdc-menu-anchor-BotoesMenu {
+    position: relative;
+    transform-origin: left top 0px;
+    left: 0px;
+    top: 0px;
+    /*transform: scale(0, 0);*/
+}

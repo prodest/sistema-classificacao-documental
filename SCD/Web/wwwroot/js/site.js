@@ -18,7 +18,7 @@ $(document).ajaxComplete(function (evento, request, ajaxOptions) {
 });
 
 
-$('#DivConteudo').on('click', 'button.BotaoAjax', function (e) {
+$('#DivConteudo').on('click', 'button.BotaoAjax, li.ItemAjax', function (e) {
     //console.log('passou');
     e.stopImmediatePropagation();
     e.preventDefault();
@@ -42,3 +42,9 @@ function ShowMessage(item, index) {
     }
 }
 
+
+function AdicionarAcaoMenu(item, index) {
+    let id = $(item).attr('data-id');
+    let menuAcoes = new mdc.menu.MDCSimpleMenu(item);
+    document.querySelector('.toggle[data-id="'+id+'"]').addEventListener('click', () => menuAcoes.open = !menuAcoes.open);
+}

@@ -88,7 +88,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal void CanDelete(ItemPlanoClassificacao itemPlanoClassificacao)
         {
-            if (itemPlanoClassificacao.ItensPlanoClassificacaoFilhos != null && itemPlanoClassificacao.ItensPlanoClassificacaoFilhos.Count > 0)
+            if (itemPlanoClassificacao.ItensPlanoClassificacaoChildren != null && itemPlanoClassificacao.ItensPlanoClassificacaoChildren.Count > 0)
                 throw new ScdException("O Itemd do Plano de Classificação possui itens e não pode ser excluído.");
         }
     }

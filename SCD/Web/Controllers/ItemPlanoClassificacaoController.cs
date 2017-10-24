@@ -17,29 +17,29 @@ namespace Web.Controllers
         {
             _service = service;
         }
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(int idPlanoClassificacao)
         {
-            var model = await _service.Search(new FiltroItemPlanoClassificacao { IdPlanoClassificacao = id });
+            var model = await _service.Search(new FiltroItemPlanoClassificacao { IdPlanoClassificacao = idPlanoClassificacao });
             return View(model);
         }
-        public async Task<IActionResult> List(int id)
+        public async Task<IActionResult> List(int idPlanoClassificacao)
         {
-            var model = await _service.Search(new FiltroItemPlanoClassificacao { IdPlanoClassificacao = id });
+            var model = await _service.Search(new FiltroItemPlanoClassificacao { IdPlanoClassificacao = idPlanoClassificacao });
             return PartialView("_List", model);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, int idPlanoClassificacao)
         {
             var model = await _service.Delete(id);
             AddHttpContextMessages(model.Result.Messages);
             if (model.Result.Ok)
             {
-                return await List(1);
+                return await List(idPlanoClassificacao);
             }
             else
             {
                 //Neste cenário a chamada é a mesma independente do resultado do delete
-                return await List(1);
+                return await List(idPlanoClassificacao);
             }
         }
 
@@ -57,9 +57,9 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<IActionResult> New()
+        public async Task<IActionResult> New(int idPlanoClassificacao)
         {
-            var model = await _service.New();
+            var model = await _service.New(idPlanoClassificacao);
             return PartialView("_Form", model);
         }
 

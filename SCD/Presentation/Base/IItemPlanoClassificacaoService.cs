@@ -10,7 +10,7 @@ namespace Prodest.Scd.Presentation.Base
         Task<ItemPlanoClassificacaoViewModel> Edit(int id);
         Task<ItemPlanoClassificacaoViewModel> Update(ItemPlanoClassificacaoEntidade entidade);
         Task<ItemPlanoClassificacaoViewModel> Create(ItemPlanoClassificacaoEntidade entidade);
-        Task<ItemPlanoClassificacaoViewModel> New();
+        Task<ItemPlanoClassificacaoViewModel> New(int idPlanoClassificacao);
 
     }
 }

@@ -8,6 +8,7 @@ using Prodest.Scd.Presentation.ViewModel;
 using Prodest.Scd.Presentation.ViewModel.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Presentation
@@ -16,12 +17,14 @@ namespace Prodest.Scd.Presentation
     {
         private IItemPlanoClassificacaoCore _core;
         private IPlanoClassificacaoCore _corePlanoClassificacao;
+        private INivelClassificacaoCore _coreNivelClassificacao;
         private IMapper _mapper;
         private IOrganogramaService _organogramaService;
 
-        public ItemPlanoClassificacaoService(IItemPlanoClassificacaoCore core, IPlanoClassificacaoCore corePlanoClassificaca,  IMapper mapper, IOrganogramaService organogramaService)
+        public ItemPlanoClassificacaoService(IItemPlanoClassificacaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, INivelClassificacaoCore coreNivelClassificacao, IMapper mapper, IOrganogramaService organogramaService)
         {
-            _corePlanoClassificacao = corePlanoClassificaca;
+            _corePlanoClassificacao = corePlanoClassificacao;
+            _coreNivelClassificacao = coreNivelClassificacao;
             _core = core;
             _mapper = mapper;
             _organogramaService = organogramaService;
@@ -162,13 +165,33 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
+
+        private void AtribuirNivelEspacamento(ICollection<ItemPlanoClassificacaoEntidade> entidades, int nivelPai)
+        {
+            foreach (var item in entidades)
+            {
+                item.NivelEspacamento = nivelPai + 1;
+                AtribuirNivelEspacamento(item.ItensPlanoClassificacaoChildren, item.NivelEspacamento);
+            }
+        }
+
         public async Task<ItemPlanoClassificacaoViewModel> Search(FiltroItemPlanoClassificacao filtro)
         {
-            var plano = _corePlanoClassificacao.Search(filtro.IdPlanoClassificacao);
-            var entidades = _core.Search(filtro.IdPlanoClassificacao, 1, 1000);
             var model = new ItemPlanoClassificacaoViewModel();
+
+            var plano = _corePlanoClassificacao.Search(filtro.IdPlanoClassificacao);
             model.plano = _mapper.Map<PlanoClassificacaoEntidade>(plano);
-            model.entidades = _mapper.Map<List<ItemPlanoClassificacaoEntidade>>(entidades);
+
+
+            var entidades = _core.Search(filtro.IdPlanoClassificacao, 1, 1000);
+
+            //Preciso apenas do primeiro nível, pois os filhos já estão mapeados dentro de cada item
+            entidades = entidades.Where(p => p.ItemPlanoClassificacaoParent == null).ToList();
+            var entidadesViewModel = _mapper.Map<ICollection<ItemPlanoClassificacaoEntidade>>(entidades);
+            //Atribui um valor (0-99) para permitir a exibição aninhada dos itens de plano de ação conforme a estrutura cadastrada
+            AtribuirNivelEspacamento(entidadesViewModel, 0);
+
+            model.entidades = entidadesViewModel;
             model.Result = new ResultViewModel
             {
                 Ok = true
@@ -176,18 +199,26 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<ItemPlanoClassificacaoViewModel> New()
+        public async Task<ItemPlanoClassificacaoViewModel> New(int idPlanoClassificacao)
         {
             var model = new ItemPlanoClassificacaoViewModel
             {
                 Action = "Create",
-                entidade = new ItemPlanoClassificacaoEntidade(),
+                entidade = new ItemPlanoClassificacaoEntidade {
+                    PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
+                    NivelClassificacao = new NivelClassificacaoEntidade { Id = 602 }
+                },
             };
+
+            var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
+            var niveis = _coreNivelClassificacao.Search(guid, 1, 1000);
+            model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
+
             return model;
         }
 
- 
-       
+
+
 
     }
 }

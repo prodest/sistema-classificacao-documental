@@ -86,6 +86,7 @@ namespace Prodest.Scd.Business
             List<ItemPlanoClassificacao> itemPlanosClassificacao = _itensPlanoClassificacao.Where(ipc => ipc.PlanoClassificacao.Id == idPlanoClassificacao)
                                                                                            .Include(ipc => ipc.NivelClassificacao)
                                                                                            .Include(ipc => ipc.PlanoClassificacao)
+                                                                                           .Include(ipc => ipc.ItemPlanoClassificacaoParent)
                                                                                            .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
                                                                                            .ThenBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
                                                                                            .ThenBy(pc => pc.Descricao)
