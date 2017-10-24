@@ -93,15 +93,10 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Plano de Classificação não encontrado.");
         }
 
-        internal void CanUpdate(PlanoClassificacaoModel newPlanoClassificacaoModel, PlanoClassificacaoModel oldPlanoClassificacaoModel)
+        internal void CanUpdate(PlanoClassificacaoModel planoClassificacaoModelOld)
         {
-            if (oldPlanoClassificacaoModel.Publicacao.HasValue)
+            if (planoClassificacaoModelOld.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
-
-            if (newPlanoClassificacaoModel.Organizacao != null)
-            {
-                throw new ScdException("Não é possível atualizar a Organização do Plano de Classificação.");
-            }
         }
 
         internal void CanDelete(PlanoClassificacaoModel planoClassificacaoModel)

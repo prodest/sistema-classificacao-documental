@@ -12,5 +12,6 @@ namespace Prodest.Scd.Business.Repository
         Task<int> CountByPlanoClassificacao(int idPlanoClassificacao);
         Task UpdateAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel);
         Task RemoveAsync(int id);
+        Task<int> CountChildren(int id);
     }
 }

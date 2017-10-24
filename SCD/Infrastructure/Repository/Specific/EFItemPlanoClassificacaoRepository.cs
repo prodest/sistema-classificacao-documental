@@ -95,6 +95,15 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             _set.Remove(itemPlanoClassificacao);
         }
 
+        public async Task<int> CountChildren(int id)
+        {
+            int count = await _set.Where(ipc => ipc.IdItemPlanoClassificacaoPai.HasValue
+                                             && ipc.IdItemPlanoClassificacaoPai.Value == id)
+                                  .CountAsync();
+
+            return count;
+        }
+
         private async Task<ItemPlanoClassificacao> SearchPersistenceAsync(int id, bool getRelationship = false)
         {
             IQueryable<ItemPlanoClassificacao> queryable = _set.Where(ipc => ipc.Id == id);

@@ -25,13 +25,12 @@ namespace Prodest.Scd.Business
 
         public async Task<ItemPlanoClassificacaoModel> InsertAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
         {
-            _validation.BasicValid(itemPlanoClassificacaoModel);
+            await _validation.BasicValid(itemPlanoClassificacaoModel);
 
             _validation.IdInsertValid(itemPlanoClassificacaoModel.Id);
 
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
-
-            itemPlanoClassificacaoModel =  await _itensPlanoClassificacao.AddAsync(itemPlanoClassificacaoModel);
+            itemPlanoClassificacaoModel = await _itensPlanoClassificacao.AddAsync(itemPlanoClassificacaoModel);
 
             return itemPlanoClassificacaoModel;
         }
@@ -67,17 +66,17 @@ namespace Prodest.Scd.Business
 
         public async Task UpdateAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
         {
-            _validation.Valid(itemPlanoClassificacaoModel);
+            await _validation.Valid(itemPlanoClassificacaoModel);
 
             ItemPlanoClassificacaoModel itemPlanoClassificacaoModelOld = await _itensPlanoClassificacao.SearchAsync(itemPlanoClassificacaoModel.Id);
 
             _validation.Found(itemPlanoClassificacaoModelOld);
 
-            //_validation.CanUpdate(itemPlanoClassificacaoModel, itemPlanoClassificacao);
+            _validation.PlanoClassificacaoEquals(itemPlanoClassificacaoModel, itemPlanoClassificacaoModelOld);
+
+            await _validation.CanUpdate(itemPlanoClassificacaoModelOld);
 
             await _itensPlanoClassificacao.UpdateAsync(itemPlanoClassificacaoModel);
-
-            await _unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(int id)
@@ -86,11 +85,9 @@ namespace Prodest.Scd.Business
 
             _validation.Found(itemPlanoClassificacaoModel);
 
-            _validation.CanDelete(itemPlanoClassificacaoModel);
+            await _validation.CanDelete(itemPlanoClassificacaoModel);
 
             await _itensPlanoClassificacao.RemoveAsync(itemPlanoClassificacaoModel.Id);
-
-            await _unitOfWork.SaveAsync();
         }
     }
 }

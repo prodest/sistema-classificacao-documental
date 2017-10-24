@@ -12,12 +12,16 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
         [TestInitialize]
         public void SetupSpecific()
         {
-            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation();
-
             OrganizacaoValidation organizacaoValidation = new OrganizacaoValidation();
-
             OrganizacaoCore organizacaoCore = new OrganizacaoCore(_repositories, organizacaoValidation);
 
+            NivelClassificacaoValidation nivelClassificacaoValidation = new NivelClassificacaoValidation();
+            NivelClassificacaoCore nivelClassificacaoCore = new NivelClassificacaoCore(_repositories, nivelClassificacaoValidation, organizacaoCore);
+
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
+            PlanoClassificacaoCore planoClassificacaoCore = new PlanoClassificacaoCore(_repositories, _organogramaService, organizacaoCore);
+
+            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation(_repositories.ItensPlanoClassificacaoSpecific, nivelClassificacaoCore, planoClassificacaoCore, planoClassificacaoValidation);
             _core = new ItemPlanoClassificacaoCore(_repositories, itemPlanoClassificacaoValidation, organizacaoCore);
         }
     }

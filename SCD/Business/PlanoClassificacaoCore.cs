@@ -90,7 +90,7 @@ namespace Prodest.Scd.Business
 
             PlanoClassificacaoModel planoClassificacaoModelOld = await SearchAsync(planoClassificacaoModel.Id);
 
-            _validation.CanUpdate(planoClassificacaoModel, planoClassificacaoModelOld);
+            _validation.CanUpdate(planoClassificacaoModelOld);
 
             planoClassificacaoModel.GuidOrganizacao = GetGuidOrganizacao();
             planoClassificacaoModel.Organizacao = await GetOrganizacaoPatricarcaModel();

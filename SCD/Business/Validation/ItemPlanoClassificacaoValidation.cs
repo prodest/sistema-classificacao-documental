@@ -1,28 +1,49 @@
-﻿using Prodest.Scd.Business.Common.Exceptions;
+﻿using Prodest.Scd.Business.Base;
+using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Validation.Common;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class ItemPlanoClassificacaoValidation : CommonValidation
     {
-        internal void Valid(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
-        {
-            IdValid(itemPlanoClassificacaoModel.Id);
+        private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
+        private INivelClassificacaoCore _nivelClassificacaoCore;
+        private IPlanoClassificacaoCore _planoClassificacaoCore;
 
-            BasicValid(itemPlanoClassificacaoModel);
+        private PlanoClassificacaoValidation _planoClassificacaoValidation;
+
+        public ItemPlanoClassificacaoValidation(IItemPlanoClassificacaoRepository itensPlanoClassificacao, INivelClassificacaoCore nivelClassificacaoCore, IPlanoClassificacaoCore planoClassificacaoCore, PlanoClassificacaoValidation planoClassificacaoValidation)
+        {
+            _itensPlanoClassificacao = itensPlanoClassificacao;
+            _nivelClassificacaoCore = nivelClassificacaoCore;
+            _planoClassificacaoCore = planoClassificacaoCore;
+            _planoClassificacaoValidation = planoClassificacaoValidation;
+        }
+
+        internal async Task Valid(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
+        {
+            await BasicValid(itemPlanoClassificacaoModel);
+
+            IdValid(itemPlanoClassificacaoModel.Id);
         }
 
         #region Basic Valid
-        internal void BasicValid(ItemPlanoClassificacaoModel itemPlanoClassificacao)
+        internal async Task BasicValid(ItemPlanoClassificacaoModel itemPlanoClassificacao)
         {
             NotNull(itemPlanoClassificacao);
 
-            PlanoClassificacaoNotNull(itemPlanoClassificacao.PlanoClassificacao);
-
             NivelClassificacaoNotNull(itemPlanoClassificacao.NivelClassificacao);
 
+            PlanoClassificacaoNotNull(itemPlanoClassificacao.PlanoClassificacao);
+
             Filled(itemPlanoClassificacao);
+
+            await NivelClassificacaoExists(itemPlanoClassificacao.NivelClassificacao);
+
+            await PlanoClassificacaoExists(itemPlanoClassificacao.PlanoClassificacao);
         }
 
         private void NotNull(ItemPlanoClassificacaoModel itemPlanoClassificacao)
@@ -84,10 +105,42 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Item do Plano de Classificação não encontrado.");
         }
 
-        internal void CanDelete(ItemPlanoClassificacaoModel itemPlanoClassificacao)
+        internal async Task NivelClassificacaoExists(NivelClassificacaoModel nivelClassificacaoModel)
         {
-            if (itemPlanoClassificacao.ItensPlanoClassificacaoChildren != null && itemPlanoClassificacao.ItensPlanoClassificacaoChildren.Count > 0)
-                throw new ScdException("O Itemd do Plano de Classificação possui itens e não pode ser excluído.");
+            nivelClassificacaoModel = await _nivelClassificacaoCore.SearchAsync(nivelClassificacaoModel.Id);
+
+            if (nivelClassificacaoModel == null)
+                throw new ScdException("Nível de Classificação não encontrado.");
+        }
+
+        internal async Task PlanoClassificacaoExists(PlanoClassificacaoModel planoClassificacaoModel)
+        {
+            planoClassificacaoModel = await _planoClassificacaoCore.SearchAsync(planoClassificacaoModel.Id);
+
+            if (planoClassificacaoModel == null)
+                throw new ScdException("Plano de Classificação não encontrado.");
+        }
+
+        internal void PlanoClassificacaoEquals(ItemPlanoClassificacaoModel itemPlanoClassificacaoModelNew, ItemPlanoClassificacaoModel itemPlanoClassificacaoModelOld)
+        {
+            if (itemPlanoClassificacaoModelNew.PlanoClassificacao.Id != itemPlanoClassificacaoModelOld.PlanoClassificacao.Id)
+                throw new ScdException("O Plano de Classificação não pode ser alterado.");
+        }
+
+        internal async Task CanUpdate(ItemPlanoClassificacaoModel itemPlanoClassificacaoModelOld)
+        {
+            PlanoClassificacaoModel planoClassificacaoModel = await _planoClassificacaoCore.SearchAsync(itemPlanoClassificacaoModelOld.Id);
+            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
+        }
+
+        internal async Task CanDelete(ItemPlanoClassificacaoModel itemPlanoClassificacao)
+        {
+            await CanUpdate(itemPlanoClassificacao);
+
+            int count = await _itensPlanoClassificacao.CountChildren(itemPlanoClassificacao.Id);
+
+            if (count > 0)
+                throw new ScdException("O Item do Plano de Classificação possui itens e não pode ser excluído.");
         }
     }
 }

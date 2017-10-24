@@ -26,7 +26,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
         protected EFScdRepositories _repositories;
         //protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
 
-        private IOrganogramaService _organogramaService;
+        protected IOrganogramaService _organogramaService;
         private IOrganizacaoCore _organizacaoCore;
 
         [TestInitialize]
