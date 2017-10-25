@@ -165,7 +165,7 @@ namespace Prodest.Scd.Presentation
             //var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
             //GEES
             var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-            var entidades = _core.SearchAsync(guid, 1, 1000);
+            var entidades = await _core.SearchAsync(guid, 1, 1000);
             var model = new NivelClassificacaoViewModel();
             model.entidades = _mapper.Map<List<NivelClassificacaoEntidade>>(entidades);
             model.Result = new ResultViewModel

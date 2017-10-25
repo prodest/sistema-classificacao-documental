@@ -13,7 +13,6 @@ namespace Prodest.Scd.Business
         private IUnitOfWork _unitOfWork;
         private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
         private ItemPlanoClassificacaoValidation _validation;
-        private IOrganizacaoCore _organizacaoCore;
 
         public ItemPlanoClassificacaoCore(IScdRepositories repositories, ItemPlanoClassificacaoValidation validation)
         {

@@ -21,8 +21,8 @@ namespace Prodest.Scd.UnitTestBusiness.ItemPlanoClassificacao
             PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
             PlanoClassificacaoCore planoClassificacaoCore = new PlanoClassificacaoCore(_repositories, _organogramaService, organizacaoCore);
 
-            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation(_repositories.ItensPlanoClassificacaoSpecific, nivelClassificacaoCore, planoClassificacaoCore, planoClassificacaoValidation);
-            _core = new ItemPlanoClassificacaoCore(_repositories, itemPlanoClassificacaoValidation, organizacaoCore);
+            ItemPlanoClassificacaoValidation itemPlanoClassificacaoValidation = new ItemPlanoClassificacaoValidation(nivelClassificacaoCore, planoClassificacaoCore, planoClassificacaoValidation);
+            _core = new ItemPlanoClassificacaoCore(_repositories, itemPlanoClassificacaoValidation);
         }
     }
 }

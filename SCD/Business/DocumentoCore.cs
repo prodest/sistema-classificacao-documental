@@ -2,7 +2,6 @@
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Validation;
-using System;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
