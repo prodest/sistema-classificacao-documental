@@ -11,6 +11,6 @@ namespace Prodest.Scd.Persistence.Model
         public string Descricao { get; set; }
         public int IdDocumento { get; set; }
 
-        public Documento IdDocumentoNavigation { get; set; }
+        public Documento Documento { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdTipoDocumental).HasColumnName("idTipoDocumental");
 
-                entity.HasOne(d => d.ItensPlanoClassificacao)
+                entity.HasOne(d => d.ItemPlanoClassificacao)
                     .WithMany(p => p.Documentos)
                     .HasForeignKey(d => d.IdItemPlanoClassificacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -205,7 +205,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
 
-                entity.HasOne(d => d.IdDocumentoNavigation)
+                entity.HasOne(d => d.Documento)
                     .WithMany(p => p.Sigilo)
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)

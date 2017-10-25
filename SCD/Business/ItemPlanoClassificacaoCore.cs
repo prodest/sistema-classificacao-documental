@@ -15,12 +15,11 @@ namespace Prodest.Scd.Business
         private ItemPlanoClassificacaoValidation _validation;
         private IOrganizacaoCore _organizacaoCore;
 
-        public ItemPlanoClassificacaoCore(IScdRepositories repositories, ItemPlanoClassificacaoValidation validation, IOrganizacaoCore organizacaoCore)
+        public ItemPlanoClassificacaoCore(IScdRepositories repositories, ItemPlanoClassificacaoValidation validation)
         {
             _unitOfWork = repositories.UnitOfWork;
             _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
             _validation = validation;
-            _organizacaoCore = organizacaoCore;
         }
 
         public async Task<ItemPlanoClassificacaoModel> InsertAsync(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
@@ -85,7 +84,9 @@ namespace Prodest.Scd.Business
 
             _validation.Found(itemPlanoClassificacaoModel);
 
-            await _validation.CanDelete(itemPlanoClassificacaoModel);
+            int countChildren = await _itensPlanoClassificacao.CountChildren(id);
+
+            await _validation.CanDelete(itemPlanoClassificacaoModel, countChildren);
 
             await _itensPlanoClassificacao.RemoveAsync(itemPlanoClassificacaoModel.Id);
         }

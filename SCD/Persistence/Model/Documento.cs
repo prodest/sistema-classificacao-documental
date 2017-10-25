@@ -17,7 +17,7 @@ namespace Prodest.Scd.Persistence.Model
         public int IdItemPlanoClassificacao { get; set; }
         public int IdTipoDocumental { get; set; }
 
-        public ItemPlanoClassificacao ItensPlanoClassificacao { get; set; }
+        public ItemPlanoClassificacao ItemPlanoClassificacao { get; set; }
         public TipoDocumental TipoDocumental { get; set; }
         public ICollection<Sigilo> Sigilo { get; set; }
     }
