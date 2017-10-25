@@ -12,6 +12,5 @@ namespace Prodest.Scd.Business.Model
         public PlanoClassificacaoModel PlanoClassificacao { get; set; }
         public ICollection<ItemPlanoClassificacaoModel> ItensPlanoClassificacaoChildren { get; set; }
         public ItemPlanoClassificacaoModel ItemPlanoClassificacaoParent { get; set; }
-
     }
 }
