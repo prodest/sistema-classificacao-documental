@@ -57,8 +57,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
                                                                               .Include(ipc => ipc.PlanoClassificacao)
                                                                               .Include(ipc => ipc.NivelClassificacao)
                                                                               .Include(ipc => ipc.ItemPlanoClassificacaoParent)
-                                                                              .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoPai.HasValue)
-                                                                              .ThenBy(ipc => ipc.IdItemPlanoClassificacaoPai.Value)
+                                                                              .OrderBy(ipc => !ipc.IdItemPlanoClassificacaoParent.HasValue)
+                                                                              .ThenBy(ipc => ipc.IdItemPlanoClassificacaoParent.Value)
                                                                               .ThenBy(pc => pc.Descricao)
                                                                               .Skip(skip)
                                                                               .Take(count)
@@ -97,8 +97,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
         public async Task<int> CountChildren(int id)
         {
-            int count = await _set.Where(ipc => ipc.IdItemPlanoClassificacaoPai.HasValue
-                                             && ipc.IdItemPlanoClassificacaoPai.Value == id)
+            int count = await _set.Where(ipc => ipc.IdItemPlanoClassificacaoParent.HasValue
+                                             && ipc.IdItemPlanoClassificacaoParent.Value == id)
                                   .CountAsync();
 
             return count;

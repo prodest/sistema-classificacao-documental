@@ -14,7 +14,7 @@ namespace Prodest.Scd.Persistence.Model
         public string Descricao { get; set; }
         public int IdPlanoClassificacao { get; set; }
         public int IdNivelClassificacao { get; set; }
-        public int? IdItemPlanoClassificacaoPai { get; set; }
+        public int? IdItemPlanoClassificacaoParent { get; set; }
 
         public ItemPlanoClassificacao ItemPlanoClassificacaoParent { get; set; }
         public NivelClassificacao NivelClassificacao { get; set; }

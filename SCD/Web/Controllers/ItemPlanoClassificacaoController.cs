@@ -87,7 +87,7 @@ namespace Web.Controllers
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
                 {
-                    return await List(1);
+                    return await List(model.entidade.PlanoClassificacao.Id);
                 }
             }
             return await Edit(model.entidade.Id);
