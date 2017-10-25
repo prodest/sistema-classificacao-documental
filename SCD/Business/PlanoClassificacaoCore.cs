@@ -23,7 +23,7 @@ namespace Prodest.Scd.Business
 
         public PlanoClassificacaoCore(IScdRepositories repositories, IOrganogramaService organogramaService, IOrganizacaoCore organizacaoCore)
         {
-            _validation = new PlanoClassificacaoValidation();
+            _validation = new PlanoClassificacaoValidation(repositories);
 
             _planosClassificacao = repositories.PlanosClassificacaoSpecific;
             _organogramaService = organogramaService;
@@ -43,7 +43,9 @@ namespace Prodest.Scd.Business
         {
             PlanoClassificacaoModel planoClassificacaoModel = await SearchAsync(id);
 
-            _validation.CanDelete(planoClassificacaoModel);
+            _validation.Found(planoClassificacaoModel);
+
+            await _validation.CanDelete(planoClassificacaoModel);
 
             await _planosClassificacao.RemoveAsync(planoClassificacaoModel.Id);
         }

@@ -33,7 +33,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             EFScdRepositories repositories = new EFScdRepositories(mapper);
 
-            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation();
+            PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(repositories);
 
             IOptions<AcessoCidadaoConfiguration> autenticacaoIdentityServerConfig = Options.Create(new AcessoCidadaoConfiguration { Authority = "https://acessocidadao.es.gov.br/is/" });
 
