@@ -129,7 +129,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task CanUpdate(ItemPlanoClassificacaoModel itemPlanoClassificacaoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await _planoClassificacaoCore.SearchAsync(itemPlanoClassificacaoModelOld.Id);
+            PlanoClassificacaoModel planoClassificacaoModel = await _planoClassificacaoCore.SearchAsync(itemPlanoClassificacaoModelOld.PlanoClassificacao.Id);
             _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
         }
 

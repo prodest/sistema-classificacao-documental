@@ -80,7 +80,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IdItemPlanoClassificacaoPai).HasColumnName("idItemPlanoClassificacaoPai");
+                entity.Property(e => e.IdItemPlanoClassificacaoParent).HasColumnName("idItemPlanoClassificacaoPai");
 
                 entity.Property(e => e.IdNivelClassificacao).HasColumnName("idNivelClassificacao");
 
@@ -88,7 +88,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.HasOne(d => d.ItemPlanoClassificacaoParent)
                     .WithMany(p => p.ItensPlanoClassificacaoChildren)
-                    .HasForeignKey(d => d.IdItemPlanoClassificacaoPai)
+                    .HasForeignKey(d => d.IdItemPlanoClassificacaoParent)
                     .HasConstraintName("FK_ItemPlanoClassificacaoPai");
 
                 entity.HasOne(d => d.NivelClassificacao)

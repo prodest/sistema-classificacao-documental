@@ -9,6 +9,6 @@ namespace Prodest.Scd.Integration.Organograma.Model
         public Guid Guid { get; set; }
         public string RazaoSocial { get; set; }
         public string Sigla { get; set; }
-        public OrganogramaOrganizacao OrganizacaoPai { get; set; }
+        public OrganogramaOrganizacao OrganizacaoParent { get; set; }
     }
 }
