@@ -86,8 +86,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdPlanoClassificacao).HasColumnName("idPlanoClassificacao");
 
-                entity.HasOne(d => d.ItemPlanoClassificacaoPai)
-                    .WithMany(p => p.ItensPlanoClassificacaoFilhos)
+                entity.HasOne(d => d.ItemPlanoClassificacaoParent)
+                    .WithMany(p => p.ItensPlanoClassificacaoChildren)
                     .HasForeignKey(d => d.IdItemPlanoClassificacaoPai)
                     .HasConstraintName("FK_ItemPlanoClassificacaoPai");
 

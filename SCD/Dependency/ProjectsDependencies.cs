@@ -1,8 +1,10 @@
 ﻿using Prodest.Scd.Business;
 using Prodest.Scd.Business.Base;
+using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
 using Prodest.Scd.Infrastructure.Integration;
+using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Infrastructure.Repository.Specific;
 using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Presentation;
@@ -21,6 +23,7 @@ namespace Prodest.Scd.Dependency
             #region Business
             #region Core
             dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(IItemPlanoClassificacaoCore), typeof(ItemPlanoClassificacaoCore));
             dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
             dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
             #endregion
@@ -28,6 +31,7 @@ namespace Prodest.Scd.Dependency
             #region Validation
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
+            dependencies.Add(typeof(ItemPlanoClassificacaoValidation), typeof(ItemPlanoClassificacaoValidation));
             dependencies.Add(typeof(NivelClassificacaoValidation), typeof(NivelClassificacaoValidation));
             #endregion
             #endregion
@@ -42,7 +46,19 @@ namespace Prodest.Scd.Dependency
 
             #region Presentation
             dependencies.Add(typeof(IPlanoClassificacaoService), typeof(PlanoClassificacaoService));
+            dependencies.Add(typeof(IItemPlanoClassificacaoService), typeof(ItemPlanoClassificacaoService));
             dependencies.Add(typeof(INivelClassificacaoService), typeof(NivelClassificacaoService));
+            #endregion
+
+            #region Infrastructure
+            dependencies.Add(typeof(IItemPlanoClassificacaoRepository), typeof(EFItemPlanoClassificacaoRepository));
+            dependencies.Add(typeof(IPlanoClassificacaoRepository), typeof(EFPlanoClassificacaoRepository));
+            dependencies.Add(typeof(INivelClassificacaoRepository), typeof(EFNivelClassificacaoRepository));
+            dependencies.Add(typeof(IOrganizacaoRepository), typeof(EFOrganizacaoRepository));
+            dependencies.Add(typeof(ITipoDocumentalRepository), typeof(EFTipoDocumentalRepository));
+            dependencies.Add(typeof(ScdContext), typeof(ScdContext));
+            dependencies.Add(typeof(IUnitOfWork), typeof(EFUnitOfWorkSpecific));
+
             #endregion
 
             return dependencies;

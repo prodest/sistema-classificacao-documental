@@ -1,0 +1,52 @@
+﻿@{
+    var siteName = "SCD";
+}
+<header class="mdc-toolbar mdc-toolbar--fixed mdc-theme--primary-dark-bg">
+    <div class="mdc-toolbar__row">
+        <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+            <button class="demo-menu material-icons mdc-toolbar__icon--menu mobile-show">menu</button>
+            <a href="@Url.Action("Index", "Home")" class="toolbar-sitename">
+                <button class="demo-menu material-icons mdc-toolbar__icon--menu mobile-hide">card_giftcard</button>
+                <div class="mdc-toolbar__title --mdc-theme-text-primary-on-primary">
+                    <span>
+                        @siteName
+                    </span>
+                </div>
+            </a>
+
+          
+        </section>
+        <section class="mdc-toolbar__section mdc-toolbar__section--align-end" role="toolbar">
+            <div class="mdc-menu-anchor">
+                <a href="#" class="toggle-avatar"><img class="avatar" src="~/images/silhouette.png"></a>
+                <div class="mdc-simple-menu menu-user " tabindex="-1" id="demo-menu">
+                    <div class="mdc-card demo-card mdc-simple-menu__items">
+                        <div class="mdc-card__horizontal-block">
+                            <img class="mdc-card__media-item avatarExpandido" src="~/images/silhouette.png">
+                            <section class="mdc-card__primary">
+                                <h1 class="mdc-card__title"><b>Nome do Usuário do Sistema</b></h1>
+                                <h2 class="mdc-card__subtitle email">nomeusuário@provedor.com.br</h2>
+                                <h2 class="mdc-card__subtitle email"><span>Entidade: </span><span>Prodest</span></h2>
+                                <div class="mdc-card__supporting-text">
+                                    <a href="https://acessocidadao.es.gov.br/Perfil/" class="mdc-button mdc-button--primary mdc-button--unelevated mdc-button--dense mdc-ripple-upgraded mdc-button-MinhaConta capitalize">Minha Conta</a>
+                                </div>
+                            </section>
+                        </div>
+                        <section class="mdc-card__actions menu-user-Barra-Acoes">
+                            <div dir="ltr" style="width:50%">
+                                <a href="#" class="mdc-button mdc-button--compact capitalize menu-user-Barra-Acoes-button">Botão Opção a Esquerda</a>
+                            </div>
+                            <div dir="rtl" style="width:50%">
+                                <a href="@Url.Action("MDCDeslogado","Home")" class="mdc-button mdc-button--compact capitalize menu-user-Barra-Acoes-button">Sair</a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="FazerLogin">
+                    <a href="@Url.Action("MDCMenuHorizontal", "Home")" class="mdc-theme--text-secondary-on-primary-dark">Fazer Login</a>
+                </div>*@
+        </section>
+    </div>
+</header>
