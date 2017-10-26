@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Prodest.Scd.Business.Base;
+﻿using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
@@ -8,7 +7,6 @@ using Prodest.Scd.Integration.Organograma.Base;
 using Prodest.Scd.Integration.Organograma.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
@@ -75,8 +73,21 @@ namespace Prodest.Scd.Business
             return planoClassificacaoModel;
         }
 
-        public async Task<ICollection<PlanoClassificacaoModel>> SearchAsync(Guid guidOrganizacao, int page, int count)
+        public async Task<PlanoClassificacaoModel> SearchCompleteAsync(int id)
         {
+            _validation.IdValid(id);
+
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchCompleteAsync(id);
+
+            _validation.Found(planoClassificacaoModel);
+
+            return planoClassificacaoModel;
+        }
+
+        public async Task<ICollection<PlanoClassificacaoModel>> GetAsync(int page, int count)
+        {
+            Guid guidOrganizacao = GetGuidOrganizacao();
+
             _validation.OrganizacaoValid(guidOrganizacao);
 
             _validation.PaginationSearch(page, count);

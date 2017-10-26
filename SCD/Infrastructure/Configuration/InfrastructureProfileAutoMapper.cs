@@ -8,6 +8,10 @@ namespace Prodest.Scd.Infrastructure.Configuration
     {
         public InfrastructureProfileAutoMapper()
         {
+            #region Documento
+            CreateMap<Documento, DocumentoModel>().ReverseMap();
+            #endregion
+
             #region Item do Plano de Classificação
             CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>();
             CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacao>()
@@ -64,6 +68,10 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)))
                 .ForMember(dest => dest.Organizacao, opt => opt.Ignore())
                 .ForMember(dest => dest.ItensPlanoClassificacao, opt => opt.Ignore());
+            #endregion
+
+            #region Sigilo
+            CreateMap<Sigilo, SigiloModel>().ReverseMap();
             #endregion
 
             #region Tipo Documental
