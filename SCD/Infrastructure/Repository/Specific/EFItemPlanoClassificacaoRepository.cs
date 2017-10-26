@@ -93,6 +93,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             ItemPlanoClassificacao itemPlanoClassificacao = await SearchPersistenceAsync(id);
 
             _set.Remove(itemPlanoClassificacao);
+
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> CountChildren(int id)
