@@ -8,6 +8,7 @@ using Prodest.Scd.Presentation.ViewModel;
 using Prodest.Scd.Presentation.ViewModel.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Presentation
@@ -162,11 +163,7 @@ namespace Prodest.Scd.Presentation
 
         public async Task<PlanoClassificacaoViewModel> Search(FiltroPlanoClassificacao filtro)
         {
-            //prodest
-            var guid = new Guid("3ca6ea0e-ca14-46fa-a911-22e616303722");
-            //GEES
-            //var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-            var entidades = await _core.SearchAsync(guid, 1, 1000);
+            var entidades = await _core.GetAsync(1, 1000);
             var model = new PlanoClassificacaoViewModel();
             model.entidades = _mapper.Map<List<PlanoClassificacaoEntidade>>(entidades);
             model.Result = new ResultViewModel
@@ -187,7 +184,7 @@ namespace Prodest.Scd.Presentation
         }
 
         #region Fim Vigência
-            public async Task<PlanoClassificacaoViewModel> EncerrarVigencia(int id)
+        public async Task<PlanoClassificacaoViewModel> EncerrarVigencia(int id)
         {
             var model = new PlanoClassificacaoViewModel();
             try
@@ -215,7 +212,7 @@ namespace Prodest.Scd.Presentation
             }
             return model;
         }
-            public async Task<PlanoClassificacaoViewModel> UpdateVigencia(PlanoClassificacaoEntidade entidade)
+        public async Task<PlanoClassificacaoViewModel> UpdateVigencia(PlanoClassificacaoEntidade entidade)
         {
             var model = new PlanoClassificacaoViewModel();
             model.entidade = entidade;
@@ -251,7 +248,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
         #endregion
-       
+
 
     }
 }

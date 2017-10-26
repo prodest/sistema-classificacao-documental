@@ -22,14 +22,16 @@ namespace Prodest.Scd.Dependency
 
             #region Business
             #region Core
-            dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(IDocumentoCore), typeof(DocumentoCore));
             dependencies.Add(typeof(IItemPlanoClassificacaoCore), typeof(ItemPlanoClassificacaoCore));
             dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
-            dependencies.Add(typeof(ITipoDocumentalCore), typeof(TipoDocumentalCore));
             dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
+            dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(ITipoDocumentalCore), typeof(TipoDocumentalCore));
             #endregion
 
             #region Validation
+            dependencies.Add(typeof(DocumentoValidation), typeof(DocumentoValidation));
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
             dependencies.Add(typeof(ItemPlanoClassificacaoValidation), typeof(ItemPlanoClassificacaoValidation));
@@ -54,6 +56,7 @@ namespace Prodest.Scd.Dependency
             #endregion
 
             #region Infrastructure
+            dependencies.Add(typeof(IDocumentoRepository), typeof(EFDocumentoRepository));
             dependencies.Add(typeof(IItemPlanoClassificacaoRepository), typeof(EFItemPlanoClassificacaoRepository));
             dependencies.Add(typeof(IPlanoClassificacaoRepository), typeof(EFPlanoClassificacaoRepository));
             dependencies.Add(typeof(INivelClassificacaoRepository), typeof(EFNivelClassificacaoRepository));
@@ -61,7 +64,6 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(ITipoDocumentalRepository), typeof(EFTipoDocumentalRepository));
             dependencies.Add(typeof(ScdContext), typeof(ScdContext));
             dependencies.Add(typeof(IUnitOfWork), typeof(EFUnitOfWorkSpecific));
-
             #endregion
 
             return dependencies;

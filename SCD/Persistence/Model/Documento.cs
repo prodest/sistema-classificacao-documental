@@ -8,7 +8,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public Documento()
         {
-            Sigilo = new HashSet<Sigilo>();
+            Sigilos = new HashSet<Sigilo>();
         }
 
         public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace Prodest.Scd.Persistence.Model
 
         public ItemPlanoClassificacao ItemPlanoClassificacao { get; set; }
         public TipoDocumental TipoDocumental { get; set; }
-        public ICollection<Sigilo> Sigilo { get; set; }
+        public ICollection<Sigilo> Sigilos { get; set; }
     }
 }

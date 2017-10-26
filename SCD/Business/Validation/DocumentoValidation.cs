@@ -4,22 +4,23 @@ using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Validation.Common;
 using System.Threading.Tasks;
 using System;
+using Prodest.Scd.Business.Repository.Base;
+using Prodest.Scd.Business.Repository;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class DocumentoValidation : CommonValidation
     {
-        private IItemPlanoClassificacaoCore _itemPlanoClassificacaoCore;
-        private IPlanoClassificacaoCore _planoClassificacaoCore;
-        private ITipoDocumentalCore _tipoDocumentalCore;
+        private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
+        private ITipoDocumentalRepository _tiposDocumentais;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
-        public DocumentoValidation(IItemPlanoClassificacaoCore itemPlanoClassificacaoCore, IPlanoClassificacaoCore planoClassificacaoCore, ITipoDocumentalCore tipoDocumentalCore, PlanoClassificacaoValidation planoClassificacaoValidation)
+        public DocumentoValidation(IScdRepositories repositories, IItemPlanoClassificacaoCore itemPlanoClassificacaoCore, ITipoDocumentalCore tipoDocumentalCore, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
-            _itemPlanoClassificacaoCore = itemPlanoClassificacaoCore;
-            _planoClassificacaoCore = planoClassificacaoCore;
-            _tipoDocumentalCore = tipoDocumentalCore;
+
+            _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
+            _tiposDocumentais = repositories.TiposDocumentaisSpecific;
 
             _planoClassificacaoValidation = planoClassificacaoValidation;
         }
@@ -102,7 +103,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task ItemPlanoClassificacaoExists(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
         {
-            itemPlanoClassificacaoModel = await _itemPlanoClassificacaoCore.SearchAsync(itemPlanoClassificacaoModel.Id);
+            itemPlanoClassificacaoModel = await _itensPlanoClassificacao.SearchAsync(itemPlanoClassificacaoModel.Id);
 
             if (itemPlanoClassificacaoModel == null)
                 throw new ScdException("Item do Plano de Classificação não encontrado.");
@@ -110,7 +111,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task TipoDocumentalExists(TipoDocumentalModel tipoDocumentalModel)
         {
-            tipoDocumentalModel = await _tipoDocumentalCore.SearchAsync(tipoDocumentalModel.Id);
+            tipoDocumentalModel = await _tiposDocumentais.SearchAsync(tipoDocumentalModel.Id);
 
             if (tipoDocumentalModel == null)
                 throw new ScdException("Tipo Documental não encontrado.");
@@ -125,8 +126,8 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task PlanoClassificacaoEquals(DocumentoModel documentoModelNew, DocumentoModel documentoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelNew = (await _itemPlanoClassificacaoCore.SearchAsync(documentoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
-            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itemPlanoClassificacaoCore.SearchAsync(documentoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            PlanoClassificacaoModel planoClassificacaoModelNew = (await _itensPlanoClassificacao.SearchAsync(documentoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(documentoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
 
             if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
                 throw new ScdException("O Plano de Classificação não pode ser alterado.");
@@ -134,20 +135,22 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task CanUpdate(DocumentoModel documentoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itemPlanoClassificacaoCore.SearchAsync(documentoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(documentoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
 
             _planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
         }
 
-        internal async Task CanDelete(DocumentoModel documentoModel, int countSigilo, int countTemporalidade)
+        internal async Task CanDelete(DocumentoModel documentoModel)
         {
             await CanUpdate(documentoModel);
 
-            if (countSigilo > 0)
-                throw new ScdException("O Documento possui Sigilo e não pode ser excluído.");
+            //TODO: Validar se possui sigilo e temporalidade
 
-            if (countTemporalidade > 0)
-                throw new ScdException("O Documento possui Temporalidade e não pode ser excluído.");
+            //if (countSigilo > 0)
+            //    throw new ScdException("O Documento possui Sigilo e não pode ser excluído.");
+
+            //if (countTemporalidade > 0)
+            //    throw new ScdException("O Documento possui Temporalidade e não pode ser excluído.");
         }
     }
 }

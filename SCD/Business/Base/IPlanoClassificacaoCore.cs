@@ -13,7 +13,9 @@ namespace Prodest.Scd.Business.Base
 
         Task<PlanoClassificacaoModel> SearchAsync(int id);
 
-        Task<ICollection<PlanoClassificacaoModel>> SearchAsync(Guid guidOrganizacao, int page, int count);
+        Task<PlanoClassificacaoModel> SearchCompleteAsync(int id);
+
+        Task<ICollection<PlanoClassificacaoModel>> GetAsync(int page, int count);
 
         Task UpdateAsync(PlanoClassificacaoModel planoClassificacao);
 
