@@ -58,9 +58,9 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<IActionResult> New()
+        public IActionResult New()
         {
-            var model = await _service.New();
+            var model = _service.New();
             return PartialView("_Form", model);
         }
 

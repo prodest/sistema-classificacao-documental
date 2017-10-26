@@ -1,7 +1,6 @@
 ﻿using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
-using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Validation.Common;
 using System.Threading.Tasks;
 
@@ -9,15 +8,13 @@ namespace Prodest.Scd.Business.Validation
 {
     public class ItemPlanoClassificacaoValidation : CommonValidation
     {
-        private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
         private INivelClassificacaoCore _nivelClassificacaoCore;
         private IPlanoClassificacaoCore _planoClassificacaoCore;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
-        public ItemPlanoClassificacaoValidation(IItemPlanoClassificacaoRepository itensPlanoClassificacao, INivelClassificacaoCore nivelClassificacaoCore, IPlanoClassificacaoCore planoClassificacaoCore, PlanoClassificacaoValidation planoClassificacaoValidation)
+        public ItemPlanoClassificacaoValidation(INivelClassificacaoCore nivelClassificacaoCore, IPlanoClassificacaoCore planoClassificacaoCore, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
-            _itensPlanoClassificacao = itensPlanoClassificacao;
             _nivelClassificacaoCore = nivelClassificacaoCore;
             _planoClassificacaoCore = planoClassificacaoCore;
             _planoClassificacaoValidation = planoClassificacaoValidation;
@@ -97,13 +94,6 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Identificador do Nível de Classificação inválido.");
         }
         #endregion
-        #endregion
-
-        internal void Found(ItemPlanoClassificacaoModel itemPlanoClassificacao)
-        {
-            if (itemPlanoClassificacao == null)
-                throw new ScdException("Item do Plano de Classificação não encontrado.");
-        }
 
         internal async Task NivelClassificacaoExists(NivelClassificacaoModel nivelClassificacaoModel)
         {
@@ -120,6 +110,13 @@ namespace Prodest.Scd.Business.Validation
             if (planoClassificacaoModel == null)
                 throw new ScdException("Plano de Classificação não encontrado.");
         }
+        #endregion
+
+        internal void Found(ItemPlanoClassificacaoModel itemPlanoClassificacao)
+        {
+            if (itemPlanoClassificacao == null)
+                throw new ScdException("Item do Plano de Classificação não encontrado.");
+        }
 
         internal void PlanoClassificacaoEquals(ItemPlanoClassificacaoModel itemPlanoClassificacaoModelNew, ItemPlanoClassificacaoModel itemPlanoClassificacaoModelOld)
         {
@@ -133,13 +130,11 @@ namespace Prodest.Scd.Business.Validation
             _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
         }
 
-        internal async Task CanDelete(ItemPlanoClassificacaoModel itemPlanoClassificacao)
+        internal async Task CanDelete(ItemPlanoClassificacaoModel itemPlanoClassificacao, int countChildren)
         {
             await CanUpdate(itemPlanoClassificacao);
 
-            int count = await _itensPlanoClassificacao.CountChildren(itemPlanoClassificacao.Id);
-
-            if (count > 0)
+            if (countChildren > 0)
                 throw new ScdException("O Item do Plano de Classificação possui itens e não pode ser excluído.");
         }
     }

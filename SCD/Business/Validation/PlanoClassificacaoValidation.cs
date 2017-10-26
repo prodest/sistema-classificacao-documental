@@ -1,12 +1,22 @@
 ﻿using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation.Common;
 using System;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class PlanoClassificacaoValidation : CommonValidation
     {
+        private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
+
+        public PlanoClassificacaoValidation(IScdRepositories repositories)
+        {
+            _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
+        }
+
         #region Valid
         internal void Valid(PlanoClassificacaoModel planoClassificacao)
         {
@@ -99,10 +109,15 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser atualizado.");
         }
 
-        internal void CanDelete(PlanoClassificacaoModel planoClassificacaoModel)
+        internal async Task CanDelete(PlanoClassificacaoModel planoClassificacaoModel)
         {
             if (planoClassificacaoModel.Publicacao.HasValue)
                 throw new ScdException("O Plano de Classificação possui data de publicação e não pode ser excluído.");
+
+            int countItensPlanoClassificacao = await _itensPlanoClassificacao.CountByPlanoClassificacao(planoClassificacaoModel.Id);
+
+            if (countItensPlanoClassificacao > 0)
+                throw new ScdException("O Plano de Classificação possui itens e não pode ser excluído.");
         }
 
     }

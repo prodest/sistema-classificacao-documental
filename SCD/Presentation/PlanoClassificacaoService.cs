@@ -176,7 +176,7 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<PlanoClassificacaoViewModel> New()
+        public PlanoClassificacaoViewModel New()
         {
             var model = new PlanoClassificacaoViewModel
             {
