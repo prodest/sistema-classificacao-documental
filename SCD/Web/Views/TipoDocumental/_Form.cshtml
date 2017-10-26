@@ -1,6 +1,41 @@
 ﻿@model  Prodest.Scd.Presentation.ViewModel.TipoDocumentalViewModel
 
 <form asp-controller="TipoDocumental" asp-action="@Model.Action" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
+    @*<div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.Descricao" type="text" class="mdc-textfield__input" required>
+                    <label asp-for="entidade.Descricao" class="mdc-textfield__label">
+                        Descrição..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
+                </div>
+            </div>
+            <div class="mdc-layout-grid__cell">
+                <div class="mdc-form-field">
+                    <div class="mdc-checkbox">
+                        <input type="checkbox" asp-for="entidade.Ativo" class="mdc-checkbox__native-control">
+                        <div class="mdc-checkbox__background">
+                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                            </svg>
+                            <div class="mdc-checkbox__mixedmark"></div>
+                        </div>
+                    </div>
+                    <label for="basic-checkbox">Ativo?</label>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__inner">
+            <button title="Salvar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--grey BotaoGrande" type="submit">
+                <i class="material-icons">save</i>
+            </button>
+            <button title="Cancelar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--red BotaoAjax BotaoGrande" data-url="/TipoDocumental/List">
+                <i class="material-icons">cancel</i>
+            </button>
+        </div>
+    </div>*@
     <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
         <div class="mdl-card TelaCheia mdl-grid">
             <div class="mdl-card__actions ItemCardFormulario">
@@ -11,26 +46,41 @@
                     <i class="material-icons">cancel</i>
                 </button>
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <input hidden asp-for="entidade.Id" />
-
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input asp-for="entidade.Descricao" class="mdl-textfield__input" type="text" />
-                    <label class="mdl-textfield__label" for="entidade.Descricao">Descrição..</label>
-                    <span asp-validation-for="entidade.Descricao" class=""></span>
+            <input hidden asp-for="entidade.Id" />
+            @*<div class="mdl-cell mdl-cell--3-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input asp-for="entidade.Descricao" class="mdl-textfield__input" type="text" />
+                        <label class="mdl-textfield__label" for="entidade.Descricao">Descrição..</label>
+                        <span asp-validation-for="entidade.Descricao" class=""></span>
+                    </div>
+                </div>*@
+            <div class="mdl-cell mdl-cell--9-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.Descricao" type="text" class="mdc-textfield__input" required>
+                    <label asp-for="entidade.Descricao" class="mdc-textfield__label">
+                        Descrição..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
                 </div>
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="entidade_Ativo">
-                        <input type="checkbox" asp-for="entidade.Ativo" class="mdl-checkbox__input">
-                        <span class="mdl-checkbox__label">Ativo?</span>
-                    </label>
+            <div class="mdc-form-field">
+                <div class="mdc-checkbox">
+                    <input type="checkbox" asp-for="entidade.Ativo" class="mdc-checkbox__native-control">
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                            <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
                 </div>
+                <label for="basic-checkbox">Ativo?</label>
             </div>
         </div>
     </div>
 </form>
 <script>
     _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+
+    document.querySelectorAll('.mdc-textfield').forEach(AdicionarMDCTextField);
+
 </script>

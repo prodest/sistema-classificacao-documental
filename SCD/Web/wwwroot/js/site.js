@@ -43,6 +43,12 @@ function ShowMessage(item, index) {
 }
 
 
+
+function AdicionarMDCTextField(item, index) {
+    mdc.textfield.MDCTextfield.attachTo(item)
+}
+
+
 function AdicionarAcaoMenu(item, index) {
     let id = $(item).attr('data-id');
     let menuAcoes = new mdc.menu.MDCSimpleMenu(item);
