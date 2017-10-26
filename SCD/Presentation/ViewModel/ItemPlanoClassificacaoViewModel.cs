@@ -13,7 +13,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public ICollection<NivelClassificacaoEntidade> niveis { get; set; }
         public ItemPlanoClassificacaoEntidade entidade { get; set; }
         public FiltroItemPlanoClassificacao filtro { get; set; }
-      
+
     }
 
     public class FiltroItemPlanoClassificacao
@@ -29,6 +29,59 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string Codigo { get; set; }
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
+
+        public int? IdItemPlanoClassificacaoParent
+        {
+            get
+            {
+                if (ItemPlanoClassificacaoParent != null)
+                {
+                    return ItemPlanoClassificacaoParent.Id;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    ItemPlanoClassificacaoParent = new ItemPlanoClassificacaoEntidade { Id = value.Value };
+                }
+                else
+                {
+                    ItemPlanoClassificacaoParent = null;
+                }
+            }
+        }
+
+        [Required(ErrorMessage = "Obrigatório")]
+        public int? IdNivelClassificacao
+        {
+            get
+            {
+                if (NivelClassificacao != null)
+                {
+                    return NivelClassificacao.Id;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    NivelClassificacao = new NivelClassificacaoEntidade { Id = value.Value };
+                }
+                else
+                {
+                    NivelClassificacao = null;
+                }
+            }
+        }
 
         public NivelClassificacaoEntidade NivelClassificacao { get; set; }
         public PlanoClassificacaoEntidade PlanoClassificacao { get; set; }

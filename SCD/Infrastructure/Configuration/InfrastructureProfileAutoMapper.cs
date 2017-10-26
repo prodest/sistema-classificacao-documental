@@ -23,7 +23,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.ItemPlanoClassificacaoParent, opt => opt.Ignore())
                 .ForMember(dest => dest.IdNivelClassificacao, opt => opt.MapFrom(src => src.NivelClassificacao != null ? src.NivelClassificacao.Id : default(int)))
                 .ForMember(dest => dest.IdPlanoClassificacao, opt => opt.MapFrom(src => src.PlanoClassificacao != null ? src.PlanoClassificacao.Id : default(int)))
-                .ForMember(dest => dest.IdItemPlanoClassificacaoParent, opt => opt.MapFrom(src => src.ItemPlanoClassificacaoParent != null ? src.ItemPlanoClassificacaoParent.Id : default(int)));
+                .ForMember(dest => dest.IdItemPlanoClassificacaoParent, opt => opt.MapFrom(src => src.ItemPlanoClassificacaoParent != null ? (int?)src.ItemPlanoClassificacaoParent.Id : null));
             #endregion
 
             #region Nível de Classificação

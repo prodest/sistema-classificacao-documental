@@ -14,8 +14,6 @@
             <div class="mdl-cell mdl-cell--3-col">
                 <input hidden asp-for="entidade.Id" />
                 <input hidden asp-for="entidade.PlanoClassificacao.Id" />
-                <input hidden asp-for="entidade.NivelClassificacao.Id" />
-                <input hidden asp-for="entidade.ItemPlanoClassificacaoParent.Id" />
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" asp-for="entidade.Codigo" />
                     <label class="mdl-textfield__label" asp-for="entidade.Codigo">Código..</label>
@@ -29,9 +27,43 @@
                     <span asp-validation-for="entidade.Descricao" class=""></span>
                 </div>
             </div>
-          
-           
-
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" asp-for="entidade.IdItemPlanoClassificacaoParent">
+                        @if (Model.entidade.IdItemPlanoClassificacaoParent.HasValue) { 
+                            <option value=""> </option>
+                        }
+                        else
+                        {
+                            <option value="" selected  > </option>
+                        }
+                        @foreach (var item in Model.entidades) {
+                            var selecionado = item.Id == Model.entidade.IdItemPlanoClassificacaoParent ? "selected" : "";
+                            <option value="@item.Id" selecionado>@item.Codigo - @item.Descricao</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" asp-for="entidade.IdNivelClassificacao">
+                        @if (Model.entidade.IdNivelClassificacao.HasValue)
+                        {
+                            <option value=""></option>
+                        }
+                        else
+                        {
+                            <option value="" selected> </option>
+                        }
+                        @foreach (var item in Model.niveis)
+                        {
+                            var selecionado = item.Id == Model.entidade.IdNivelClassificacao ? "selected" : "";
+                            <option value="@item.Id" selecionado>@item.Descricao</option>
+                        }
+                    </select>
+                    <span asp-validation-for="entidade.IdNivelClassificacao" class=""></span>
+                </div>
+            </div>
         </div>
     </div>
 </form>

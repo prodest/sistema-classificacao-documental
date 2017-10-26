@@ -1,5 +1,5 @@
 ﻿@model  Prodest.Scd.Presentation.ViewModel.ItemPlanoClassificacaoEntidade
-<li class="mdc-list-item mdc-list-item-BotoesAcoes" style="padding-left:@(Model.NivelEspacamento*15)px">
+<li class="mdc-list-item mdc-list-item-BotoesAcoes" style="padding-left:@(Model.NivelEspacamento*20)px">
     <span class="mdc-list-item__text">
         <span>
             @Model.Codigo - @Model.Descricao
@@ -14,10 +14,10 @@
             <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
                 <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/Edit/@Model.Id">Editar Item</li>
                 <li class="mdc-list-divider" role="separator"></li>
-                <li class="mdc-list-item mdc-list-item-MenuAcoes" role="menuitem" tabindex="0">Adiconar Item</li>
-                <li class="mdc-list-item mdc-list-item-MenuAcoes" role="menuitem" tabindex="0">Adicionar Tipo Documental</li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.PlanoClassificacao.Id&IdItemPlanoClassificacaoParent=@Model.Id">Adiconar Item</li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes" role="menuitem" tabindex="0">Adicionar Documento</li>
                 <li class="mdc-list-divider" role="separator"></li>
-                <li class="mdc-list-item mdc-list-item-MenuAcoes" role="menuitem" tabindex="0">Excluir Item</li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/Delete/@Model.Id?idPlanoClassificacao=@Model.PlanoClassificacao.Id">Excluir Item</li>
             </ul>
         </div>
     </div>

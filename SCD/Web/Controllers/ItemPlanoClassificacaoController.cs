@@ -53,13 +53,13 @@ namespace Web.Controllers
             }
             else
             {
-                return await List(1);
+                return await List(model.plano.Id);
             }
         }
 
-        public async Task<IActionResult> New(int idPlanoClassificacao)
+        public async Task<IActionResult> New(int idPlanoClassificacao, int? IdItemPlanoClassificacaoParent)
         {
-            var model = await _service.New(idPlanoClassificacao);
+            var model = await _service.New(idPlanoClassificacao, IdItemPlanoClassificacaoParent);
             return PartialView("_Form", model);
         }
 
@@ -72,7 +72,7 @@ namespace Web.Controllers
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
                 {
-                    return await List(1);
+                    return await List(model.entidade.PlanoClassificacao.Id);
                 }
             }
             //Se de tudo der errado, volta para o formulário

@@ -72,6 +72,11 @@ namespace Prodest.Scd.Presentation
             {
                 model.Action = "Update";
                 model.entidade = _mapper.Map<ItemPlanoClassificacaoEntidade>(await _core.SearchAsync(id));
+                var entidades = await _core.SearchAsync(model.entidade.PlanoClassificacao.Id, 1, 1000);
+                var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
+                var niveis = await _coreNivelClassificacao.SearchAsync(guid, 1, 1000);
+                model.entidades = _mapper.Map<ICollection<ItemPlanoClassificacaoEntidade>>(entidades.Where(p => p.Id != id).OrderBy(p => p.Codigo).ToList());
+                model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -135,7 +140,8 @@ namespace Prodest.Scd.Presentation
             var model = new ItemPlanoClassificacaoViewModel();
             try
             {
-                await _core.InsertAsync(_mapper.Map<ItemPlanoClassificacaoModel>(entidade));
+                var modelInsert = await _core.InsertAsync(_mapper.Map<ItemPlanoClassificacaoModel>(entidade));
+                model.entidade = _mapper.Map<ItemPlanoClassificacaoEntidade>(modelInsert);
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -199,21 +205,40 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<ItemPlanoClassificacaoViewModel> New(int idPlanoClassificacao)
+        public async Task<ItemPlanoClassificacaoViewModel> New(int idPlanoClassificacao, int? IdItemPlanoClassificacaoParent)
         {
-            var model = new ItemPlanoClassificacaoViewModel
+            var model = new ItemPlanoClassificacaoViewModel();
+            try
             {
-                Action = "Create",
-                entidade = new ItemPlanoClassificacaoEntidade {
+                model.Action = "Create";
+                model.entidade = new ItemPlanoClassificacaoEntidade {
                     PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
-                    NivelClassificacao = new NivelClassificacaoEntidade { Id = 602 }
-                },
-            };
-
-            var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-            var niveis = await _coreNivelClassificacao.SearchAsync(guid, 1, 1000);
-            model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
-
+                    IdItemPlanoClassificacaoParent = IdItemPlanoClassificacaoParent
+                };
+                var entidades = await _core.SearchAsync(model.entidade.PlanoClassificacao.Id, 1, 1000);
+                var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
+                var niveis = await _coreNivelClassificacao.SearchAsync(guid, 1, 1000);
+                model.entidades = _mapper.Map<ICollection<ItemPlanoClassificacaoEntidade>>(entidades.OrderBy(p => p.Codigo).ToList());
+                model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
+                model.Result = new ResultViewModel
+                {
+                    Ok = true
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
             return model;
         }
 
