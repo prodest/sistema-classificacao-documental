@@ -206,7 +206,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
 
                 entity.HasOne(d => d.Documento)
-                    .WithMany(p => p.Sigilo)
+                    .WithMany(p => p.Sigilos)
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Sigilo_Documento");

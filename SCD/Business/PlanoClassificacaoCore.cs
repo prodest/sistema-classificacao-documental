@@ -73,6 +73,17 @@ namespace Prodest.Scd.Business
             return planoClassificacaoModel;
         }
 
+        public async Task<PlanoClassificacaoModel> SearchCompleteAsync(int id)
+        {
+            _validation.IdValid(id);
+
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchCompleteAsync(id);
+
+            _validation.Found(planoClassificacaoModel);
+
+            return planoClassificacaoModel;
+        }
+
         public async Task<ICollection<PlanoClassificacaoModel>> GetAsync(int page, int count)
         {
             Guid guidOrganizacao = GetGuidOrganizacao();

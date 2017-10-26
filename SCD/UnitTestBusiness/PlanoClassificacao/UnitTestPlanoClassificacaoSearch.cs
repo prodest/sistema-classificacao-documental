@@ -116,6 +116,8 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
 
+            await _core.SearchCompleteAsync(planoClassificacaoModel.Id);
+
             PlanoClassificacaoModel planoClassificacaoModelSearched = await _core.SearchAsync(planoClassificacaoModel.Id);
 
             Assert.AreEqual(planoClassificacaoModel.Id, planoClassificacaoModelSearched.Id);

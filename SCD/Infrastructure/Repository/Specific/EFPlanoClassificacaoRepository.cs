@@ -50,6 +50,15 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return planoClassificacaoModel;
         }
 
+        public async Task<PlanoClassificacaoModel> SearchCompleteAsync(int id)
+        {
+            PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id, true, true);
+
+            PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
+
+            return planoClassificacaoModel;
+        }
+
         public async Task<ICollection<PlanoClassificacaoModel>> SearchByOrganizacaoAsync(Guid guidOrganizacao, int page, int count)
         {
             int skip = (page - 1) * count;
@@ -96,12 +105,19 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             await _unitOfWork.SaveAsync();
         }
 
-        private async Task<PlanoClassificacao> SearchPersistenceAsync(int id, bool getRelationship = false)
+        private async Task<PlanoClassificacao> SearchPersistenceAsync(int id, bool getRelationship = false, bool getHierarchy = false)
         {
             IQueryable<PlanoClassificacao> queryable = _set.Where(pc => pc.Id == id);
 
             if (getRelationship)
                 queryable = queryable.Include(pc => pc.Organizacao);
+
+            if (getHierarchy)
+            {
+                queryable = queryable.Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.Documentos).ThenInclude(d => d.TipoDocumental)
+                                     .Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.Documentos).ThenInclude(d => d.Sigilos)
+                                     .Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.NivelClassificacao);
+            }
 
             PlanoClassificacao planoClassificacao = await queryable.SingleOrDefaultAsync();
 

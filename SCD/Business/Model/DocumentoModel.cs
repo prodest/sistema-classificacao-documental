@@ -10,6 +10,6 @@ namespace Prodest.Scd.Business.Model
 
         public ItemPlanoClassificacaoModel ItemPlanoClassificacao { get; set; }
         public TipoDocumentalModel TipoDocumental { get; set; }
-        public ICollection<SigiloModel> Sigilo { get; set; }
+        public ICollection<SigiloModel> Sigilos { get; set; }
     }
 }
