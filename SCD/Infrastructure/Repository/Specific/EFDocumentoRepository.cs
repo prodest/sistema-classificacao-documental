@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Persistence.Model;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Infrastructure.Repository.Specific
 {
-    public class EFDocumentoRepository
+    public class EFDocumentoRepository : IDocumentoRepository
     {
         private ScdContext _context;
         private DbSet<Documento> _set;
@@ -63,6 +64,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             Documento documento = await SearchPersistenceAsync(id);
 
             _set.Remove(documento);
+
+            await _unitOfWork.SaveAsync();
         }
 
         private async Task<Documento> SearchPersistenceAsync(int id, bool getRelationship = false)

@@ -63,11 +63,7 @@ namespace Prodest.Scd.Business
 
             _validation.Found(documentoModel);
 
-            int countSigilo = await _documentos.CountSigilo(id);
-
-            int countTemporalidade = await _documentos.CountTemporalidade(id);
-
-            await _validation.CanDelete(documentoModel, countSigilo, countTemporalidade);
+            await _validation.CanDelete(documentoModel);
 
             await _documentos.RemoveAsync(documentoModel.Id);
         }
