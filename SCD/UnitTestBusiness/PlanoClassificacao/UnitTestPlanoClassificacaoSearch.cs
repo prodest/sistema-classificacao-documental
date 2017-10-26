@@ -139,7 +139,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             try
             {
-                await _core.SearchAsync(Guid.Empty, default(int), default(int));
+                await _core.GetAsync(default(int), default(int));
 
                 ok = true;
             }
@@ -163,7 +163,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             try
             {
-                await _core.SearchAsync(_guidProdest, default(int), default(int));
+                await _core.GetAsync(default(int), default(int));
 
                 ok = true;
             }
@@ -187,7 +187,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             try
             {
-                await _core.SearchAsync(_guidProdest, 1, default(int));
+                await _core.GetAsync(1, default(int));
 
                 ok = true;
             }
@@ -206,7 +206,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
         [TestMethod]
         public async Task PlanoClassificacaoTestPaginationSearchWithGuidOrganizacaoNonexistentOnDataBase()
         {
-            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _core.SearchAsync(Guid.NewGuid(), 1, 1);
+            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _core.GetAsync(1, 1);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == 0);
         }
@@ -219,7 +219,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             await InsertPlanosClassificacao(page * count);
 
-            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _core.SearchAsync(_guidProdest, page, count);
+            ICollection<PlanoClassificacaoModel> planosClassificacaoModel = await _core.GetAsync(page, count);
             Assert.IsNotNull(planosClassificacaoModel);
             Assert.IsTrue(planosClassificacaoModel.Count == count);
 

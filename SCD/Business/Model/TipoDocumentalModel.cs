@@ -1,4 +1,6 @@
-﻿namespace Prodest.Scd.Business.Model
+﻿using System.Collections.Generic;
+
+namespace Prodest.Scd.Business.Model
 {
     public class TipoDocumentalModel
     {
@@ -7,5 +9,6 @@
         public bool Ativo { get; set; }
 
         public OrganizacaoModel Organizacao { get; set; }
+        public ICollection<DocumentoModel> Documentos { get; set; }
     }
 }
