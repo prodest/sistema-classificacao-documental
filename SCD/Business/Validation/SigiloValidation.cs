@@ -140,7 +140,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task CanInsert(SigiloModel sigiloModel)
         {
-            PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(sigiloModel.Documento.Id); ;
+            PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(sigiloModel.Documento.Id);
 
             _planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
         }

@@ -192,13 +192,26 @@ namespace Prodest.Scd.UnitTestBusiness.Common
         {
             DocumentoModel documentoModel = await InsertDocumentoAsync();
 
+            string codigo = "01";
+            string descricao = "SigiloTestInsert";
+            string fundamentoLegal = "Fundamento Legal Teste";
+            string justificativa = "Justificativa Teste";
+            int prazoTermino = 5;
+            SigiloModel.UnidadePrazoTerminoSigilo unidadePrazoTerminoSigilo = SigiloModel.UnidadePrazoTerminoSigilo.Anos;
+            SigiloModel.GrauSigilo grauSigilo = SigiloModel.GrauSigilo.UltraSecreto;
+            bool gerarTermo = true;
+
             SigiloModel sigiloModel = new SigiloModel
             {
-                Codigo = "01",
-                Descricao = "Teste",
-                
-                //ItemPlanoClassificacao = documentoModel,
-                //TipoDocumental = tipoDocumentalModel
+                Codigo = codigo,
+                Descricao = descricao,
+                FundamentoLegal = fundamentoLegal,
+                Justificativa = justificativa,
+                PrazoTermino = prazoTermino,
+                UnidadePrazoTermino = unidadePrazoTerminoSigilo,
+                Grau = grauSigilo,
+                GerarTermo = gerarTermo,
+                Documento = documentoModel
             };
 
             sigiloModel = await _repositories.SigilosSpecific.AddAsync(sigiloModel);

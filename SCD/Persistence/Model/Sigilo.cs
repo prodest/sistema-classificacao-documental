@@ -16,7 +16,7 @@ namespace Prodest.Scd.Persistence.Model
         public string FundamentoLegal { get; set; }
         public bool GerarTermo { get; set; }
         public int IdGrau { get; set; }
-        public int IdUnidadePrazoTermino { get; set; }
+        public int? IdUnidadePrazoTermino { get; set; }
 
         public Documento Documento { get; set; }
     }
