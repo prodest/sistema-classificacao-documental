@@ -19,9 +19,11 @@ namespace Prodest.Scd.UnitTestBusiness.Common
 {
     public class UnitTestBase
     {
+        protected List<int> _idsDocumentosTestados = new List<int>();
         protected List<int> _idsItensPlanoClassificacaoTestados = new List<int>();
         protected List<int> _idsNiveisClassificacaoTestados = new List<int>();
         protected List<int> _idsPlanosClassificacaoTestados = new List<int>();
+        protected List<int> _idsSigilosTestados = new List<int>();
         protected List<int> _idsTiposDocumentaisTestados = new List<int>();
         protected EFScdRepositories _repositories;
         //protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
@@ -55,6 +57,22 @@ namespace Prodest.Scd.UnitTestBusiness.Common
         [TestCleanup]
         public async Task Cleanup()
         {
+            foreach (int idSigilo in _idsSigilosTestados)
+            {
+                SigiloModel sigiloModel = await _repositories.SigilosSpecific.SearchAsync(idSigilo);
+
+                if (sigiloModel != null)
+                    await _repositories.SigilosSpecific.RemoveAsync(sigiloModel.Id);
+            }
+
+            foreach (int idDocumento in _idsDocumentosTestados)
+            {
+                DocumentoModel documentoModel = await _repositories.DocumentosSpecific.SearchAsync(idDocumento);
+
+                if (documentoModel != null)
+                    await _repositories.DocumentosSpecific.RemoveAsync(documentoModel.Id);
+            }
+
             foreach (int idItemPlanoClassificacao in _idsItensPlanoClassificacaoTestados)
             {
                 ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _repositories.ItensPlanoClassificacaoSpecific.SearchAsync(idItemPlanoClassificacao);
@@ -86,6 +104,26 @@ namespace Prodest.Scd.UnitTestBusiness.Common
                 if (tipoDocumentalModel != null)
                     await _repositories.TiposDocumentaisSpecific.RemoveAsync(tipoDocumentalModel.Id);
             }
+        }
+
+        protected async Task<DocumentoModel> InsertDocumentoAsync()
+        {
+            ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await InsertItemPlanoClassificacaoAsync();
+            TipoDocumentalModel tipoDocumentalModel = await InsertTipoDocumentalAsync();
+
+            DocumentoModel documentoModel = new DocumentoModel
+            {
+                Codigo = "01",
+                Descricao = "Teste",
+                ItemPlanoClassificacao = itemPlanoClassificacaoModel,
+                TipoDocumental = tipoDocumentalModel
+            };
+
+            documentoModel = await _repositories.DocumentosSpecific.AddAsync(documentoModel);
+
+            _idsDocumentosTestados.Add(documentoModel.Id);
+
+            return documentoModel;
         }
 
         protected async Task<ItemPlanoClassificacaoModel> InsertItemPlanoClassificacaoAsync()
@@ -148,6 +186,26 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             _idsPlanosClassificacaoTestados.Add(planoClassificacaoModel.Id);
 
             return planoClassificacaoModel;
+        }
+
+        protected async Task<SigiloModel> InsertSigiloAsync()
+        {
+            DocumentoModel documentoModel = await InsertDocumentoAsync();
+
+            SigiloModel sigiloModel = new SigiloModel
+            {
+                Codigo = "01",
+                Descricao = "Teste",
+                
+                //ItemPlanoClassificacao = documentoModel,
+                //TipoDocumental = tipoDocumentalModel
+            };
+
+            sigiloModel = await _repositories.SigilosSpecific.AddAsync(sigiloModel);
+
+            _idsSigilosTestados.Add(sigiloModel.Id);
+
+            return sigiloModel;
         }
 
         protected async Task<TipoDocumentalModel> InsertTipoDocumentalAsync()

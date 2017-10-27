@@ -13,6 +13,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             UnitOfWork = new EFUnitOfWorkSpecific(context);
 
+            DocumentosSpecific = new EFDocumentoRepository(context, mapper, UnitOfWork);
+
             ItensPlanoClassificacaoSpecific = new EFItemPlanoClassificacaoRepository(context, mapper, UnitOfWork);
 
             NiveisClassificacaoSpecific = new EFNivelClassificacaoRepository(context, mapper, UnitOfWork);
@@ -21,10 +23,14 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             PlanosClassificacaoSpecific = new EFPlanoClassificacaoRepository(context, mapper, UnitOfWork);
 
-            TiposDocumentaisSpecific = new EFTipoDocumentalRepository(context, mapper, UnitOfWork);
+            SigilosSpecific = new EFSigiloRepository(context, mapper, UnitOfWork);
+
+            TiposDocumentaisSpecific = new EFTipoDocumentalRepository(context, mapper, UnitOfWork);            
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
+
+        public IDocumentoRepository DocumentosSpecific { get; private set; }
 
         public IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; private set; }
 
@@ -33,6 +39,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         public IOrganizacaoRepository OrganizacoesSpecific { get; private set; }
 
         public IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; private set; }
+
+        public ISigiloRepository SigilosSpecific { get; private set; }
 
         public ITipoDocumentalRepository TiposDocumentaisSpecific { get; private set; }
 

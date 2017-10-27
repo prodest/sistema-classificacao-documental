@@ -50,6 +50,16 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return planoClassificacaoModel;
         }
 
+        public async Task<PlanoClassificacaoModel> SearchByDocumentoAsync(int idDocumento)
+        {
+            PlanoClassificacao planoClassificacao = await _set.Where(pc => pc.ItensPlanoClassificacao.Any(ipc => ipc.Documentos.Any(d => d.Id == idDocumento)))
+                                                              .SingleOrDefaultAsync();
+
+            PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
+
+            return planoClassificacaoModel;
+        }
+
         public async Task<PlanoClassificacaoModel> SearchCompleteAsync(int id)
         {
             PlanoClassificacao planoClassificacao = await SearchPersistenceAsync(id, true, true);

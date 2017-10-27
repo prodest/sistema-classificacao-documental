@@ -9,6 +9,7 @@ namespace Prodest.Scd.Business.Repository
     {
         Task<PlanoClassificacaoModel> AddAsync(PlanoClassificacaoModel planoClassificacaoModel);
         Task<PlanoClassificacaoModel> SearchAsync(int id);
+        Task<PlanoClassificacaoModel> SearchByDocumentoAsync(int idDocumento);
         Task<PlanoClassificacaoModel> SearchCompleteAsync(int id);
         Task<ICollection<PlanoClassificacaoModel>> SearchByOrganizacaoAsync(Guid guidOrganizacao, int page, int count);
         Task<int> CountByOrganizacaoAsync(Guid guidOrganizacao);

@@ -6,6 +6,8 @@ namespace Prodest.Scd.Business.Repository.Base
     {
         IUnitOfWork UnitOfWork { get; }
 
+        IDocumentoRepository DocumentosSpecific { get; }
+
         IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; }
 
         INivelClassificacaoRepository NiveisClassificacaoSpecific { get; }
@@ -15,5 +17,7 @@ namespace Prodest.Scd.Business.Repository.Base
         IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; }
 
         ITipoDocumentalRepository TiposDocumentaisSpecific { get; }
+
+        ISigiloRepository SigilosSpecific { get; }
     }
 }

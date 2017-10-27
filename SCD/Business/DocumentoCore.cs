@@ -1,6 +1,7 @@
 ﻿using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
 using System.Threading.Tasks;
 
@@ -12,9 +13,9 @@ namespace Prodest.Scd.Business
 
         private DocumentoValidation _validation;
 
-        public DocumentoCore(IDocumentoRepository documentos, DocumentoValidation validation)
+        public DocumentoCore(IScdRepositories repositories, DocumentoValidation validation)
         {
-            _documentos = documentos;
+            _documentos = repositories.DocumentosSpecific;
 
             _validation = validation;
         }

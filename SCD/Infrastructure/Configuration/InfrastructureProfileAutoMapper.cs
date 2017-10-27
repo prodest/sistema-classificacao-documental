@@ -86,8 +86,18 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Sigilo
-            CreateMap<Sigilo, SigiloModel>().ReverseMap()
-                .MaxDepth(1);
+            CreateMap<Sigilo, SigiloModel>();
+
+            CreateMap<SigiloModel, Sigilo>()
+                .ForMember(dest => dest.Id, opt =>
+                 {
+                     opt.Condition((src, dest, srcMember, destMember) =>
+                     {
+                         return (destMember == default(int));
+                     });
+                 })
+                .ForMember(dest => dest.Documento, opt => opt.Ignore())
+                .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)));
             #endregion
 
             #region Tipo Documental
