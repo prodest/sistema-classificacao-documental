@@ -164,6 +164,7 @@ namespace Prodest.Scd.Presentation
         public async Task<PlanoClassificacaoViewModel> Search(FiltroPlanoClassificacao filtro)
         {
             var entidades = await _core.GetAsync(1, 1000);
+            //await _core.SearchCompleteAsync(entidades.FirstOrDefault().Id);
             var model = new PlanoClassificacaoViewModel();
             model.entidades = _mapper.Map<List<PlanoClassificacaoEntidade>>(entidades);
             model.Result = new ResultViewModel

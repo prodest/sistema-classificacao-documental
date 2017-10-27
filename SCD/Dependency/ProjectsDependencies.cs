@@ -53,6 +53,7 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(IItemPlanoClassificacaoService), typeof(ItemPlanoClassificacaoService));
             dependencies.Add(typeof(INivelClassificacaoService), typeof(NivelClassificacaoService));
             dependencies.Add(typeof(ITipoDocumentalService), typeof(TipoDocumentalService));
+            dependencies.Add(typeof(IDocumentoService), typeof(DocumentoService));
             #endregion
 
             #region Infrastructure

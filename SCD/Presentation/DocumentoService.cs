@@ -13,26 +13,24 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Presentation
 {
-    public class ItemPlanoClassificacaoService : IItemPlanoClassificacaoService
+    public class DocumentoService : IDocumentoService
     {
-        private IItemPlanoClassificacaoCore _core;
-        private IPlanoClassificacaoCore _corePlanoClassificacao;
-        private INivelClassificacaoCore _coreNivelClassificacao;
+        private IDocumentoCore _core;
         private IMapper _mapper;
-        private IOrganogramaService _organogramaService;
+        private IItemPlanoClassificacaoCore _coreItemPlanoClassificacao;
+        private ITipoDocumentalCore _coreTipoDocumental;
 
-        public ItemPlanoClassificacaoService(IItemPlanoClassificacaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, INivelClassificacaoCore coreNivelClassificacao, IMapper mapper, IOrganogramaService organogramaService)
+        public DocumentoService(IDocumentoCore core, IMapper mapper, IItemPlanoClassificacaoCore coreItemPlanoClassificacao, ITipoDocumentalCore coreTipoDocumental)
         {
-            _corePlanoClassificacao = corePlanoClassificacao;
-            _coreNivelClassificacao = coreNivelClassificacao;
+            _coreTipoDocumental = coreTipoDocumental;
+            _coreItemPlanoClassificacao = coreItemPlanoClassificacao;
             _core = core;
             _mapper = mapper;
-            _organogramaService = organogramaService;
         }
-
-        public async Task<ItemPlanoClassificacaoViewModel> Delete(int id)
+ 
+        public async Task<DocumentoViewModel> Delete(int id)
         {
-            var model = new ItemPlanoClassificacaoViewModel();
+            var model = new DocumentoViewModel();
             try
             {
                 await _core.DeleteAsync(id);
@@ -65,18 +63,18 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<ItemPlanoClassificacaoViewModel> Edit(int id)
+        public async Task<DocumentoViewModel> Edit(int id)
         {
-            var model = new ItemPlanoClassificacaoViewModel();
+            var model = new DocumentoViewModel();
             try
             {
                 model.Action = "Update";
-                model.entidade = _mapper.Map<ItemPlanoClassificacaoEntidade>(await _core.SearchAsync(id));
-                var entidades = await _core.SearchAsync(model.entidade.PlanoClassificacao.Id, 1, 1000);
+                var entidade = await _core.SearchAsync(id);
+                entidade.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(entidade.ItemPlanoClassificacao.Id);
+                model.entidade = _mapper.Map<DocumentoEntidade>(entidade);
                 var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-                var niveis = await _coreNivelClassificacao.SearchAsync(guid, 1, 1000);
-                model.entidades = _mapper.Map<ICollection<ItemPlanoClassificacaoEntidade>>(entidades.Where(p => p.Id != id).OrderBy(p => p.Codigo).ToList());
-                model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
+                var tipos = await _coreTipoDocumental.SearchAsync(guid, 1, 1000);
+                model.tipos = _mapper.Map<ICollection<TipoDocumentalEntidade>>(tipos);
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -99,13 +97,16 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<ItemPlanoClassificacaoViewModel> Update(ItemPlanoClassificacaoEntidade entidade)
+        public async Task<DocumentoViewModel> Update(DocumentoEntidade entidade)
         {
-            var model = new ItemPlanoClassificacaoViewModel();
+            var model = new DocumentoViewModel();
             model.entidade = entidade;
+            var item = await _coreItemPlanoClassificacao.SearchAsync(entidade.ItemPlanoClassificacao.Id);
+            model.entidade.ItemPlanoClassificacao = _mapper.Map<ItemPlanoClassificacaoEntidade>(item);
             try
             {
-                await _core.UpdateAsync(_mapper.Map<ItemPlanoClassificacaoModel>(entidade));
+                await _core.UpdateAsync(_mapper.Map<DocumentoModel>(entidade));
+
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -135,13 +136,14 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<ItemPlanoClassificacaoViewModel> Create(ItemPlanoClassificacaoEntidade entidade)
+        public async Task<DocumentoViewModel> Create(DocumentoEntidade entidade)
         {
-            var model = new ItemPlanoClassificacaoViewModel();
+            var model = new DocumentoViewModel();
             try
             {
-                var modelInsert = await _core.InsertAsync(_mapper.Map<ItemPlanoClassificacaoModel>(entidade));
-                model.entidade = _mapper.Map<ItemPlanoClassificacaoEntidade>(modelInsert);
+                var modelInsert = await _core.InsertAsync(_mapper.Map<DocumentoModel>(entidade));
+                modelInsert.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(entidade.ItemPlanoClassificacao.Id);
+                model.entidade = _mapper.Map<DocumentoEntidade>(modelInsert);
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -172,55 +174,18 @@ namespace Prodest.Scd.Presentation
         }
 
 
-        private void AtribuirNivelEspacamento(ICollection<ItemPlanoClassificacaoEntidade> entidades, int nivelPai)
+        public async Task<DocumentoViewModel> New(int IdItemPlanoClassificacao)
         {
-            foreach (var item in entidades)
-            {
-                item.NivelEspacamento = nivelPai + 1;
-                AtribuirNivelEspacamento(item.ItensPlanoClassificacaoChildren, item.NivelEspacamento);
-            }
-        }
-
-        public async Task<ItemPlanoClassificacaoViewModel> Search(FiltroItemPlanoClassificacao filtro)
-        {
-            var model = new ItemPlanoClassificacaoViewModel();
-
-            var plano = await _corePlanoClassificacao.SearchCompleteAsync(filtro.IdPlanoClassificacao);
-            model.plano = _mapper.Map<PlanoClassificacaoEntidade>(plano);
-
-            
-
-            //var entidades = await _core.SearchAsync(filtro.IdPlanoClassificacao, 1, 1000);
-
-            ////Preciso apenas do primeiro nível, pois os filhos já estão mapeados dentro de cada item
-            //entidades = entidades.Where(p => p.ItemPlanoClassificacaoParent == null).ToList();
-            //var entidadesViewModel = _mapper.Map<ICollection<ItemPlanoClassificacaoEntidade>>(entidades);
-            //Atribui um valor (0-99) para permitir a exibição aninhada dos itens de plano de ação conforme a estrutura cadastrada
-            AtribuirNivelEspacamento(model.plano.ItensPlanoClassificacao, 0);
-
-            model.entidades = model.plano.ItensPlanoClassificacao;
-            model.Result = new ResultViewModel
-            {
-                Ok = true
-            };
-            return model;
-        }
-
-        public async Task<ItemPlanoClassificacaoViewModel> New(int idPlanoClassificacao, int? IdItemPlanoClassificacaoParent)
-        {
-            var model = new ItemPlanoClassificacaoViewModel();
+            var model = new DocumentoViewModel();
             try
             {
                 model.Action = "Create";
-                model.entidade = new ItemPlanoClassificacaoEntidade {
-                    PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
-                    IdItemPlanoClassificacaoParent = IdItemPlanoClassificacaoParent
-                };
-                var entidades = await _core.SearchAsync(model.entidade.PlanoClassificacao.Id, 1, 1000);
+                model.entidade = new DocumentoEntidade();
+                var item = await _coreItemPlanoClassificacao.SearchAsync(IdItemPlanoClassificacao);
+                model.entidade.ItemPlanoClassificacao = _mapper.Map<ItemPlanoClassificacaoEntidade>(item);
                 var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-                var niveis = await _coreNivelClassificacao.SearchAsync(guid, 1, 1000);
-                model.entidades = _mapper.Map<ICollection<ItemPlanoClassificacaoEntidade>>(entidades.OrderBy(p => p.Codigo).ToList());
-                model.niveis = _mapper.Map<ICollection<NivelClassificacaoEntidade>>(niveis);
+                var tipos = await _coreTipoDocumental.SearchAsync(guid, 1, 1000);
+                model.tipos = _mapper.Map<List<TipoDocumentalEntidade>>(tipos);
                 model.Result = new ResultViewModel
                 {
                     Ok = true

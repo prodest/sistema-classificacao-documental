@@ -1,0 +1,25 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.DocumentoEntidade
+<li class="mdc-list-item mdc-list-item-BotoesAcoes" style="padding-left:@((Model.ItemPlanoClassificacao.NivelEspacamento+1)*20)px">
+    <span class="mdc-list-item__text">
+        <span>
+            @Model.Codigo - @Model.Descricao
+        </span>
+        <span class="mdc-list-item__text__secondary">Documento</span>
+    </span>
+    <div class="mdc-menu-anchor-BotoesMenu">
+        <button class="mdc-button mdc-button-BotoesAcoes toggle" data-id="DOCUMENTO-@Model.Id">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <div class="mdc-simple-menu" tabindex="-1" id="acoes-menu" data-id="DOCUMENTO-@Model.Id">
+            <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Documento/Edit/@Model.Id">Editar Documento</li>
+                <li class="mdc-list-divider" role="separator"></li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.Id&IdItemPlanoClassificacaoParent=@Model.Id">Adiconar Sigilo</li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.Id&IdItemPlanoClassificacaoParent=@Model.Id">Adiconar Temporalidade</li>
+                <li class="mdc-list-divider" role="separator"></li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Documento/Delete/@Model.Id?idPlanoClassificacao=@Model.ItemPlanoClassificacao.PlanoClassificacao.Id">Excluir Documento</li>
+            </ul>
+        </div>
+    </div>
+
+</li>

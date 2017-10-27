@@ -86,6 +86,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public NivelClassificacaoEntidade NivelClassificacao { get; set; }
         public PlanoClassificacaoEntidade PlanoClassificacao { get; set; }
         public ICollection<ItemPlanoClassificacaoEntidade> ItensPlanoClassificacaoChildren { get; set; }
+        public ICollection<DocumentoEntidade> Documentos { get; set; }
         public ItemPlanoClassificacaoEntidade ItemPlanoClassificacaoParent { get; set; }
 
 

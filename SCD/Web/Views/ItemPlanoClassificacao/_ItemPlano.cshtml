@@ -7,31 +7,30 @@
         <span class="mdc-list-item__text__secondary">@Model.NivelClassificacao.Descricao</span>
     </span>
     <div class="mdc-menu-anchor-BotoesMenu">
-        <button class="mdc-button mdc-button-BotoesAcoes toggle" data-id="@Model.Id">
+        <button class="mdc-button mdc-button-BotoesAcoes toggle" data-id="ITEM-@Model.Id">
             <i class="material-icons">more_vert</i>
         </button>
-        <div class="mdc-simple-menu" tabindex="-1" id="acoes-menu" data-id="@Model.Id">
+        <div class="mdc-simple-menu" tabindex="-1" id="acoes-menu" data-id="ITEM-@Model.Id">
             <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
                 <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/Edit/@Model.Id">Editar Item</li>
                 <li class="mdc-list-divider" role="separator"></li>
                 <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.PlanoClassificacao.Id&IdItemPlanoClassificacaoParent=@Model.Id">Adiconar Item</li>
-                <li class="mdc-list-item mdc-list-item-MenuAcoes" role="menuitem" tabindex="0">Adicionar Documento</li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Documento/New?IdItemPlanoClassificacao=@Model.Id">Adicionar Documento</li>
                 <li class="mdc-list-divider" role="separator"></li>
                 <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/Delete/@Model.Id?idPlanoClassificacao=@Model.PlanoClassificacao.Id">Excluir Item</li>
             </ul>
         </div>
     </div>
-    @*<button title="Editar" class="mdc-button mdc-button-BotoesAcoes BotaoAjax" data-url="/ItemPlanoClassificacao/Edit/@Model.Id">
-            <i class="material-icons">edit</i>
-        </button>
-        <button title="Excluir" class="mdc-button mdc-button-BotoesAcoes BotaoAjax" data-url="/ItemPlanoClassificacao/Delete/@Model.Id?idPlanoClassificacao=@Model.PlanoClassificacao.Id">
-            <i class="material-icons">delete</i>
-        </button>
-        <button title="Adicionar Item" class="mdc-button mdc-button-BotoesAcoes BotaoAjax" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.PlanoClassificacao.Id">
-            <i class="material-icons" aria-hidden="true">add</i>
-        </button>*@
+
 </li>
-@*<li class="mdc-list-divider" role="separator"></li>*@
+@*@if (Model.Documentos.Count>0) {
+<li class="mdc-list-divider" role="separator"></li>
+}*@
+@foreach (var item in Model.Documentos.OrderBy(p => p.Codigo))
+{
+    @Html.Partial("_Documento", item)
+}
+
 @foreach (var item in Model.ItensPlanoClassificacaoChildren.OrderBy(p => p.Codigo))
 {
     @Html.Partial("_ItemPlano", item)

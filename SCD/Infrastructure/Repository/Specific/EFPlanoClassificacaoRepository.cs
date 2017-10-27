@@ -56,6 +56,10 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             PlanoClassificacaoModel planoClassificacaoModel = _mapper.Map<PlanoClassificacaoModel>(planoClassificacao);
 
+            planoClassificacaoModel.ItensPlanoClassificacao = planoClassificacaoModel.ItensPlanoClassificacao
+                                                                                        .Where(p => p.ItemPlanoClassificacaoParent == null)
+                                                                                        .ToList();
+
             return planoClassificacaoModel;
         }
 
