@@ -203,7 +203,33 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EventoFim)
+                    .HasColumnName("eventoFim")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FundamentoLegal)
+                    .IsRequired()
+                    .HasColumnName("fundamentoLegal")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GerarTermo).HasColumnName("gerarTermo");
+
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
+
+                entity.Property(e => e.IdGrau).HasColumnName("idGrau");
+
+                entity.Property(e => e.IdUnidadePrazoTermino).HasColumnName("idUnidadePrazoTermino");
+
+                entity.Property(e => e.Justificativa)
+                    .IsRequired()
+                    .HasColumnName("justificativa")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PrazoTermino).HasColumnName("prazoTermino");
+
 
                 entity.HasOne(d => d.Documento)
                     .WithMany(p => p.Sigilos)
