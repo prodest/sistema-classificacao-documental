@@ -65,6 +65,9 @@ namespace Prodest.Scd.Business.Validation
             CodigoFilled(sigiloModel.Codigo);
             DescricaoFilled(sigiloModel.Descricao);
             DocumentoFilled(sigiloModel.Documento);
+            PrazoTerminoOrEventoFimFilled(sigiloModel.PrazoTermino, sigiloModel.UnidadePrazoTermino, sigiloModel.EventoFim);
+            JustificativaFilled(sigiloModel.Justificativa);
+            FundamentoLegalFilled(sigiloModel.FundamentoLegal);
         }
 
         private void CodigoFilled(string codigo)
@@ -77,6 +80,30 @@ namespace Prodest.Scd.Business.Validation
         {
             if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
+        }
+
+        private void PrazoTerminoOrEventoFimFilled(int? prazoTermino, SigiloModel.UnidadePrazoTerminoSigilo? unidadePrazoTerminoSigilo, string eventoFim)
+        {
+            if (!prazoTermino.HasValue && string.IsNullOrWhiteSpace(eventoFim))
+                throw new ScdException("Ou Prazo de Término ou o Evento Fim deve ser preenchido.");
+
+            if (prazoTermino.HasValue && !string.IsNullOrWhiteSpace(eventoFim))
+                throw new ScdException("Ou Prazo de Término ou o Evento Fim deve ser preenchido.");
+
+            if (prazoTermino.HasValue && !unidadePrazoTerminoSigilo.HasValue)
+                throw new ScdException("A Unidade do Prazo Término deve ser preenchida quando o Prazo de Término é preenchido.");
+        }
+
+        private void FundamentoLegalFilled(string fundamentoLegal)
+        {
+            if (string.IsNullOrWhiteSpace(fundamentoLegal))
+                throw new ScdException("O Fundamento Legal não pode ser vazia ou nula.");
+        }
+
+        private void JustificativaFilled(string justificativa)
+        {
+            if (string.IsNullOrWhiteSpace(justificativa))
+                throw new ScdException("A Justificativa não pode ser vazia ou nula.");
         }
 
         private void DocumentoFilled(DocumentoModel documentoModel)

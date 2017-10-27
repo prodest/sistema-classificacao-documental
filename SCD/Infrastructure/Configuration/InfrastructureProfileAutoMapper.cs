@@ -97,7 +97,11 @@ namespace Prodest.Scd.Infrastructure.Configuration
                      });
                  })
                 .ForMember(dest => dest.Documento, opt => opt.Ignore())
-                .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)));
+                .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)))
+                .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau))
+                .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.Grau))
+
+                ;
             #endregion
 
             #region Tipo Documental
