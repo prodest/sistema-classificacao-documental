@@ -27,8 +27,8 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Item do Plano de Classificação
-            CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>()
-                .MaxDepth(1);
+            CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>();
+                //.MaxDepth(2);
             CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacao>()
                 .ForMember(dest => dest.Id, opt =>
                  {
@@ -46,7 +46,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Nível de Classificação
-            CreateMap<NivelClassificacao, NivelClassificacaoModel>().MaxDepth(1);
+            CreateMap<NivelClassificacao, NivelClassificacaoModel>();
 
             CreateMap<NivelClassificacaoModel, NivelClassificacao>()
                 .ForMember(dest => dest.Organizacao,

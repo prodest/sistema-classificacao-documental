@@ -1,0 +1,55 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.DocumentoViewModel
+
+<form asp-controller="Documento" asp-action="@Model.Action" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
+    <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+        <div class="mdl-card TelaCheia mdl-grid">
+            <div class="mdl-card__actions ItemCardFormulario">
+                <button title="Salvar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--grey BotaoGrande" type="submit">
+                    <i class="material-icons">save</i>
+                </button>
+                <button title="Cancelar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--red BotaoAjax BotaoGrande" data-url="/ItemPlanoClassificacao/List?idPlanoClassificacao=@Model.entidade.ItemPlanoClassificacao.PlanoClassificacao.Id">
+                    <i class="material-icons">cancel</i>
+                </button>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <input hidden asp-for="entidade.Id" />
+                <input hidden asp-for="entidade.ItemPlanoClassificacao.Id" />
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" asp-for="entidade.Codigo" />
+                    <label class="mdl-textfield__label" asp-for="entidade.Codigo">Código..</label>
+                    <span asp-validation-for="entidade.Codigo" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.Descricao" class="mdl-textfield__input" type="text"  />
+                    <label class="mdl-textfield__label" for="entidade.Descricao">Descrição..</label>
+                    <span asp-validation-for="entidade.Descricao" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" asp-for="entidade.IdTipoDocumental">
+                        @if (Model.entidade.IdTipoDocumental.HasValue)
+                        {
+                            <option value=""></option>
+                        }
+                        else
+                        {
+                            <option value="" selected> </option>
+                        }
+                        @foreach (var item in Model.tipos)
+                        {
+                            var selecionado = item.Id == Model.entidade.IdTipoDocumental ? "selected" : "";
+                            <option value="@item.Id" selecionado>@item.Descricao</option>
+                        }
+                    </select>
+                    <span asp-validation-for="entidade.IdTipoDocumental" class=""></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+</script>

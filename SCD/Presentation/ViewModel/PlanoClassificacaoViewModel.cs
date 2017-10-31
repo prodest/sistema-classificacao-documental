@@ -98,6 +98,9 @@ namespace Prodest.Scd.Presentation.ViewModel
             }
         }
 
+
+        public ICollection<ItemPlanoClassificacaoEntidade> ItensPlanoClassificacao { get; set; }
+
     }
 
 }
