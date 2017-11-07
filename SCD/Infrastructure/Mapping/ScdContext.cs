@@ -13,6 +13,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
         public virtual DbSet<NivelClassificacao> NivelClassificacao { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
         public virtual DbSet<PlanoClassificacao> PlanoClassificacao { get; set; }
+        public virtual DbSet<Temporalidade> Temporalidade { get; set; }
         public virtual DbSet<TipoDocumental> TipoDocumental { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -255,6 +256,58 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PlanoClassificacao_Organizacao");
+            });
+
+            modelBuilder.Entity<Temporalidade>(entity =>
+            {
+                entity.ToTable("Temporalidade", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasColumnName("codigo")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FaseCorrenteEventoFim)
+                    .HasColumnName("faseCorrenteEventoFim")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FaseCorrentePrazoGuarda).HasColumnName("faseCorrentePrazoGuarda");
+
+                entity.Property(e => e.FaseIntermediariaEventoFim)
+                    .HasColumnName("faseIntermediariaEventoFim")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FaseIntermediariaPrazoGuarda).HasColumnName("faseIntermediariaPrazoGuarda");
+
+                entity.Property(e => e.IdDestinacaoFinal).HasColumnName("idDestinacaoFinal");
+
+                entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
+
+                entity.Property(e => e.IdFaseCorrentePrazoGuardaUnidade).HasColumnName("idFaseCorrentePrazoGuardaUnidade");
+
+                entity.Property(e => e.IdFaseIntermediariaPrazoGuardaUnidade).HasColumnName("idFaseIntermediariaPrazoGuardaUnidade");
+
+                entity.Property(e => e.Observacao)
+                    .HasColumnName("observacao")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdDocumentoNavigation)
+                    .WithMany(p => p.Temporalidade)
+                    .HasForeignKey(d => d.IdDocumento)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Temporalidade_Documento");
             });
 
             modelBuilder.Entity<TipoDocumental>(entity =>
