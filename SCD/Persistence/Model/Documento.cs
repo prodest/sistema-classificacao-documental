@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Prodest.Scd.Persistence.Model
 {
@@ -8,7 +6,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public Documento()
         {
-            Sigilos = new HashSet<Sigilo>();
+            CriterioRestricaoDocumento = new HashSet<CriterioRestricaoDocumento>();
         }
 
         public int Id { get; set; }
@@ -19,6 +17,6 @@ namespace Prodest.Scd.Persistence.Model
 
         public ItemPlanoClassificacao ItemPlanoClassificacao { get; set; }
         public TipoDocumental TipoDocumental { get; set; }
-        public ICollection<Sigilo> Sigilos { get; set; }
+        public ICollection<CriterioRestricaoDocumento> CriterioRestricaoDocumento { get; set; }
     }
 }

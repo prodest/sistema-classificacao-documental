@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business.Base
 {
-    public interface ISigiloCore
+    public interface ICriterioRestricaoCore
     {
-        Task<SigiloModel> InsertAsync(SigiloModel sigiloModel);
+        Task<CriterioRestricaoModel> InsertAsync(CriterioRestricaoModel criterioRestricaoModel);
 
-        Task<SigiloModel> SearchAsync(int id);
+        Task<CriterioRestricaoModel> SearchAsync(int id);
 
-        Task UpdateAsync(SigiloModel sigiloModel);
+        Task UpdateAsync(CriterioRestricaoModel criterioRestricaoModel);
 
         Task DeleteAsync(int id);
     }

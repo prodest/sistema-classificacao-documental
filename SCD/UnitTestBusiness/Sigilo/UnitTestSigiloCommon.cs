@@ -17,7 +17,7 @@ namespace Prodest.Scd.UnitTestBusiness.Sigilo
 
             PlanoClassificacaoValidation planoClassificacaoValidation = new PlanoClassificacaoValidation(_repositories);
 
-            SigiloValidation sigiloValidation = new SigiloValidation(_repositories, planoClassificacaoValidation);
+            CriterioRestricaoValidation sigiloValidation = new CriterioRestricaoValidation(_repositories, planoClassificacaoValidation);
             _core = new SigiloCore(_repositories, sigiloValidation);
         }
     }

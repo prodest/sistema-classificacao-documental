@@ -18,6 +18,6 @@ namespace Prodest.Scd.Business.Repository.Base
 
         ITipoDocumentalRepository TiposDocumentaisSpecific { get; }
 
-        ISigiloRepository SigilosSpecific { get; }
+        ICriterioRestricaoRepository SigilosSpecific { get; }
     }
 }

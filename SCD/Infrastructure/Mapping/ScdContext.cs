@@ -6,12 +6,13 @@ namespace Prodest.Scd.Infrastructure.Mapping
 {
     public partial class ScdContext : DbContext
     {
+        public virtual DbSet<CriterioRestricao> CriterioRestricao { get; set; }
+        public virtual DbSet<CriterioRestricaoDocumento> CriterioRestricaoDocumento { get; set; }
         public virtual DbSet<Documento> Documento { get; set; }
         public virtual DbSet<ItemPlanoClassificacao> ItemPlanoClassificacao { get; set; }
         public virtual DbSet<NivelClassificacao> NivelClassificacao { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
         public virtual DbSet<PlanoClassificacao> PlanoClassificacao { get; set; }
-        public virtual DbSet<Sigilo> Sigilo { get; set; }
         public virtual DbSet<TipoDocumental> TipoDocumental { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,8 +30,77 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CriterioRestricao>(entity =>
+            {
+                entity.ToTable("CriterioRestricao", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Classificavel).HasColumnName("classificavel");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasColumnName("codigo")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EventoFim)
+                    .HasColumnName("eventoFim")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FundamentoLegal)
+                    .IsRequired()
+                    .HasColumnName("fundamentoLegal")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdGrau).HasColumnName("idGrau");
+
+                entity.Property(e => e.IdUnidadePrazoTermino).HasColumnName("idUnidadePrazoTermino");
+
+                entity.Property(e => e.Justificativa)
+                    .IsRequired()
+                    .HasColumnName("justificativa")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PrazoTermino).HasColumnName("prazoTermino");
+            });
+
+            modelBuilder.Entity<CriterioRestricaoDocumento>(entity =>
+            {
+                entity.ToTable("CriterioRestricaoDocumento", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdCriterioRestricao).HasColumnName("idCriterioRestricao");
+
+                entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
+
+                entity.HasOne(d => d.IdCriterioRestricaoNavigation)
+                    .WithMany(p => p.CriterioRestricaoDocumento)
+                    .HasForeignKey(d => d.IdCriterioRestricao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CriterioRestricaoDocumento_CriterioRestricao");
+
+                entity.HasOne(d => d.IdDocumentoNavigation)
+                    .WithMany(p => p.CriterioRestricaoDocumento)
+                    .HasForeignKey(d => d.IdDocumento)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CriterioRestricaoDocumento_Documento");
+            });
+
             modelBuilder.Entity<Documento>(entity =>
             {
+                entity.ToTable("Documento", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Codigo)
@@ -64,7 +134,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             modelBuilder.Entity<ItemPlanoClassificacao>(entity =>
             {
-                entity.ToTable("ItemPlanoClassificacao");
+                entity.ToTable("ItemPlanoClassificacao", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -106,7 +176,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             modelBuilder.Entity<NivelClassificacao>(entity =>
             {
-                entity.ToTable("NivelClassificacao");
+                entity.ToTable("NivelClassificacao", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -129,7 +199,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             modelBuilder.Entity<Organizacao>(entity =>
             {
-                entity.ToTable("Organizacao");
+                entity.ToTable("Organizacao", "dbo");
 
                 entity.HasIndex(e => e.GuidOrganizacao)
                     .HasName("UK_GuidOrganizacao")
@@ -142,7 +212,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             modelBuilder.Entity<PlanoClassificacao>(entity =>
             {
-                entity.ToTable("PlanoClassificacao");
+                entity.ToTable("PlanoClassificacao", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -187,60 +257,9 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasConstraintName("FK_PlanoClassificacao_Organizacao");
             });
 
-            modelBuilder.Entity<Sigilo>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Codigo)
-                    .IsRequired()
-                    .HasColumnName("codigo")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Descricao)
-                    .IsRequired()
-                    .HasColumnName("descricao")
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.EventoFim)
-                    .HasColumnName("eventoFim")
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FundamentoLegal)
-                    .IsRequired()
-                    .HasColumnName("fundamentoLegal")
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.GerarTermo).HasColumnName("gerarTermo");
-
-                entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
-
-                entity.Property(e => e.IdGrau).HasColumnName("idGrau");
-
-                entity.Property(e => e.IdUnidadePrazoTermino).HasColumnName("idUnidadePrazoTermino");
-
-                entity.Property(e => e.Justificativa)
-                    .IsRequired()
-                    .HasColumnName("justificativa")
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PrazoTermino).HasColumnName("prazoTermino");
-
-
-                entity.HasOne(d => d.Documento)
-                    .WithMany(p => p.Sigilos)
-                    .HasForeignKey(d => d.IdDocumento)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Sigilo_Documento");
-            });
-
             modelBuilder.Entity<TipoDocumental>(entity =>
             {
-                entity.ToTable("TipoDocumental");
+                entity.ToTable("TipoDocumental", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
