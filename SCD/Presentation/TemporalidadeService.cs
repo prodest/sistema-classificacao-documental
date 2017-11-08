@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Prodest.Scd.Business;
 using Prodest.Scd.Business.Base;
 using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
@@ -13,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Presentation
 {
-    public class SigiloService : ISigiloService
+    public class TemporalidadeService : ITemporalidadeService
     {
-        private ISigiloCore _core;
+        private TemporalidadeCore _core;
         private IMapper _mapper;
         private IItemPlanoClassificacaoCore _coreItemPlanoClassificacao;
         private IDocumentoCore _coreDocumento;
 
-        public SigiloService(ISigiloCore core, IMapper mapper, IItemPlanoClassificacaoCore coreItemPlanoClassificacao, IDocumentoCore coreDocumento)
+        public TemporalidadeService(ITemporalidadeCore core, IMapper mapper, IItemPlanoClassificacaoCore coreItemPlanoClassificacao, IDocumentoCore coreDocumento)
         {
             _coreDocumento = coreDocumento;
             _coreItemPlanoClassificacao = coreItemPlanoClassificacao;
@@ -28,9 +29,9 @@ namespace Prodest.Scd.Presentation
             _mapper = mapper;
         }
  
-        public async Task<SigiloViewModel> Delete(int id)
+        public async Task<TemporalidadeViewModel> Delete(int id)
         {
-            var model = new SigiloViewModel();
+            var model = new TemporalidadeViewModel();
             try
             {
                 await _core.DeleteAsync(id);
@@ -63,16 +64,16 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<SigiloViewModel> Edit(int id)
+        public async Task<TemporalidadeViewModel> Edit(int id)
         {
-            var model = new SigiloViewModel();
+            var model = new TemporalidadeViewModel();
             try
             {
                 model.Action = "Update";
                 var entidade = await _core.SearchAsync(id);
                 entidade.Documento = await _coreDocumento.SearchAsync(entidade.Documento.Id);
                 entidade.Documento.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(entidade.Documento.ItemPlanoClassificacao.Id);
-                model.entidade = _mapper.Map<SigiloEntidade>(entidade);
+                model.entidade = _mapper.Map<TemporalidadeEntidade>(entidade);
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -95,16 +96,16 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<SigiloViewModel> Update(SigiloEntidade entidade)
+        public async Task<TemporalidadeViewModel> Update(TemporalidadeEntidade entidade)
         {
-            var model = new SigiloViewModel();
+            var model = new TemporalidadeViewModel();
             model.entidade = entidade;
             var documento = await _coreDocumento.SearchAsync(entidade.Documento.Id);
             documento.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(documento.ItemPlanoClassificacao.Id);
             model.entidade.Documento = _mapper.Map<DocumentoEntidade>(documento);
             try
             {
-                await _core.UpdateAsync(_mapper.Map<SigiloModel>(entidade));
+                await _core.UpdateAsync(_mapper.Map<TemporalidadeModel>(entidade));
 
                 model.Result = new ResultViewModel
                 {
@@ -135,12 +136,12 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<SigiloViewModel> Create(SigiloEntidade entidade)
+        public async Task<TemporalidadeViewModel> Create(TemporalidadeEntidade entidade)
         {
-            var model = new SigiloViewModel();
+            var model = new TemporalidadeViewModel();
             try
             {
-                var modelInsert = await _core.InsertAsync(_mapper.Map<SigiloModel>(entidade));
+                var modelInsert = await _core.InsertAsync(_mapper.Map<TemporalidadeModel>(entidade));
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -171,13 +172,13 @@ namespace Prodest.Scd.Presentation
         }
 
 
-        public async Task<SigiloViewModel> New(int idDocumento)
+        public async Task<TemporalidadeViewModel> New(int idDocumento)
         {
-            var model = new SigiloViewModel();
+            var model = new TemporalidadeViewModel();
             try
             {
                 model.Action = "Create";
-                model.entidade = new SigiloEntidade();
+                model.entidade = new TemporalidadeEntidade();
 
                 var documento = await _coreDocumento.SearchAsync(idDocumento);
                 documento.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(documento.ItemPlanoClassificacao.Id);
