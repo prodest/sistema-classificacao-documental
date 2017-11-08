@@ -1,0 +1,22 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.SigiloEntidade
+<li class="mdc-list-item mdc-list-item-BotoesAcoes" style="padding-left:@((Model.Documento.ItemPlanoClassificacao.NivelEspacamento+2)*20)px">
+    <span class="mdc-list-item__text">
+        <span>
+            @Model.Codigo - @Model.Descricao
+        </span>
+        <span class="mdc-list-item__text__secondary">Sigilo</span>
+    </span>
+    <div class="mdc-menu-anchor-BotoesMenu">
+        <button class="mdc-button mdc-button-BotoesAcoes toggle" data-id="SIGILO-@Model.Id">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <div class="mdc-simple-menu" tabindex="-1" id="acoes-menu" data-id="SIGILO-@Model.Id">
+            <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Sigilo/Edit/@Model.Id">Editar Sigilo</li>
+                <li class="mdc-list-divider" role="separator"></li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Sigilo/Delete/@Model.Id?idPlanoClassificacao=@Model.Documento.ItemPlanoClassificacao.PlanoClassificacao.Id">Excluir Sigilo</li>
+            </ul>
+        </div>
+    </div>
+
+</li>

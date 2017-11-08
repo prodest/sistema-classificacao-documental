@@ -17,9 +17,15 @@
 
         public enum GrauSigilo
         {
-            Ostensivo = 1,
+            //Ostensivo = 1,
+            //InformacaoPessoal = 2,
+            //Reservado = 3,
+            //Secreto = 4,
+            //UltraSecreto = 5,
+
+            Classificavel = 1,
             InformacaoPessoal = 2,
-            Reservado = 3,
+            OutraLegis = 3,
             Secreto = 4,
             UltraSecreto = 5,
         }

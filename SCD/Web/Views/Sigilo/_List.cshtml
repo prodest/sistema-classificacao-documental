@@ -1,0 +1,11 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.SigiloViewModel
+<script>
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+
+
+    urlDestino = '/ItemPlanoClassificacao/List?idPlanoClassificacao=@Model.entidade.Documento.ItemPlanoClassificacao.PlanoClassificacao.Id'
+    $.get(urlDestino).then(function (dados) {
+        $('#DivConteudo').html(dados);
+        $.validator.unobtrusive.parse($('form'));
+    });
+</script>

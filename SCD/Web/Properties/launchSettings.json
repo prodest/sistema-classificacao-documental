@@ -22,6 +22,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:1806"
+      //"applicationUrl": "http://10.32.32.116:1806"
     }
   }
 }
