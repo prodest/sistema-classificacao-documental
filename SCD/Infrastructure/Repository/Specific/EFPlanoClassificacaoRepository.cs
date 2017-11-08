@@ -129,7 +129,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             if (getHierarchy)
             {
                 queryable = queryable.Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.Documentos).ThenInclude(d => d.TipoDocumental)
-                                     .Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.Documentos).ThenInclude(d => d.Sigilos)
+                                     .Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.Documentos).ThenInclude(d => d.Temporalidades)
                                      .Include(pc => pc.ItensPlanoClassificacao).ThenInclude(ipc => ipc.NivelClassificacao);
             }
 

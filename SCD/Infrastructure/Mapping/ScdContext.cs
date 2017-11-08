@@ -92,7 +92,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasConstraintName("FK_CriterioRestricaoDocumento_CriterioRestricao");
 
                 entity.HasOne(d => d.IdDocumentoNavigation)
-                    .WithMany(p => p.CriterioRestricaoDocumento)
+                    .WithMany(p => p.CriteriosRestricaoDocumento)
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CriterioRestricaoDocumento_Documento");
@@ -276,35 +276,35 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasMaxLength(2000)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FaseCorrenteEventoFim)
-                    .HasColumnName("faseCorrenteEventoFim")
+                entity.Property(e => e.EventoFimFaseCorrente)
+                    .HasColumnName("eventoFimFaseCorrente")
                     .HasMaxLength(2000)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FaseCorrentePrazoGuarda).HasColumnName("faseCorrentePrazoGuarda");
-
-                entity.Property(e => e.FaseIntermediariaEventoFim)
-                    .HasColumnName("faseIntermediariaEventoFim")
+                entity.Property(e => e.EventoFimFaseIntermediaria)
+                    .HasColumnName("eventoFimFaseIntermediaria")
                     .HasMaxLength(2000)
                     .IsUnicode(false);
-
-                entity.Property(e => e.FaseIntermediariaPrazoGuarda).HasColumnName("faseIntermediariaPrazoGuarda");
 
                 entity.Property(e => e.IdDestinacaoFinal).HasColumnName("idDestinacaoFinal");
 
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
 
-                entity.Property(e => e.IdFaseCorrentePrazoGuardaUnidade).HasColumnName("idFaseCorrentePrazoGuardaUnidade");
+                entity.Property(e => e.IdUnidadePrazoGuardaFaseCorrente).HasColumnName("idUnidadePrazoGuardaFaseCorrente");
 
-                entity.Property(e => e.IdFaseIntermediariaPrazoGuardaUnidade).HasColumnName("idFaseIntermediariaPrazoGuardaUnidade");
+                entity.Property(e => e.IdUnidadePrazoGuardaFaseIntermediaria).HasColumnName("idUnidadePrazoGuardaFaseIntermediaria");
 
                 entity.Property(e => e.Observacao)
                     .HasColumnName("observacao")
                     .HasMaxLength(2000)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.IdDocumentoNavigation)
-                    .WithMany(p => p.Temporalidade)
+                entity.Property(e => e.PrazoGuardaFaseCorrente).HasColumnName("prazoGuardaFaseCorrente");
+
+                entity.Property(e => e.PrazoGuardaFaseIntermediaria).HasColumnName("prazoGuardaFaseIntermediaria");
+
+                entity.HasOne(d => d.Documento)
+                    .WithMany(p => p.Temporalidades)
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Temporalidade_Documento");

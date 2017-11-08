@@ -9,16 +9,16 @@ namespace Prodest.Scd.Persistence.Model
         public int Id { get; set; }
         public string Codigo { get; set; }
         public string Descricao { get; set; }
-        public int? FaseCorrentePrazoGuarda { get; set; }
-        public int? IdFaseCorrentePrazoGuardaUnidade { get; set; }
-        public string FaseCorrenteEventoFim { get; set; }
-        public int? FaseIntermediariaPrazoGuarda { get; set; }
-        public int? IdFaseIntermediariaPrazoGuardaUnidade { get; set; }
-        public string FaseIntermediariaEventoFim { get; set; }
+        public int? PrazoGuardaFaseCorrente { get; set; }
+        public int? IdUnidadePrazoGuardaFaseCorrente { get; set; }
+        public string EventoFimFaseCorrente { get; set; }
+        public int? PrazoGuardaFaseIntermediaria { get; set; }
+        public int? IdUnidadePrazoGuardaFaseIntermediaria { get; set; }
+        public string EventoFimFaseIntermediaria { get; set; }
         public int IdDestinacaoFinal { get; set; }
         public string Observacao { get; set; }
         public int IdDocumento { get; set; }
 
-        public Documento IdDocumentoNavigation { get; set; }
+        public Documento Documento { get; set; }
     }
 }

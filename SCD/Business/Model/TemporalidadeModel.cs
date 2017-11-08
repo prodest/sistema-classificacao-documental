@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Prodest.Scd.Business.Model
 {
-    public class Temporalidade
+    public class TemporalidadeModel
     {
         public int Id { get; set; }
         public string Codigo { get; set; }

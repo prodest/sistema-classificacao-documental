@@ -15,7 +15,7 @@ namespace Prodest.Scd.Business
 
         public CriterioRestricaoCore(IScdRepositories repositories, CriterioRestricaoValidation validation)
         {
-            _criteriosRestricao = repositories.CriteriosRestricaoSpecific;
+            //_criteriosRestricao = repositories.CriteriosRestricaoSpecific;
 
             _validation = validation;
         }
