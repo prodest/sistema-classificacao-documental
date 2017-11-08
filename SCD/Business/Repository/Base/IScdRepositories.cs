@@ -16,8 +16,10 @@ namespace Prodest.Scd.Business.Repository.Base
 
         IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; }
 
+        ITemporalidadeRepository TemporalidadesSpecific { get; }
+
         ITipoDocumentalRepository TiposDocumentaisSpecific { get; }
 
-        ISigiloRepository SigilosSpecific { get; }
+        ICriterioRestricaoRepository SigilosSpecific { get; }
     }
 }

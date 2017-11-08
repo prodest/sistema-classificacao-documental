@@ -86,11 +86,34 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Sigilo
-            CreateMap<Sigilo, SigiloModel>()
-                .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
-                .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino));
+            //CreateMap<Sigilo, SigiloModel>()
+            //    .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
+            //    .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino));
 
-            CreateMap<SigiloModel, Sigilo>()
+            //CreateMap<SigiloModel, Sigilo>()
+            //    .ForMember(dest => dest.Id, opt =>
+            //     {
+            //         opt.Condition((src, dest, srcMember, destMember) =>
+            //         {
+            //             return (destMember == default(int));
+            //         });
+            //     })
+            //    .ForMember(dest => dest.Documento, opt => opt.Ignore())
+            //    .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)))
+            //    .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau))
+            //    .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
+
+            //    ;
+            #endregion
+
+            #region Temporalidade
+            CreateMap<Temporalidade, TemporalidadeModel>()
+                .ForMember(dest => dest.DestinacaoFinal, opt => opt.MapFrom(src => src.IdDestinacaoFinal))
+                .ForMember(dest => dest.UnidadePrazoGuardaFaseCorrente, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseCorrente))
+                .ForMember(dest => dest.UnidadePrazoGuardaFaseIntermediaria, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseIntermediaria))
+                ;
+
+            CreateMap<TemporalidadeModel, Temporalidade>()
                 .ForMember(dest => dest.Id, opt =>
                  {
                      opt.Condition((src, dest, srcMember, destMember) =>
@@ -100,9 +123,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
                  })
                 .ForMember(dest => dest.Documento, opt => opt.Ignore())
                 .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)))
-                .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau))
-                .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
-
+                .ForMember(dest => dest.IdDestinacaoFinal, opt => opt.MapFrom(src => src.DestinacaoFinal))
+                .ForMember(dest => dest.IdUnidadePrazoGuardaFaseCorrente, opt => opt.MapFrom(src => src.UnidadePrazoGuardaFaseCorrente))
+                .ForMember(dest => dest.IdUnidadePrazoGuardaFaseIntermediaria, opt => opt.MapFrom(src => src.UnidadePrazoGuardaFaseIntermediaria))
                 ;
             #endregion
 

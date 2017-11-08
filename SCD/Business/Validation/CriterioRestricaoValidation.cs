@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business.Validation
 {
-    public class SigiloValidation : CommonValidation
+    public class CriterioRestricaoValidation : CommonValidation
     {
         private IDocumentoRepository _documentos;
         private IPlanoClassificacaoRepository _planosClassificacao;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
-        public SigiloValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
+        public CriterioRestricaoValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
             _documentos = repositories.DocumentosSpecific;
             _planosClassificacao = repositories.PlanosClassificacaoSpecific;
@@ -22,29 +22,29 @@ namespace Prodest.Scd.Business.Validation
             _planoClassificacaoValidation = planoClassificacaoValidation;
         }
 
-        internal async Task Valid(SigiloModel sigiloModel)
+        internal async Task Valid(CriterioRestricaoModel criterioRestricaoModel)
         {
-            await BasicValid(sigiloModel);
+            await BasicValid(criterioRestricaoModel);
 
-            IdValid(sigiloModel.Id);
+            IdValid(criterioRestricaoModel.Id);
         }
 
         #region Basic Valid
-        internal async Task BasicValid(SigiloModel sigiloModel)
+        internal async Task BasicValid(CriterioRestricaoModel criterioRestricaoModel)
         {
-            NotNull(sigiloModel);
+            NotNull(criterioRestricaoModel);
 
-            DocumentoNotNull(sigiloModel.Documento);
+            //DocumentoNotNull(criterioRestricaoModel.Documentos);
 
-            Filled(sigiloModel);
+            Filled(criterioRestricaoModel);
 
-            await DocumentoExists(sigiloModel.Documento);
+            //await DocumentoExists(criterioRestricaoModel.Documento);
         }
 
-        private void NotNull(SigiloModel sigiloModel)
+        private void NotNull(CriterioRestricaoModel criterioRestricaoModel)
         {
-            if (sigiloModel == null)
-                throw new ScdException("O Sigilo não pode ser nulo.");
+            if (criterioRestricaoModel == null)
+                throw new ScdException("O CriterioRestricao não pode ser nulo.");
         }
 
         private void DocumentoNotNull(DocumentoModel documentoModel)
@@ -60,14 +60,14 @@ namespace Prodest.Scd.Business.Validation
         }
 
         #region Filled
-        internal void Filled(SigiloModel sigiloModel)
+        internal void Filled(CriterioRestricaoModel criterioRestricaoModel)
         {
-            CodigoFilled(sigiloModel.Codigo);
-            DescricaoFilled(sigiloModel.Descricao);
-            DocumentoFilled(sigiloModel.Documento);
-            PrazoTerminoOrEventoFimFilled(sigiloModel.PrazoTermino, sigiloModel.UnidadePrazoTermino, sigiloModel.EventoFim);
-            JustificativaFilled(sigiloModel.Justificativa);
-            FundamentoLegalFilled(sigiloModel.FundamentoLegal);
+            CodigoFilled(criterioRestricaoModel.Codigo);
+            DescricaoFilled(criterioRestricaoModel.Descricao);
+            //DocumentoFilled(criterioRestricaoModel.Documento);
+            //PrazoTerminoOrEventoFimFilled(criterioRestricaoModel.PrazoTermino, criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModel.EventoFim);
+            JustificativaFilled(criterioRestricaoModel.Justificativa);
+            FundamentoLegalFilled(criterioRestricaoModel.FundamentoLegal);
         }
 
         private void CodigoFilled(string codigo)
@@ -82,7 +82,7 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
 
-        private void PrazoTerminoOrEventoFimFilled(int? prazoTermino, SigiloModel.UnidadePrazoTerminoSigilo? unidadePrazoTerminoSigilo, string eventoFim)
+        private void PrazoTerminoOrEventoFimFilled(int? prazoTermino, UnidadeTempo? unidadePrazoTerminoCriterioRestricao, string eventoFim)
         {
             if (!prazoTermino.HasValue && string.IsNullOrWhiteSpace(eventoFim))
                 throw new ScdException("Ou Prazo de Término ou o Evento Fim deve ser preenchido.");
@@ -90,7 +90,7 @@ namespace Prodest.Scd.Business.Validation
             if (prazoTermino.HasValue && !string.IsNullOrWhiteSpace(eventoFim))
                 throw new ScdException("Ou Prazo de Término ou o Evento Fim deve ser preenchido.");
 
-            if (prazoTermino.HasValue && !unidadePrazoTerminoSigilo.HasValue)
+            if (prazoTermino.HasValue && !unidadePrazoTerminoCriterioRestricao.HasValue)
                 throw new ScdException("A Unidade do Prazo Término deve ser preenchida quando o Prazo de Término é preenchido.");
         }
 
@@ -122,39 +122,39 @@ namespace Prodest.Scd.Business.Validation
         }
         #endregion
 
-        internal void Found(SigiloModel sigiloModel)
+        internal void Found(CriterioRestricaoModel criterioRestricaoModel)
         {
-            if (sigiloModel == null)
-                throw new ScdException("Sigilo não encontrado.");
+            if (criterioRestricaoModel == null)
+                throw new ScdException("CriterioRestricao não encontrado.");
         }
 
-        internal async Task PlanoClassificacaoEquals(SigiloModel sigiloModelNew, SigiloModel sigiloModelOld)
+        internal async Task PlanoClassificacaoEquals(CriterioRestricaoModel criterioRestricaoModelNew, CriterioRestricaoModel criterioRestricaoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelNew = await _planosClassificacao.SearchByDocumentoAsync(sigiloModelNew.Documento.Id);
+            //PlanoClassificacaoModel planoClassificacaoModelNew = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModelNew.Documento.Id);
 
-            PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(sigiloModelOld.Documento.Id);
+            //PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModelOld.Documento.Id);
 
-            if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
-                throw new ScdException("O Plano de Classificação não pode ser alterado.");
+            //if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
+            //    throw new ScdException("O Plano de Classificação não pode ser alterado.");
         }
 
-        internal async Task CanInsert(SigiloModel sigiloModel)
+        internal async Task CanInsert(CriterioRestricaoModel criterioRestricaoModel)
         {
-            PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(sigiloModel.Documento.Id);
+            //PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModel.Documento.Id);
 
-            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
+            //_planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
         }
 
-        internal async Task CanUpdate(SigiloModel sigiloModel)
+        internal async Task CanUpdate(CriterioRestricaoModel criterioRestricaoModel)
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchByDocumentoAsync(sigiloModel.Documento.Id); ;
+            //PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModel.Documento.Id); ;
 
-            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
+            //_planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
         }
 
-        internal async Task CanDelete(SigiloModel sigiloModel)
+        internal async Task CanDelete(CriterioRestricaoModel criterioRestricaoModel)
         {
-            await CanUpdate(sigiloModel);
+            await CanUpdate(criterioRestricaoModel);
         }
     }
 }

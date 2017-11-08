@@ -84,8 +84,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         //TODO: Verificar como utilizar este método
         private IQueryable<Documento> GetRelationship()
         {
-            IQueryable<Documento> queryable = _set.Include(ipc => ipc.Sigilos)
-                                                  //.Include(ipc => ipc.Temporalidade)
+            IQueryable<Documento> queryable = _set.Include(ipc => ipc.ItemPlanoClassificacao)
+                                                  .Include(ipc => ipc.TipoDocumental)
                                                   ;
 
             return queryable;
