@@ -27,6 +27,7 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
             dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
             dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(ITemporalidadeCore), typeof(TemporalidadeCore));
             dependencies.Add(typeof(ITipoDocumentalCore), typeof(TipoDocumentalCore));
             #endregion
 
@@ -36,6 +37,7 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
             dependencies.Add(typeof(ItemPlanoClassificacaoValidation), typeof(ItemPlanoClassificacaoValidation));
             dependencies.Add(typeof(NivelClassificacaoValidation), typeof(NivelClassificacaoValidation));
+            dependencies.Add(typeof(TemporalidadeValidation), typeof(TemporalidadeValidation));
             dependencies.Add(typeof(TipoDocumentalValidation), typeof(TipoDocumentalValidation));
             #endregion
             #endregion
@@ -62,6 +64,7 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(IPlanoClassificacaoRepository), typeof(EFPlanoClassificacaoRepository));
             dependencies.Add(typeof(INivelClassificacaoRepository), typeof(EFNivelClassificacaoRepository));
             dependencies.Add(typeof(IOrganizacaoRepository), typeof(EFOrganizacaoRepository));
+            dependencies.Add(typeof(ITemporalidadeRepository), typeof(EFTemporalidadeRepository));
             dependencies.Add(typeof(ITipoDocumentalRepository), typeof(EFTipoDocumentalRepository));
             dependencies.Add(typeof(ScdContext), typeof(ScdContext));
             dependencies.Add(typeof(IUnitOfWork), typeof(EFUnitOfWorkSpecific));
