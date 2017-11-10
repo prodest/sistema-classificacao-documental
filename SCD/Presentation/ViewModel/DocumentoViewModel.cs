@@ -28,6 +28,8 @@ namespace Prodest.Scd.Presentation.ViewModel
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
 
+        public ICollection<TemporalidadeEntidade> Temporalidades { get; set; }
+
         public TipoDocumentalEntidade TipoDocumental { get; set; }
         public ItemPlanoClassificacaoEntidade ItemPlanoClassificacao { get; set; }
 

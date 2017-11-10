@@ -4,11 +4,16 @@ using System.Text;
 
 namespace Prodest.Scd.Presentation.ViewModel.Base
 {
-    public class BaseViewModel
+    public class BaseViewModel : ICloneable
     {
         public ResultViewModel Result { get; set; }
         public string Action { get; set; }
-        
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
     }
     public class ResultViewModel
     {

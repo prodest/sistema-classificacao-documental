@@ -1,0 +1,160 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.TemporalidadeViewModel
+
+<form asp-controller="Temporalidade" asp-action="@Model.Action" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
+    <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+        <div class="mdl-card TelaCheia mdl-grid">
+            <div class="mdl-card__actions ItemCardFormulario">
+                <button title="Salvar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--grey BotaoGrande" type="submit">
+                    <i class="material-icons">save</i>
+                </button>
+                <button title="Cancelar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--red BotaoAjax BotaoGrande" data-url="/ItemPlanoClassificacao/List?idPlanoClassificacao=@Model.entidade.Documento.ItemPlanoClassificacao.PlanoClassificacao.Id">
+                    <i class="material-icons">cancel</i>
+                </button>
+            </div>
+            <input hidden asp-for="entidade.Id" />
+            <input hidden asp-for="entidade.Documento.Id" />
+            <input hidden asp-for="entidade.Documento.ItemPlanoClassificacao.PlanoClassificacao.Id" />
+            <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.Codigo" type="text" class="mdc-textfield__input" required>
+                    <label asp-for="entidade.Codigo" class="mdc-textfield__label">
+                        Codigo..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.Descricao" type="text" class="mdc-textfield__input" required>
+                    <label asp-for="entidade.Descricao" class="mdc-textfield__label">
+                        Descrição..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
+                </div>
+            </div>
+
+
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.PrazoGuardaFaseCorrente" type="text" class="mdc-textfield__input" >
+                    <label asp-for="entidade.PrazoGuardaFaseCorrente" class="mdc-textfield__label">
+                        Prazo de Guarda (Fase Corrente)
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 80px center"></div>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+                <div class="mdl-textfield">
+                    <select class="mdc-select" asp-for="entidade.IdUnidadePrazoGuardaFaseCorrente">
+                        @if (Model.entidade.UnidadePrazoGuardaFaseCorrente!=null)
+                        {
+                            <option value=""></option>
+                        }
+                        else
+                        {
+                            <option value="" selected> </option>
+                        }
+                        @foreach (var item in Model.unidadesTempo)
+                        {
+                            var selecionado = item.Id == Model.entidade.IdUnidadePrazoGuardaFaseCorrente ? "selected" : "";
+                            <option value="@item.Id" selecionado>@item.Nome</option>
+                        }
+                    </select>
+                    <span asp-validation-for="entidade.IdUnidadePrazoGuardaFaseCorrente" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.EventoFimFaseCorrente" type="text" class="mdc-textfield__input" >
+                    <label asp-for="entidade.EventoFimFaseCorrente" class="mdc-textfield__label">
+                        Evento Fim Fase Corrente..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
+                </div>
+            </div>
+
+
+
+
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.PrazoGuardaFaseIntermediaria" type="text" class="mdc-textfield__input" >
+                    <label asp-for="entidade.PrazoGuardaFaseIntermediaria" class="mdc-textfield__label">
+                        Prazo de Guarda (Fase Intermediária)
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 80px center"></div>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+                <div class="mdl-textfield">
+                    <select class="mdc-select" asp-for="entidade.IdUnidadePrazoGuardaFaseIntermediaria">
+                        @if (Model.entidade.UnidadePrazoGuardaFaseIntermediaria != null)
+                        {
+                            <option value=""></option>
+                        }
+                        else
+                        {
+                            <option value="" selected> </option>
+                        }
+                        @foreach (var item in Model.unidadesTempo)
+                        {
+                            var selecionado = item.Id == Model.entidade.IdUnidadePrazoGuardaFaseIntermediaria ? "selected" : "";
+                            <option value="@item.Id" selecionado>@item.Nome</option>
+                        }
+                    </select>
+                    <span asp-validation-for="entidade.IdUnidadePrazoGuardaFaseIntermediaria" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.EventoFimFaseIntermediaria" type="text" class="mdc-textfield__input" >
+                    <label asp-for="entidade.EventoFimFaseIntermediaria" class="mdc-textfield__label">
+                        Evento Fim Fase Intermediária..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
+                </div>
+            </div>
+
+
+            <div class="mdl-cell mdl-cell--2-col">
+                <div class="mdl-textfield">
+                    <select class="mdc-select" asp-for="entidade.IdDestinacaoFinal">
+                        @foreach (var item in Model.destinacoes)
+                        {
+                            var selecionado = item.Id == Model.entidade.IdDestinacaoFinal ? "selected" : "";
+                            <option value="@item.Id" selecionado>@item.Nome</option>
+                        }
+                    </select>
+                    <span asp-validation-for="entidade.IdDestinacaoFinal" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdc-textfield mdc-textfield--upgraded mdc-textfield--fullwidth">
+                    <input asp-for="entidade.Observacao" type="text" class="mdc-textfield__input">
+                    <label asp-for="entidade.Observacao" class="mdc-textfield__label">
+                        Observacao..
+                    </label>
+                    <div class="mdc-textfield__bottom-line" style="transform-origin: 154px center"></div>
+                </div>
+            </div>
+            @*<div class="mdc-form-field">
+                <div class="mdc-checkbox">
+                    <input type="checkbox" asp-for="entidade.GerarTermo" class="mdc-checkbox__native-control">
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                            <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                </div>
+                <label for="basic-checkbox">Gera Termo Classificação Informação?</label>
+            </div>*@
+        </div>
+    </div>
+</form>
+<script>
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+
+    document.querySelectorAll('.mdc-textfield').forEach(AdicionarMDCTextField);
+
+</script>
