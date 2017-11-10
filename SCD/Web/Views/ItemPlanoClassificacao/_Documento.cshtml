@@ -14,15 +14,14 @@
             <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
                 <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Documento/Edit/@Model.Id">Editar Documento</li>
                 <li class="mdc-list-divider" role="separator"></li>
-                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Sigilo/New?IdDocumento=@Model.Id">Adiconar Sigilo</li>
-                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/ItemPlanoClassificacao/New?idPlanoClassificacao=@Model.Id&IdItemPlanoClassificacaoParent=@Model.Id">Adiconar Temporalidade</li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Temporalidade/New?IdDocumento=@Model.Id">Adicionar Temporalidade</li>
                 <li class="mdc-list-divider" role="separator"></li>
                 <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Documento/Delete/@Model.Id?idPlanoClassificacao=@Model.ItemPlanoClassificacao.PlanoClassificacao.Id">Excluir Documento</li>
             </ul>
         </div>
     </div>
 </li>
-@foreach (var item in Model.Sigilos.OrderBy(p => p.Codigo))
+@foreach (var item in Model.Temporalidades.OrderBy(p => p.Codigo))
 {
-    @Html.Partial("_Sigilo", item)
+    @Html.Partial("_Temporalidade", item)
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Prodest.Scd.Business.Model;
 using Prodest.Scd.Presentation.Base;
 using Prodest.Scd.Presentation.ViewModel;
 using Prodest.Scd.Web.Controllers.Base;
@@ -9,19 +10,20 @@ using System.Threading.Tasks;
 namespace Web.Controllers
 {
     [MessageFilterAttribute]
-    public class Sigilo : BaseController
+    public class Temporalidade : BaseController
     {
-        ISigiloService _service;
+        ITemporalidadeService _service;
 
-        public Sigilo(ISigiloService service)
+        public Temporalidade(ITemporalidadeService service)
         {
             _service = service;
         }
 
         public async Task<IActionResult> List(int idPlanoClassificacao)
         {
-            var model = new SigiloViewModel {
-                entidade = new SigiloEntidade
+            var model = new TemporalidadeViewModel
+            {
+                entidade = new TemporalidadeEntidade
                 {
                     Documento = new DocumentoEntidade
                     {
@@ -73,14 +75,11 @@ namespace Web.Controllers
             return PartialView("_Form", model);
         }
 
-        public async Task<IActionResult> Create(SigiloViewModel model)
+        public async Task<IActionResult> Create(TemporalidadeViewModel model)
         {
-            SigiloViewModel modelForm = model.Clone() as SigiloViewModel;
+            TemporalidadeViewModel modelForm = model.Clone() as TemporalidadeViewModel;
             if (model != null && model.entidade != null)
             {
-                model.entidade.UnidadePrazoTermino = Prodest.Scd.Business.Model.SigiloModel.UnidadePrazoTerminoSigilo.Dias;
-                model.entidade.PrazoTermino = 50;
-                model.entidade.Grau = Prodest.Scd.Business.Model.SigiloModel.GrauSigilo.InformacaoPessoal;
                 model = await _service.Create(model.entidade);
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
@@ -92,14 +91,11 @@ namespace Web.Controllers
             return PartialView("_Form", modelForm);
         }
 
-        public async Task<IActionResult> Update(SigiloViewModel model)
+        public async Task<IActionResult> Update(TemporalidadeViewModel model)
         {
 
             if (model != null && model.entidade != null)
             {
-                model.entidade.UnidadePrazoTermino = Prodest.Scd.Business.Model.SigiloModel.UnidadePrazoTerminoSigilo.Dias;
-                model.entidade.PrazoTermino = 50;
-                model.entidade.Grau = Prodest.Scd.Business.Model.SigiloModel.GrauSigilo.InformacaoPessoal;
                 model = await _service.Update(model.entidade);
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
@@ -109,6 +105,6 @@ namespace Web.Controllers
             }
             return await Edit(model.entidade.Id, model.entidade.Documento.ItemPlanoClassificacao.PlanoClassificacao.Id);
         }
-   
+
     }
 }

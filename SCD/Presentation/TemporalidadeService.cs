@@ -16,7 +16,7 @@ namespace Prodest.Scd.Presentation
 {
     public class TemporalidadeService : ITemporalidadeService
     {
-        private TemporalidadeCore _core;
+        private ITemporalidadeCore _core;
         private IMapper _mapper;
         private IItemPlanoClassificacaoCore _coreItemPlanoClassificacao;
         private IDocumentoCore _coreDocumento;
@@ -70,6 +70,8 @@ namespace Prodest.Scd.Presentation
             try
             {
                 model.Action = "Update";
+                model.unidadesTempo = obterListaUnidadesTempo();
+                model.destinacoes = obterListaDestinacao();
                 var entidade = await _core.SearchAsync(id);
                 entidade.Documento = await _coreDocumento.SearchAsync(entidade.Documento.Id);
                 entidade.Documento.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(entidade.Documento.ItemPlanoClassificacao.Id);
@@ -171,6 +173,23 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
+        private ICollection<EnumModel> obterListaUnidadesTempo()
+        {
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)UnidadeTempo.Anos, Nome = UnidadeTempo.Anos.ToString() },
+                    new EnumModel { Id = (int)UnidadeTempo.Dias, Nome = UnidadeTempo.Dias.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempo.Meses, Nome = UnidadeTempo.Meses.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
+                };
+        }
+
+        private ICollection<EnumModel> obterListaDestinacao()
+        {
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)DestinacaoFinal.Eliminacao, Nome = "Eliminação" },
+                    new EnumModel { Id = (int)DestinacaoFinal.GuardaPermanente, Nome = "Guarda Permanente" },
+                };
+        }
 
         public async Task<TemporalidadeViewModel> New(int idDocumento)
         {
@@ -179,7 +198,8 @@ namespace Prodest.Scd.Presentation
             {
                 model.Action = "Create";
                 model.entidade = new TemporalidadeEntidade();
-
+                model.unidadesTempo = obterListaUnidadesTempo();
+                model.destinacoes = obterListaDestinacao();
                 var documento = await _coreDocumento.SearchAsync(idDocumento);
                 documento.ItemPlanoClassificacao = await _coreItemPlanoClassificacao.SearchAsync(documento.ItemPlanoClassificacao.Id);
                 model.entidade.Documento = _mapper.Map<DocumentoEntidade>(documento);
