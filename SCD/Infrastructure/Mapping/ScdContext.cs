@@ -64,6 +64,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdGrau).HasColumnName("idGrau");
 
+                entity.Property(e => e.IdPlanoClassificacao).HasColumnName("idPlanoClassificacao");
+
                 entity.Property(e => e.IdUnidadePrazoTermino).HasColumnName("idUnidadePrazoTermino");
 
                 entity.Property(e => e.Justificativa)
@@ -73,6 +75,12 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .IsUnicode(false);
 
                 entity.Property(e => e.PrazoTermino).HasColumnName("prazoTermino");
+
+                entity.HasOne(d => d.PlanoClassificacao)
+                    .WithMany(p => p.CriteriosRestricao)
+                    .HasForeignKey(d => d.IdPlanoClassificacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CriterioRestricao_PlanoClassificacao");
             });
 
             modelBuilder.Entity<CriterioRestricaoDocumento>(entity =>
@@ -85,13 +93,13 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
 
-                entity.HasOne(d => d.IdCriterioRestricaoNavigation)
-                    .WithMany(p => p.CriterioRestricaoDocumento)
+                entity.HasOne(d => d.CriterioRestricao)
+                    .WithMany(p => p.CriteriosRestricaoDocumento)
                     .HasForeignKey(d => d.IdCriterioRestricao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CriterioRestricaoDocumento_CriterioRestricao");
 
-                entity.HasOne(d => d.IdDocumentoNavigation)
+                entity.HasOne(d => d.Documento)
                     .WithMany(p => p.CriteriosRestricaoDocumento)
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)

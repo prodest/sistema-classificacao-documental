@@ -7,6 +7,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public PlanoClassificacao()
         {
+            CriteriosRestricao = new HashSet<CriterioRestricao>();
             ItensPlanoClassificacao = new HashSet<ItemPlanoClassificacao>();
         }
 
@@ -22,6 +23,7 @@ namespace Prodest.Scd.Persistence.Model
         public DateTime? FimVigencia { get; set; }
 
         public Organizacao Organizacao { get; set; }
+        public ICollection<CriterioRestricao> CriteriosRestricao { get; set; }
         public ICollection<ItemPlanoClassificacao> ItensPlanoClassificacao { get; set; }
     }
 }

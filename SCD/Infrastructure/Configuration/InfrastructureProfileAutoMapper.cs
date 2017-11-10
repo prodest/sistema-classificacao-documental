@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Prodest.Scd.Business.Model;
 using Prodest.Scd.Persistence.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Prodest.Scd.Infrastructure.Configuration
 {
@@ -8,9 +10,44 @@ namespace Prodest.Scd.Infrastructure.Configuration
     {
         public InfrastructureProfileAutoMapper()
         {
+            #region Critério de Restrição
+            CreateMap<CriterioRestricao, CriterioRestricaoModel>()
+                .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
+                .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino))
+                //.ForMember(dest => dest.Documentos, opt => opt.MapFrom(src => (src.CriteriosRestricaoDocumento != null && src.CriteriosRestricaoDocumento.Count > 0) ? Mapper.Map<ICollection<CriterioRestricaoDocumento>, ICollection<DocumentoModel>>(src.CriteriosRestricaoDocumento) : null))
+                ;
+
+            //CreateMap<CriterioRestricaoDocumento, DocumentoModel>()
+            //    .ConvertUsing(src => src.Documento != null ? Mapper.Map<Documento,DocumentoModel>(src.Documento) : null)
+            //    ;
+
+            CreateMap<CriterioRestricaoModel, CriterioRestricao>()
+                .ForMember(dest => dest.Id, opt =>
+                 {
+                     opt.Condition((src, dest, srcMember, destMember) =>
+                     {
+                         return (destMember == default(int));
+                     });
+                 })
+                .ForMember(dest => dest.PlanoClassificacao, opt => opt.Ignore())
+                .ForMember(dest => dest.IdPlanoClassificacao, opt => opt.MapFrom(src => src.PlanoClassificacao != null ? src.PlanoClassificacao.Id : default(int)))
+                .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau)) 
+                .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
+                .ForMember(dest => dest.CriteriosRestricaoDocumento, opt => opt.Ignore())
+                //.ForMember(dest => dest.CriteriosRestricaoDocumento, opt => opt.MapFrom(src => src.Documentos != null ? Mapper.Map<ICollection<DocumentoModel>, ICollection<CriterioRestricaoDocumento>>(src.Documentos) : null))
+                ;
+
+            //CreateMap<CriterioRestricaoModel, CriterioRestricaoDocumento>()
+            //    .ForMember(dest => dest.Id, opt => opt.Ignore())
+            //    .ForMember(dest => dest.IdCriterioRestricao, opt => opt.MapFrom(src => src.Id))
+            //    .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Do))
+            //    ;
+
+            #endregion
+
             #region Documento
             CreateMap<Documento, DocumentoModel>()
-                .MaxDepth(1);
+                .MaxDepth(2);
 
             CreateMap<DocumentoModel, Documento>()
                 .ForMember(dest => dest.Id, opt =>
@@ -83,27 +120,6 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)))
                 .ForMember(dest => dest.Organizacao, opt => opt.Ignore())
                 .ForMember(dest => dest.ItensPlanoClassificacao, opt => opt.Ignore());
-            #endregion
-
-            #region Sigilo
-            //CreateMap<Sigilo, SigiloModel>()
-            //    .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
-            //    .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino));
-
-            //CreateMap<SigiloModel, Sigilo>()
-            //    .ForMember(dest => dest.Id, opt =>
-            //     {
-            //         opt.Condition((src, dest, srcMember, destMember) =>
-            //         {
-            //             return (destMember == default(int));
-            //         });
-            //     })
-            //    .ForMember(dest => dest.Documento, opt => opt.Ignore())
-            //    .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)))
-            //    .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau))
-            //    .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
-
-            //    ;
             #endregion
 
             #region Temporalidade

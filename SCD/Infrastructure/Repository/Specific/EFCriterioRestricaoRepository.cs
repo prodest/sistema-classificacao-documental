@@ -5,6 +5,7 @@ using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Persistence.Model;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
     {
         private ScdContext _context;
         private DbSet<CriterioRestricao> _set;
+        private DbSet<CriterioRestricaoDocumento> _setCriterioRestricaoDocumento;
 
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
@@ -22,6 +24,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         {
             _context = context;
             _set = _context.CriterioRestricao;
+            _setCriterioRestricaoDocumento = _context.CriterioRestricaoDocumento;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -30,11 +33,28 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         {
             CriterioRestricao criterioRestricao = _mapper.Map<CriterioRestricao>(criterioRestricaoModel);
 
+            if (criterioRestricaoModel.Documentos != null && criterioRestricaoModel.Documentos.Count > 0)
+            {
+                criterioRestricao.CriteriosRestricaoDocumento = new List<CriterioRestricaoDocumento>();
+
+                foreach (var documento in criterioRestricaoModel.Documentos)
+                {
+                    CriterioRestricaoDocumento criterioRestricaoDocumento = new CriterioRestricaoDocumento
+                    {
+                        IdDocumento = documento.Id
+                    };
+
+                    criterioRestricao.CriteriosRestricaoDocumento.Add(criterioRestricaoDocumento);
+                }
+            }
+
             var entityEntry = await _set.AddAsync(criterioRestricao);
 
             await _unitOfWork.SaveAsync();
 
             criterioRestricaoModel = _mapper.Map<CriterioRestricaoModel>(entityEntry.Entity);
+
+            criterioRestricaoModel.Documentos = _mapper.Map<ICollection<DocumentoModel>>(criterioRestricao.CriteriosRestricaoDocumento.Select(crd => crd.Documento).ToList());
 
             return criterioRestricaoModel;
         }
@@ -52,16 +72,51 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         {
             CriterioRestricao criterioRestricaoNew = _mapper.Map<CriterioRestricao>(criterioRestricaoModel);
 
-            CriterioRestricao criterioRestricaoOld = await SearchPersistenceAsync(criterioRestricaoNew.Id);
+            CriterioRestricao criterioRestricaoOld = await SearchPersistenceWithDocumentosAsync(criterioRestricaoNew.Id);
 
             _context.Entry(criterioRestricaoOld).CurrentValues.SetValues(criterioRestricaoNew);
+
+            //Remover as associações que não existem mais
+            foreach (var criterioRestricaoDocumento in criterioRestricaoOld.CriteriosRestricaoDocumento)
+            {
+                var documento = criterioRestricaoModel.Documentos.Where(d => d.Id == criterioRestricaoDocumento.IdDocumento)
+                                                               .SingleOrDefault();
+
+                bool exists = documento != null ? true : false;
+
+                if (!exists)
+                {
+                    criterioRestricaoOld.CriteriosRestricaoDocumento.Remove(criterioRestricaoDocumento);
+                }
+            }
+
+            //Adicionar as associações que ainda não existem
+            foreach (var documento in criterioRestricaoModel.Documentos)
+            {
+                var criterioRestricaoDocumento = criterioRestricaoOld.CriteriosRestricaoDocumento.Where(crd => crd.IdDocumento == documento.Id)
+                                                                                                 .SingleOrDefault();
+
+                bool exists = criterioRestricaoDocumento != null ? true : false;
+
+                if (!exists)
+                {
+                    criterioRestricaoOld.CriteriosRestricaoDocumento.Add(new CriterioRestricaoDocumento
+                    {
+                        IdCriterioRestricao = criterioRestricaoModel.Id,
+                        IdDocumento = documento.Id
+                    });
+                }
+            }
 
             await _unitOfWork.SaveAsync();
         }
 
         public async Task RemoveAsync(int id)
         {
-            CriterioRestricao criterioRestricao = await SearchPersistenceAsync(id);
+            CriterioRestricao criterioRestricao = await SearchPersistenceWithDocumentosAsync(id);
+
+            if (criterioRestricao.CriteriosRestricaoDocumento.Count > 0)
+                _setCriterioRestricaoDocumento.RemoveRange(criterioRestricao.CriteriosRestricaoDocumento);
 
             _set.Remove(criterioRestricao);
 
@@ -72,8 +127,19 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         {
             IQueryable<CriterioRestricao> queryable = _set.Where(cr => cr.Id == id);
 
-            //if (getRelationship)
-            //    queryable = queryable.Include(cr => cr.);
+            if (getRelationship)
+                queryable = queryable.Include(cr => cr.PlanoClassificacao);
+
+            CriterioRestricao criterioRestricao = await queryable.SingleOrDefaultAsync();
+
+            return criterioRestricao;
+        }
+
+        private async Task<CriterioRestricao> SearchPersistenceWithDocumentosAsync(int id)
+        {
+            IQueryable<CriterioRestricao> queryable = _set.Where(cr => cr.Id == id)
+                                                          .Include(cr => cr.PlanoClassificacao)
+                                                          .Include(cr => cr.CriteriosRestricaoDocumento);
 
             CriterioRestricao criterioRestricao = await queryable.SingleOrDefaultAsync();
 

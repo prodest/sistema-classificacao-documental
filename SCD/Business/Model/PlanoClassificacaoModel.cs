@@ -16,6 +16,7 @@ namespace Prodest.Scd.Business.Model
         public DateTime? FimVigencia { get; set; }
 
         public OrganizacaoModel Organizacao { get; set; }
+        public ICollection<CriterioRestricaoModel> CriteriosRestricao { get; set; }
         public ICollection<ItemPlanoClassificacaoModel> ItensPlanoClassificacao { get; set; }
     }
 }

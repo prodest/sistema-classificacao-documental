@@ -22,6 +22,7 @@ namespace Prodest.Scd.Dependency
 
             #region Business
             #region Core
+            dependencies.Add(typeof(ICriterioRestricaoCore), typeof(CriterioRestricaoCore));
             dependencies.Add(typeof(IDocumentoCore), typeof(DocumentoCore));
             dependencies.Add(typeof(IItemPlanoClassificacaoCore), typeof(ItemPlanoClassificacaoCore));
             dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
@@ -32,6 +33,7 @@ namespace Prodest.Scd.Dependency
             #endregion
 
             #region Validation
+            dependencies.Add(typeof(CriterioRestricaoValidation), typeof(CriterioRestricaoValidation));
             dependencies.Add(typeof(DocumentoValidation), typeof(DocumentoValidation));
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
@@ -59,6 +61,7 @@ namespace Prodest.Scd.Dependency
             #endregion
 
             #region Infrastructure
+            dependencies.Add(typeof(ICriterioRestricaoRepository), typeof(EFCriterioRestricaoRepository));
             dependencies.Add(typeof(IDocumentoRepository), typeof(EFDocumentoRepository));
             dependencies.Add(typeof(IItemPlanoClassificacaoRepository), typeof(EFItemPlanoClassificacaoRepository));
             dependencies.Add(typeof(IPlanoClassificacaoRepository), typeof(EFPlanoClassificacaoRepository));

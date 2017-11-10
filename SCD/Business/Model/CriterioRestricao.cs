@@ -15,6 +15,7 @@ namespace Prodest.Scd.Business.Model
         public GrauSigilo? Grau { get; set; }
         public UnidadeTempo? UnidadePrazoTermino { get; set; }
 
+        public PlanoClassificacaoModel PlanoClassificacao { get; set; }
         public ICollection<DocumentoModel> Documentos { get; set; }
 
         public enum GrauSigilo

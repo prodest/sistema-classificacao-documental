@@ -54,7 +54,7 @@ namespace Prodest.Scd.Business
 
             _validation.Found(criterioRestricaoModelOld);
 
-            await _validation.PlanoClassificacaoEquals(criterioRestricaoModel, criterioRestricaoModelOld);
+            _validation.PlanoClassificacaoEquals(criterioRestricaoModel, criterioRestricaoModelOld);
 
             await _validation.CanUpdate(criterioRestricaoModelOld);
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário

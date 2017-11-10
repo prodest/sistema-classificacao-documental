@@ -9,14 +9,12 @@ namespace Prodest.Scd.Business.Validation
 {
     public class CriterioRestricaoValidation : CommonValidation
     {
-        private IDocumentoRepository _documentos;
         private IPlanoClassificacaoRepository _planosClassificacao;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
         public CriterioRestricaoValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
-            _documentos = repositories.DocumentosSpecific;
             _planosClassificacao = repositories.PlanosClassificacaoSpecific;
 
             _planoClassificacaoValidation = planoClassificacaoValidation;
@@ -34,11 +32,11 @@ namespace Prodest.Scd.Business.Validation
         {
             NotNull(criterioRestricaoModel);
 
-            //DocumentoNotNull(criterioRestricaoModel.Documentos);
+            PlanoClassificacaoNotNull(criterioRestricaoModel.PlanoClassificacao);
 
             Filled(criterioRestricaoModel);
 
-            //await DocumentoExists(criterioRestricaoModel.Documento);
+            await PlanoClassificacaoExists(criterioRestricaoModel.PlanoClassificacao);
         }
 
         private void NotNull(CriterioRestricaoModel criterioRestricaoModel)
@@ -47,16 +45,10 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O CriterioRestricao não pode ser nulo.");
         }
 
-        private void DocumentoNotNull(DocumentoModel documentoModel)
+        private void PlanoClassificacaoNotNull(PlanoClassificacaoModel planoClassificacaoModel)
         {
-            if (documentoModel == null)
-                throw new ScdException("O Documento não pode ser nulo.");
-        }
-
-        private void TipoDocumentalNotNull(TipoDocumentalModel tipoDocumentalModel)
-        {
-            if (tipoDocumentalModel == null)
-                throw new ScdException("O Tipo Documental não pode ser nulo.");
+            if (planoClassificacaoModel == null)
+                throw new ScdException("O Plano de Classificação não pode ser nulo.");
         }
 
         #region Filled
@@ -64,10 +56,10 @@ namespace Prodest.Scd.Business.Validation
         {
             CodigoFilled(criterioRestricaoModel.Codigo);
             DescricaoFilled(criterioRestricaoModel.Descricao);
-            //DocumentoFilled(criterioRestricaoModel.Documento);
-            //PrazoTerminoOrEventoFimFilled(criterioRestricaoModel.PrazoTermino, criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModel.EventoFim);
             JustificativaFilled(criterioRestricaoModel.Justificativa);
             FundamentoLegalFilled(criterioRestricaoModel.FundamentoLegal);
+            PrazoTerminoOrEventoFimFilled(criterioRestricaoModel.PrazoTermino, criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModel.EventoFim);
+            PlanoClassificacaoFilled(criterioRestricaoModel.PlanoClassificacao);
         }
 
         private void CodigoFilled(string codigo)
@@ -106,50 +98,46 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("A Justificativa não pode ser vazia ou nula.");
         }
 
-        private void DocumentoFilled(DocumentoModel documentoModel)
+        private void PlanoClassificacaoFilled(PlanoClassificacaoModel planoClassificacaoModel)
         {
-            if (documentoModel.Id == default(int))
-                throw new ScdException("Identificador do Documento inválido.");
+            if (planoClassificacaoModel.Id == default(int))
+                throw new ScdException("Identificador do Plano Classificação inválido.");
         }
         #endregion
 
-        internal async Task DocumentoExists(DocumentoModel documentoModel)
+        internal async Task PlanoClassificacaoExists(PlanoClassificacaoModel planoClassificacaoModel)
         {
-            documentoModel = await _documentos.SearchAsync(documentoModel.Id);
+            planoClassificacaoModel = await _planosClassificacao.SearchAsync(planoClassificacaoModel.Id);
 
-            if (documentoModel == null)
-                throw new ScdException("Documento não encontrado.");
+            if (planoClassificacaoModel == null)
+                throw new ScdException("Plano de Classificação não encontrado.");
         }
         #endregion
 
         internal void Found(CriterioRestricaoModel criterioRestricaoModel)
         {
             if (criterioRestricaoModel == null)
-                throw new ScdException("CriterioRestricao não encontrado.");
+                throw new ScdException("Criterio de Restrição não encontrado.");
         }
 
-        internal async Task PlanoClassificacaoEquals(CriterioRestricaoModel criterioRestricaoModelNew, CriterioRestricaoModel criterioRestricaoModelOld)
+        internal void PlanoClassificacaoEquals(CriterioRestricaoModel criterioRestricaoModelNew, CriterioRestricaoModel criterioRestricaoModelOld)
         {
-            //PlanoClassificacaoModel planoClassificacaoModelNew = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModelNew.Documento.Id);
-
-            //PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModelOld.Documento.Id);
-
-            //if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
-            //    throw new ScdException("O Plano de Classificação não pode ser alterado.");
+            if (criterioRestricaoModelNew.PlanoClassificacao.Id != criterioRestricaoModelOld.PlanoClassificacao.Id)
+                throw new ScdException("O Plano de Classificação não pode ser alterado.");
         }
 
         internal async Task CanInsert(CriterioRestricaoModel criterioRestricaoModel)
         {
-            //PlanoClassificacaoModel planoClassificacaoModelOld = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModel.Documento.Id);
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(criterioRestricaoModel.PlanoClassificacao.Id);
 
-            //_planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
+            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
         }
 
         internal async Task CanUpdate(CriterioRestricaoModel criterioRestricaoModel)
         {
-            //PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchByDocumentoAsync(criterioRestricaoModel.Documento.Id); ;
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(criterioRestricaoModel.PlanoClassificacao.Id); ;
 
-            //_planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
+            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
         }
 
         internal async Task CanDelete(CriterioRestricaoModel criterioRestricaoModel)

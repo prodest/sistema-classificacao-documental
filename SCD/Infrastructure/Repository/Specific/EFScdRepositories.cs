@@ -23,7 +23,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             PlanosClassificacaoSpecific = new EFPlanoClassificacaoRepository(context, mapper, UnitOfWork);
 
-            SigilosSpecific = new EFCriterioRestricaoRepository(context, mapper, UnitOfWork);
+            CriteriosRestricaoSpecific = new EFCriterioRestricaoRepository(context, mapper, UnitOfWork);
 
             TemporalidadesSpecific = new EFTemporalidadeRepository(context, mapper, UnitOfWork);
 
@@ -31,6 +31,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
+
+        public ICriterioRestricaoRepository CriteriosRestricaoSpecific { get; private set; }
 
         public IDocumentoRepository DocumentosSpecific { get; private set; }
 
@@ -41,8 +43,6 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         public IOrganizacaoRepository OrganizacoesSpecific { get; private set; }
 
         public IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; private set; }
-
-        public ICriterioRestricaoRepository SigilosSpecific { get; private set; }
 
         public ITemporalidadeRepository TemporalidadesSpecific { get; private set; }
 

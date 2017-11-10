@@ -23,7 +23,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
         protected List<int> _idsItensPlanoClassificacaoTestados = new List<int>();
         protected List<int> _idsNiveisClassificacaoTestados = new List<int>();
         protected List<int> _idsPlanosClassificacaoTestados = new List<int>();
-        //protected List<int> _idsSigilosTestados = new List<int>();
+        protected List<int> _idsCriteriosRestricaoTestados = new List<int>();
         protected List<int> _idsTemporalidadesTestados = new List<int>();
         protected List<int> _idsTiposDocumentaisTestados = new List<int>();
         protected EFScdRepositories _repositories;
@@ -66,13 +66,13 @@ namespace Prodest.Scd.UnitTestBusiness.Common
                     await _repositories.TemporalidadesSpecific.RemoveAsync(temporalidadeModel.Id);
             }
 
-            //foreach (int idSigilo in _idsSigilosTestados)
-            //{
-            //    SigiloModel sigiloModel = await _repositories.SigilosSpecific.SearchAsync(idSigilo);
+            foreach (int idCriterioRestricao in _idsCriteriosRestricaoTestados)
+            {
+                CriterioRestricaoModel criterioRestricaoModel = await _repositories.CriteriosRestricaoSpecific.SearchAsync(idCriterioRestricao);
 
-            //    if (sigiloModel != null)
-            //        await _repositories.SigilosSpecific.RemoveAsync(sigiloModel.Id);
-            //}
+                if (criterioRestricaoModel != null)
+                    await _repositories.CriteriosRestricaoSpecific.RemoveAsync(criterioRestricaoModel.Id);
+            }
 
             foreach (int idDocumento in _idsDocumentosTestados)
             {
@@ -197,38 +197,39 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             return planoClassificacaoModel;
         }
 
-        //protected async Task<SigiloModel> InsertSigiloAsync()
-        //{
-        //    DocumentoModel documentoModel = await InsertDocumentoAsync();
+        protected async Task<CriterioRestricaoModel> InsertCriterioRestricaoAsync()
+        {
+            PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
+            DocumentoModel documentoModel = await InsertDocumentoAsync();
 
-        //    string codigo = "01";
-        //    string descricao = "SigiloTestInsert";
-        //    string fundamentoLegal = "Fundamento Legal Teste";
-        //    string justificativa = "Justificativa Teste";
-        //    int prazoTermino = 5;
-        //    SigiloModel.UnidadePrazoTerminoSigilo unidadePrazoTerminoSigilo = SigiloModel.UnidadePrazoTerminoSigilo.Anos;
-        //    SigiloModel.GrauSigilo grauSigilo = SigiloModel.GrauSigilo.UltraSecreto;
-        //    bool gerarTermo = true;
+            string codigo = "01";
+            string descricao = "SigiloTestInsert";
+            string fundamentoLegal = "Fundamento Legal Teste";
+            string justificativa = "Justificativa Teste";
+            int prazoTermino = 5;
+            UnidadeTempo unidadePrazoTerminoSigilo = UnidadeTempo.Anos;
+            CriterioRestricaoModel.GrauSigilo grauSigilo = CriterioRestricaoModel.GrauSigilo.UltraSecreto;
+            bool gerarTermo = true;
 
-        //    SigiloModel sigiloModel = new SigiloModel
-        //    {
-        //        Codigo = codigo,
-        //        Descricao = descricao,
-        //        FundamentoLegal = fundamentoLegal,
-        //        Justificativa = justificativa,
-        //        PrazoTermino = prazoTermino,
-        //        UnidadePrazoTermino = unidadePrazoTerminoSigilo,
-        //        Grau = grauSigilo,
-        //        GerarTermo = gerarTermo,
-        //        Documento = documentoModel
-        //    };
+            CriterioRestricaoModel sigiloModel = new CriterioRestricaoModel
+            {
+                Codigo = codigo,
+                Descricao = descricao,
+                FundamentoLegal = fundamentoLegal,
+                Justificativa = justificativa,
+                PrazoTermino = prazoTermino,
+                UnidadePrazoTermino = unidadePrazoTerminoSigilo,
+                Grau = grauSigilo,
+                //GerarTermo = gerarTermo,
+                //Documento = documentoModel
+            };
 
-        //    sigiloModel = await _repositories.SigilosSpecific.AddAsync(sigiloModel);
+            sigiloModel = await _repositories.CriteriosRestricaoSpecific.AddAsync(sigiloModel);
 
-        //    _idsSigilosTestados.Add(sigiloModel.Id);
+            _idsCriteriosRestricaoTestados.Add(sigiloModel.Id);
 
-        //    return sigiloModel;
-        //}
+            return sigiloModel;
+        }
 
         protected async Task<TemporalidadeModel> InsertTemporalidadeAsync()
         {
