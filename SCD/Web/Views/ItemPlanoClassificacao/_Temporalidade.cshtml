@@ -1,0 +1,22 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.TemporalidadeEntidade
+<li class="mdc-list-item mdc-list-item-BotoesAcoes" style="padding-left:@((Model.Documento.ItemPlanoClassificacao.NivelEspacamento+2)*20)px">
+    <span class="mdc-list-item__text">
+        <span>
+            @Model.Codigo - @Model.Descricao
+        </span>
+        <span class="mdc-list-item__text__secondary">Temporalidade</span>
+    </span>
+    <div class="mdc-menu-anchor-BotoesMenu">
+        <button class="mdc-button mdc-button-BotoesAcoes toggle" data-id="TEMPORALIDADE-@Model.Id">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <div class="mdc-simple-menu" tabindex="-1" id="acoes-menu" data-id="TEMPORALIDADE-@Model.Id">
+            <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Temporalidade/Edit/@Model.Id">Editar Temporalidade</li>
+                <li class="mdc-list-divider" role="separator"></li>
+                <li class="mdc-list-item mdc-list-item-MenuAcoes ItemAjax" role="menuitem" tabindex="0" data-url="/Temporalidade/Delete/@Model.Id?idPlanoClassificacao=@Model.Documento.ItemPlanoClassificacao.PlanoClassificacao.Id">Excluir Temporalidade</li>
+            </ul>
+        </div>
+    </div>
+
+</li>
