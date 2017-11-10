@@ -9,7 +9,12 @@ export DOCKER_TAG=${TRAVIS_COMMIT:0:7}
 export DOCKER_IMAGE=prodest/scd
 
 cd SCD/Web/
-dotnet restore && dotnet publish -c release -r debian.8-x64 -o publish ./
+
+dotnet restore
+
+npm install
+
+dotnet publish -c release -r debian.8-x64 -o publish ./
 
 cd ../../
 

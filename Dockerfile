@@ -5,4 +5,4 @@ WORKDIR /home/bin
 
 EXPOSE 1806/tcp
 
-CMD ["./Web"]
+CMD ["./Prodest.Scd.Web"]
