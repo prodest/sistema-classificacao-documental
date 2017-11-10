@@ -199,36 +199,39 @@ namespace Prodest.Scd.UnitTestBusiness.Common
 
         protected async Task<CriterioRestricaoModel> InsertCriterioRestricaoAsync()
         {
+            string codigo = "01";
+            string descricao = "CriterioRestricaoTestInsert";
+            string justificativa = "Jsutificativa Teste";
+            string fundamentoLegal = "Fundamento Legal Teste";
+            bool classificavel = true;
+            CriterioRestricaoModel.GrauSigilo grauSigilo = CriterioRestricaoModel.GrauSigilo.Reservado;
+            int prazoTermino = 5;
+            UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
+
             PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
             DocumentoModel documentoModel = await InsertDocumentoAsync();
 
-            string codigo = "01";
-            string descricao = "SigiloTestInsert";
-            string fundamentoLegal = "Fundamento Legal Teste";
-            string justificativa = "Justificativa Teste";
-            int prazoTermino = 5;
-            UnidadeTempo unidadePrazoTerminoSigilo = UnidadeTempo.Anos;
-            CriterioRestricaoModel.GrauSigilo grauSigilo = CriterioRestricaoModel.GrauSigilo.UltraSecreto;
-            bool gerarTermo = true;
-
-            CriterioRestricaoModel sigiloModel = new CriterioRestricaoModel
+            CriterioRestricaoModel criterioRestricaoModel = new CriterioRestricaoModel
             {
                 Codigo = codigo,
                 Descricao = descricao,
-                FundamentoLegal = fundamentoLegal,
                 Justificativa = justificativa,
-                PrazoTermino = prazoTermino,
-                UnidadePrazoTermino = unidadePrazoTerminoSigilo,
+                FundamentoLegal = fundamentoLegal,
+                Classificavel = classificavel,
                 Grau = grauSigilo,
-                //GerarTermo = gerarTermo,
-                //Documento = documentoModel
+                PrazoTermino = prazoTermino,
+                UnidadePrazoTermino = unidadePrazoTermino,
+
+                PlanoClassificacao = planoClassificacaoModel,
+
+                Documentos = new List<DocumentoModel>() { documentoModel }
             };
 
-            sigiloModel = await _repositories.CriteriosRestricaoSpecific.AddAsync(sigiloModel);
+            criterioRestricaoModel = await _repositories.CriteriosRestricaoSpecific.AddAsync(criterioRestricaoModel);
 
-            _idsCriteriosRestricaoTestados.Add(sigiloModel.Id);
+            _idsCriteriosRestricaoTestados.Add(criterioRestricaoModel.Id);
 
-            return sigiloModel;
+            return criterioRestricaoModel;
         }
 
         protected async Task<TemporalidadeModel> InsertTemporalidadeAsync()

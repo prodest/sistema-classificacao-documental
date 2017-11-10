@@ -65,6 +65,10 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             CriterioRestricaoModel criterioRestricaoModel = _mapper.Map<CriterioRestricaoModel>(criterioRestricao);
 
+            //TODO: Verificar uma forma melhor de fazer isso
+            if (criterioRestricaoModel != null)
+                criterioRestricaoModel.Documentos = _mapper.Map<ICollection<DocumentoModel>>(criterioRestricao.CriteriosRestricaoDocumento.Select(crd => crd.Documento).ToList());
+
             return criterioRestricaoModel;
         }
 
@@ -128,7 +132,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             IQueryable<CriterioRestricao> queryable = _set.Where(cr => cr.Id == id);
 
             if (getRelationship)
-                queryable = queryable.Include(cr => cr.PlanoClassificacao);
+                queryable = queryable.Include(cr => cr.PlanoClassificacao)
+                                     .Include(cr => cr.CriteriosRestricaoDocumento).ThenInclude(crd => crd.Documento);
 
             CriterioRestricao criterioRestricao = await queryable.SingleOrDefaultAsync();
 
@@ -139,7 +144,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         {
             IQueryable<CriterioRestricao> queryable = _set.Where(cr => cr.Id == id)
                                                           .Include(cr => cr.PlanoClassificacao)
-                                                          .Include(cr => cr.CriteriosRestricaoDocumento);
+                                                          .Include(cr => cr.CriteriosRestricaoDocumento).ThenInclude(crd => crd.Documento);
 
             CriterioRestricao criterioRestricao = await queryable.SingleOrDefaultAsync();
 

@@ -117,7 +117,7 @@ namespace Prodest.Scd.Business.Validation
         internal void Found(CriterioRestricaoModel criterioRestricaoModel)
         {
             if (criterioRestricaoModel == null)
-                throw new ScdException("Criterio de Restrição não encontrado.");
+                throw new ScdException("Critério de Restrição não encontrado.");
         }
 
         internal void PlanoClassificacaoEquals(CriterioRestricaoModel criterioRestricaoModelNew, CriterioRestricaoModel criterioRestricaoModelOld)

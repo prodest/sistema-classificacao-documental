@@ -64,87 +64,93 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             Assert.IsTrue(criterioRestricaoModel.Documentos.Single().Id == documentoModel.Id);
         }
 
-        //[TestMethod]
-        //public async Task CriterioRestricaoTestSearch()
-        //{
-        //    CriterioRestricaoModel criterioRestricaoModel = await InsertCriterioRestricaoAsync();
+        [TestMethod]
+        public async Task CriterioRestricaoTestSearch()
+        {
+            CriterioRestricaoModel criterioRestricaoModel = await InsertCriterioRestricaoAsync();
 
-        //    CriterioRestricaoModel criterioRestricaoModelSearched = await _core.SearchAsync(criterioRestricaoModel.Id);
+            CriterioRestricaoModel criterioRestricaoModelSearched = await _core.SearchAsync(criterioRestricaoModel.Id);
 
-        //    Assert.AreEqual(criterioRestricaoModel.Id, criterioRestricaoModelSearched.Id);
-        //    Assert.AreEqual(criterioRestricaoModel.Codigo, criterioRestricaoModelSearched.Codigo);
-        //    Assert.AreEqual(criterioRestricaoModel.Descricao, criterioRestricaoModelSearched.Descricao);
-        //    Assert.AreEqual(criterioRestricaoModel.PrazoGuardaFaseCorrente, criterioRestricaoModelSearched.PrazoGuardaFaseCorrente);
-        //    Assert.AreEqual(criterioRestricaoModel.UnidadePrazoGuardaFaseCorrente, criterioRestricaoModelSearched.UnidadePrazoGuardaFaseCorrente);
-        //    Assert.AreEqual(criterioRestricaoModel.EventoFimFaseCorrente, criterioRestricaoModelSearched.EventoFimFaseCorrente);
-        //    Assert.AreEqual(criterioRestricaoModel.PrazoGuardaFaseIntermediaria, criterioRestricaoModelSearched.PrazoGuardaFaseIntermediaria);
-        //    Assert.AreEqual(criterioRestricaoModel.UnidadePrazoGuardaFaseIntermediaria, criterioRestricaoModelSearched.UnidadePrazoGuardaFaseIntermediaria);
-        //    Assert.AreEqual(criterioRestricaoModel.EventoFimFaseIntermediaria, criterioRestricaoModelSearched.EventoFimFaseIntermediaria);
-        //    Assert.AreEqual(criterioRestricaoModel.DestinacaoFinal, criterioRestricaoModelSearched.DestinacaoFinal);
-        //    Assert.AreEqual(criterioRestricaoModel.Observacao, criterioRestricaoModelSearched.Observacao);
-        //    Assert.AreEqual(criterioRestricaoModel.Documento.Id, criterioRestricaoModelSearched.Documento.Id);
-        //}
+            Assert.AreEqual(criterioRestricaoModel.Id, criterioRestricaoModelSearched.Id);
+            Assert.AreEqual(criterioRestricaoModel.Codigo, criterioRestricaoModelSearched.Codigo);
+            Assert.AreEqual(criterioRestricaoModel.Descricao, criterioRestricaoModelSearched.Descricao);
+            Assert.AreEqual(criterioRestricaoModel.Justificativa, criterioRestricaoModelSearched.Justificativa);
+            Assert.AreEqual(criterioRestricaoModel.FundamentoLegal, criterioRestricaoModelSearched.FundamentoLegal);
+            Assert.AreEqual(criterioRestricaoModel.Classificavel, criterioRestricaoModelSearched.Classificavel);
+            Assert.AreEqual(criterioRestricaoModel.Grau, criterioRestricaoModelSearched.Grau);
+            Assert.AreEqual(criterioRestricaoModel.PrazoTermino, criterioRestricaoModelSearched.PrazoTermino);
+            Assert.AreEqual(criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModelSearched.UnidadePrazoTermino);
+            Assert.IsNull(criterioRestricaoModel.EventoFim);
 
-        //[TestMethod]
-        //public async Task CriterioRestricaoTestUpdate()
-        //{
-        //    CriterioRestricaoModel criterioRestricaoModel = await InsertCriterioRestricaoAsync();
+            Assert.IsFalse(criterioRestricaoModel.PlanoClassificacao == null);
+            Assert.IsTrue(criterioRestricaoModel.PlanoClassificacao.Id == criterioRestricaoModelSearched.PlanoClassificacao.Id);
 
-        //    criterioRestricaoModel.Codigo = "02";
-        //    criterioRestricaoModel.Descricao = "Descrição updated";
-        //    criterioRestricaoModel.PrazoGuardaFaseCorrente = 1;
-        //    criterioRestricaoModel.UnidadePrazoGuardaFaseCorrente = UnidadeTempo.Meses;
-        //    //criterioRestricaoModel.EventoFimFaseCorrente = "Evento fim fase corrente update";
-        //    criterioRestricaoModel.PrazoGuardaFaseIntermediaria = 2;
-        //    criterioRestricaoModel.UnidadePrazoGuardaFaseIntermediaria = UnidadeTempo.Dias;
-        //    //criterioRestricaoModel.EventoFimFaseIntermediaria = "Evento fim fase intermediária update";
-        //    criterioRestricaoModel.DestinacaoFinal = DestinacaoFinal.GuardaPermanente;
-        //    criterioRestricaoModel.Observacao = "Observação update";
+            Assert.IsFalse(criterioRestricaoModel.Documentos == null);
+            Assert.IsTrue(criterioRestricaoModel.Documentos.Count == 1);
+            Assert.IsTrue(criterioRestricaoModel.Documentos.Single().Id == criterioRestricaoModelSearched.Documentos.Single().Id);
+        }
 
-        //    //TODO: Testar a mudança e documento
+        [TestMethod]
+        public async Task CriterioRestricaoTestUpdate()
+        {
+            CriterioRestricaoModel criterioRestricaoModel = await InsertCriterioRestricaoAsync();
 
-        //    await _core.UpdateAsync(criterioRestricaoModel);
+            criterioRestricaoModel.Codigo = "02";
+            criterioRestricaoModel.Descricao = "Descrição updated";
+            criterioRestricaoModel.Justificativa = "Jutificativa Teste update";
+            criterioRestricaoModel.FundamentoLegal= "Fundamento Legal Teste update";
+            criterioRestricaoModel.Classificavel = false;
+            criterioRestricaoModel.Grau = CriterioRestricaoModel.GrauSigilo.Secreto;
+            criterioRestricaoModel.PrazoTermino = 1;
+            criterioRestricaoModel.UnidadePrazoTermino = UnidadeTempo.Dias;
 
-        //    CriterioRestricaoModel criterioRestricaoModelSearched = await _core.SearchAsync(criterioRestricaoModel.Id);
+            await _core.UpdateAsync(criterioRestricaoModel);
 
-        //    Assert.AreEqual(criterioRestricaoModel.Id, criterioRestricaoModelSearched.Id);
-        //    Assert.AreEqual(criterioRestricaoModel.Codigo, criterioRestricaoModelSearched.Codigo);
-        //    Assert.AreEqual(criterioRestricaoModel.Descricao, criterioRestricaoModelSearched.Descricao);
-        //    Assert.AreEqual(criterioRestricaoModel.PrazoGuardaFaseCorrente, criterioRestricaoModelSearched.PrazoGuardaFaseCorrente);
-        //    Assert.AreEqual(criterioRestricaoModel.UnidadePrazoGuardaFaseCorrente, criterioRestricaoModelSearched.UnidadePrazoGuardaFaseCorrente);
-        //    Assert.AreEqual(criterioRestricaoModel.EventoFimFaseCorrente, criterioRestricaoModelSearched.EventoFimFaseCorrente);
-        //    Assert.AreEqual(criterioRestricaoModel.PrazoGuardaFaseIntermediaria, criterioRestricaoModelSearched.PrazoGuardaFaseIntermediaria);
-        //    Assert.AreEqual(criterioRestricaoModel.UnidadePrazoGuardaFaseIntermediaria, criterioRestricaoModelSearched.UnidadePrazoGuardaFaseIntermediaria);
-        //    Assert.AreEqual(criterioRestricaoModel.EventoFimFaseIntermediaria, criterioRestricaoModelSearched.EventoFimFaseIntermediaria);
-        //    Assert.AreEqual(criterioRestricaoModel.DestinacaoFinal, criterioRestricaoModelSearched.DestinacaoFinal);
-        //    Assert.AreEqual(criterioRestricaoModel.Observacao, criterioRestricaoModelSearched.Observacao);
-        //    Assert.AreEqual(criterioRestricaoModel.Documento.Id, criterioRestricaoModelSearched.Documento.Id);
-        //}
+            CriterioRestricaoModel criterioRestricaoModelSearched = await _core.SearchAsync(criterioRestricaoModel.Id);
 
-        //[TestMethod]
-        //public async Task CriterioRestricaoTestDelete()
-        //{
-        //    CriterioRestricaoModel criterioRestricaoModel = await InsertCriterioRestricaoAsync();
+            Assert.AreEqual(criterioRestricaoModel.Id, criterioRestricaoModelSearched.Id);
+            Assert.AreEqual(criterioRestricaoModel.Codigo, criterioRestricaoModelSearched.Codigo);
+            Assert.AreEqual(criterioRestricaoModel.Descricao, criterioRestricaoModelSearched.Descricao);
+            Assert.AreEqual(criterioRestricaoModel.Justificativa, criterioRestricaoModelSearched.Justificativa);
+            Assert.AreEqual(criterioRestricaoModel.FundamentoLegal, criterioRestricaoModelSearched.FundamentoLegal);
+            Assert.AreEqual(criterioRestricaoModel.Classificavel, criterioRestricaoModelSearched.Classificavel);
+            Assert.AreEqual(criterioRestricaoModel.Grau, criterioRestricaoModelSearched.Grau);
+            Assert.AreEqual(criterioRestricaoModel.PrazoTermino, criterioRestricaoModelSearched.PrazoTermino);
+            Assert.AreEqual(criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModelSearched.UnidadePrazoTermino);
+            Assert.IsNull(criterioRestricaoModel.EventoFim);
 
-        //    await _core.DeleteAsync(criterioRestricaoModel.Id);
+            Assert.IsFalse(criterioRestricaoModel.PlanoClassificacao == null);
+            Assert.IsTrue(criterioRestricaoModel.PlanoClassificacao.Id == criterioRestricaoModelSearched.PlanoClassificacao.Id);
 
-        //    bool ok = false;
+            Assert.IsFalse(criterioRestricaoModel.Documentos == null);
+            Assert.IsTrue(criterioRestricaoModel.Documentos.Count == 1);
+            Assert.IsTrue(criterioRestricaoModel.Documentos.Single().Id == criterioRestricaoModelSearched.Documentos.Single().Id);
+        }
 
-        //    try
-        //    {
-        //        await _core.SearchAsync(criterioRestricaoModel.Id);
+        [TestMethod]
+        public async Task CriterioRestricaoTestDelete()
+        {
+            CriterioRestricaoModel criterioRestricaoModel = await InsertCriterioRestricaoAsync();
 
-        //        ok = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOfType(ex, typeof(ScdException));
+            await _core.DeleteAsync(criterioRestricaoModel.Id);
 
-        //        Assert.AreEqual(ex.Message, "CriterioRestricao não encontrado.");
-        //    }
+            bool ok = false;
 
-        //    if (ok)
-        //        Assert.Fail("Não deveria ter encontrado o Siglo excluído.");
-        //}
+            try
+            {
+                await _core.SearchAsync(criterioRestricaoModel.Id);
+
+                ok = true;
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ScdException));
+
+                Assert.AreEqual(ex.Message, "Critério de Restrição não encontrado.");
+            }
+
+            if (ok)
+                Assert.Fail("Não deveria ter encontrado o Critério de Restrição excluído.");
+        }
     }
 }
