@@ -75,9 +75,9 @@ namespace Prodest.Scd.Presentation
         private ICollection<EnumModel> obterListaGraus()
         {
             return new List<EnumModel> {
-                    new EnumModel { Id = (int)GrauSigilo.Reservado, Nome = "Reservado" },
-                    new EnumModel { Id = (int)GrauSigilo.Secreto, Nome = "Secreto" },
-                    new EnumModel { Id = (int)GrauSigilo.Ultrassecreto, Nome = "Ultrassecreto" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Reservado, Nome = "Reservado" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Secreto, Nome = "Secreto" },
+                    new EnumModel { Id = (int)GrauSigiloModel.UltraSecreto, Nome = "Ultrassecreto" },
                 };
         }
 
