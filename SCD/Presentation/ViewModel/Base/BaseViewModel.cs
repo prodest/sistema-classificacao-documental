@@ -28,7 +28,7 @@ namespace Prodest.Scd.Presentation.ViewModel.Base
 
     public enum TypeMessageViewModel
     {
-        Sucess = 1,
+        Success = 1,
         Fail = 2,
         Alert = 3
     }

@@ -1,0 +1,93 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.CriterioRestricaoViewModel
+
+<form asp-controller="CriterioRestricao" asp-action="@Model.Action" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
+    <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
+        <div class="mdl-card TelaCheia mdl-grid">
+            <div class="mdl-card__actions ItemCardFormulario">
+                <button title="Salvar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--grey BotaoGrande" type="submit">
+                    <i class="material-icons">save</i>
+                </button>
+                <button title="Cancelar" class="mdl-button mdl-js-button mdl-button--fab mdl-color--red BotaoAjax BotaoGrande" data-url="/CriterioRestricao/List?idPlanoClassificacao=@Model.entidade.PlanoClassificacao.Id">
+                    <i class="material-icons">cancel</i>
+                </button>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <input hidden asp-for="entidade.Id" />
+                <input hidden asp-for="entidade.PlanoClassificacao.Id" />
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" asp-for="entidade.Codigo" required />
+                    <label class="mdl-textfield__label" asp-for="entidade.Codigo">Código..</label>
+                    <span asp-validation-for="entidade.Codigo" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.Descricao" class="mdl-textfield__input" type="text" required />
+                    <label class="mdl-textfield__label" asp-for="entidade.Descricao">Descrição..</label>
+                    <span asp-validation-for="entidade.Descricao" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.Justificativa" class="mdl-textfield__input" type="text" required />
+                    <label class="mdl-textfield__label" asp-for="entidade.Justificativa">Justificativa..</label>
+                    <span asp-validation-for="entidade.Justificativa" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.FundamentoLegal" class="mdl-textfield__input" type="text" required />
+                    <label class="mdl-textfield__label" asp-for="entidade.FundamentoLegal">Fundamento Legal..</label>
+                    <span asp-validation-for="entidade.FundamentoLegal" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" asp-for="entidade.IdGrau" required asp-items="@(new SelectList(Model.graus,"Id","Nome")) ">
+                        <option value=""></option>
+                    </select>
+                    <span asp-validation-for="entidade.IdGrau" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.PrazoTermino" class="mdl-textfield__input" type="number" />
+                    <label class="mdl-textfield__label" for="entidade.PrazoTermino">Prazo Término..</label>
+                    <span asp-validation-for="entidade.PrazoTermino" class=""></span>
+
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" asp-for="entidade.IdUnidadePrazoTermino" asp-items="@(new SelectList(Model.unidadesTempo,"Id","Nome"))">
+                        <option value=""> </option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.EventoFim" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="entidade.EventoFim">Evento Fim..</label>
+                    <span asp-validation-for="entidade.EventoFim" class=""></span>
+                </div>
+            </div>
+            <div class="mdc-form-field">
+                <div class="mdc-checkbox">
+                    <input type="checkbox" asp-for="entidade.Classificavel" class="mdc-checkbox__native-control">
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                            <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                </div>
+                <label for="basic-checkbox">Gera Termo Classificação Informação?</label>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+</script>

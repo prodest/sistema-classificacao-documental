@@ -22,7 +22,7 @@ namespace Prodest.Scd.Business.Model
         {
             Reservado = 1,
             Secreto = 2,
-            UltraSecreto = 3,
+            Ultrassecreto = 3,
         }
     }
 }
