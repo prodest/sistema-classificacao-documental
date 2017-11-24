@@ -72,6 +72,15 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return criterioRestricaoModel;
         }
 
+        public async Task<ICollection<CriterioRestricaoModel>> SearchByPlanoClassificacaoAsync(int idPlanoClassificacao)
+        {
+            ICollection<CriterioRestricao> criteriosRestricao = await _set.Where(p => p.IdPlanoClassificacao == idPlanoClassificacao).ToListAsync();
+
+            ICollection<CriterioRestricaoModel> criteriosRestricaoModel = _mapper.Map<ICollection<CriterioRestricaoModel>>(criteriosRestricao);
+
+            return criteriosRestricaoModel;
+        }
+
         public async Task UpdateAsync(CriterioRestricaoModel criterioRestricaoModel)
         {
             CriterioRestricao criterioRestricaoNew = _mapper.Map<CriterioRestricao>(criterioRestricaoModel);

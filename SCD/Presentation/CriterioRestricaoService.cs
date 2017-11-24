@@ -8,25 +8,28 @@ using Prodest.Scd.Presentation.ViewModel;
 using Prodest.Scd.Presentation.ViewModel.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using static Prodest.Scd.Business.Model.CriterioRestricaoModel;
 
 namespace Prodest.Scd.Presentation
 {
-    public class TipoDocumentalService : ITipoDocumentalService
+    public class CriterioRestricaoService : ICriterioRestricaoService
     {
-        private ITipoDocumentalCore _core;
+        private ICriterioRestricaoCore _core;
+        private IPlanoClassificacaoCore _corePlanoClassificacao;
         private IMapper _mapper;
-        private IOrganogramaService _organogramaService;
-        public TipoDocumentalService(ITipoDocumentalCore core, IMapper mapper, IOrganogramaService organogramaService)
+
+        public CriterioRestricaoService(ICriterioRestricaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IMapper mapper)
         {
+            _corePlanoClassificacao = corePlanoClassificacao;
             _core = core;
             _mapper = mapper;
-            _organogramaService = organogramaService;
         }
 
-        public async Task<TipoDocumentalViewModel> Delete(int id)
+        public async Task<CriterioRestricaoViewModel> Delete(int id)
         {
-            var model = new TipoDocumentalViewModel();
+            var model = new CriterioRestricaoViewModel();
             try
             {
                 await _core.DeleteAsync(id);
@@ -59,14 +62,35 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<TipoDocumentalViewModel> Edit(int id)
+        private ICollection<EnumModel> obterListaUnidadesTempo()
         {
-            var model = new TipoDocumentalViewModel();
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)UnidadeTempo.Anos, Nome = UnidadeTempo.Anos.ToString() },
+                    new EnumModel { Id = (int)UnidadeTempo.Dias, Nome = UnidadeTempo.Dias.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempo.Meses, Nome = UnidadeTempo.Meses.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
+                };
+        }
+
+        private ICollection<EnumModel> obterListaGraus()
+        {
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)GrauSigilo.Reservado, Nome = "Reservado" },
+                    new EnumModel { Id = (int)GrauSigilo.Secreto, Nome = "Secreto" },
+                    new EnumModel { Id = (int)GrauSigilo.Ultrassecreto, Nome = "Ultrassecreto" },
+                };
+        }
+
+        public async Task<CriterioRestricaoViewModel> Edit(int id)
+        {
+            var model = new CriterioRestricaoViewModel();
             try
             {
                 model.Action = "Update";
-                model.entidade = _mapper.Map<TipoDocumentalEntidade>(await _core.SearchAsync(id));
-                model.organizacoes = await _organogramaService.SearchAsync();
+                model.entidade = _mapper.Map<CriterioRestricaoEntidade>(await _core.SearchAsync(id));
+                model.graus = obterListaGraus();
+                model.unidadesTempo = obterListaUnidadesTempo();
+
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -89,13 +113,13 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<TipoDocumentalViewModel> Update(TipoDocumentalEntidade entidade)
+        public async Task<CriterioRestricaoViewModel> Update(CriterioRestricaoEntidade entidade)
         {
-            var model = new TipoDocumentalViewModel();
+            var model = new CriterioRestricaoViewModel();
             model.entidade = entidade;
             try
             {
-                await _core.UpdateAsync(_mapper.Map<TipoDocumentalModel>(entidade));
+                await _core.UpdateAsync(_mapper.Map<CriterioRestricaoModel>(entidade));
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -124,12 +148,14 @@ namespace Prodest.Scd.Presentation
             }
             return model;
         }
-        public async Task<TipoDocumentalViewModel> Create(TipoDocumentalEntidade entidade)
+
+        public async Task<CriterioRestricaoViewModel> Create(CriterioRestricaoEntidade entidade)
         {
-            var model = new TipoDocumentalViewModel();
+            var model = new CriterioRestricaoViewModel();
             try
             {
-                await _core.InsertAsync(_mapper.Map<TipoDocumentalModel>(entidade));
+                var modelInsert = await _core.InsertAsync(_mapper.Map<CriterioRestricaoModel>(entidade));
+                model.entidade = _mapper.Map<CriterioRestricaoEntidade>(modelInsert);
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -140,6 +166,61 @@ namespace Prodest.Scd.Presentation
                             Type = TypeMessageViewModel.Success
                         }
                     }
+                };
+            }
+            catch (ScdException e)
+            {
+                //Necessário configurar a tela para continuar a ação 
+                model.Action = "Create";
+                model.graus = obterListaGraus();
+                model.unidadesTempo = obterListaUnidadesTempo();
+                model.entidade = entidade;
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
+        }
+
+
+    
+
+        public async Task<CriterioRestricaoViewModel> Search(FiltroCriterioRestricao filtro)
+        {
+            var model = new CriterioRestricaoViewModel();
+            var plano = await _corePlanoClassificacao.SearchAsync(filtro.IdPlanoClassificacao);
+            model.plano = _mapper.Map<PlanoClassificacaoEntidade>(plano);
+            var entidades = await _core.SearchByPlanoClassificacaoAsync(filtro.IdPlanoClassificacao);
+            model.entidades = _mapper.Map<ICollection<CriterioRestricaoEntidade>>(entidades);
+            model.Result = new ResultViewModel
+            {
+                Ok = true
+            };
+            return model;
+        }
+
+        public async Task<CriterioRestricaoViewModel> New(int idPlanoClassificacao)
+        {
+            var model = new CriterioRestricaoViewModel();
+            try
+            {
+                model.Action = "Create";
+                model.entidade = new CriterioRestricaoEntidade {
+                    PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
+                };
+                model.graus = obterListaGraus();
+                model.unidadesTempo = obterListaUnidadesTempo();
+                model.Result = new ResultViewModel
+                {
+                    Ok = true
                 };
             }
             catch (ScdException e)
@@ -159,34 +240,8 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<TipoDocumentalViewModel> Search(FiltroTipoDocumental filtro)
-        {
-            //prodest
-            //var guid = "3ca6ea0e-ca14-46fa-a911-22e616303722";
-            //GEES
-            var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
-            var entidades = await _core.SearchAsync(guid, 1, 1000);
-            var model = new TipoDocumentalViewModel();
-            model.entidades = _mapper.Map<List<TipoDocumentalEntidade>>(entidades);
-            model.Result = new ResultViewModel
-            {
-                Ok = true
-            };
-            return model;
-        }
 
 
-        public async Task<TipoDocumentalViewModel> New()
-        {
-            var model = new TipoDocumentalViewModel
-            {
-                Action = "Create",
-                entidade = new TipoDocumentalEntidade(),
-                organizacoes = await _organogramaService.SearchAsync()
-            };
-            return model;
-        }
 
-       
     }
 }

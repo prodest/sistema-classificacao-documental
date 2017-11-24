@@ -53,7 +53,9 @@
                             <button title="Atribuir Itens" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--grey BotaoAjax" data-url="/ItemPlanoClassificacao/List?idPlanoClassificacao=@item.Id">
                                 <i class="material-icons">assignment</i>
                             </button>
-                            
+                            <button title="Critérios de Restrição" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--grey BotaoAjax" data-url="/CriterioRestricao/List?idPlanoClassificacao=@item.Id">
+                                <i class="material-icons">assignment_late</i>
+                            </button>
                             @if (item.Publicacao.HasValue)
                             {
                                 <button title="Informar Data Fim Vigência" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--black BotaoAjax" data-url="/PlanoClassificacao/EncerrarVigencia/@item.Id">

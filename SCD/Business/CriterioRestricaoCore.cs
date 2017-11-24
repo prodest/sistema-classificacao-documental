@@ -3,6 +3,7 @@ using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
@@ -19,6 +20,8 @@ namespace Prodest.Scd.Business
 
             _validation = validation;
         }
+
+
 
         public async Task<CriterioRestricaoModel> InsertAsync(CriterioRestricaoModel criterioRestricaoModel)
         {
@@ -42,9 +45,17 @@ namespace Prodest.Scd.Business
             CriterioRestricaoModel criterioRestricaoModel = await _criteriosRestricao.SearchAsync(id);
 
             _validation.Found(criterioRestricaoModel);
-
+            //TODO fazer validação
             return criterioRestricaoModel;
         }
+
+        public async Task<ICollection<CriterioRestricaoModel>> SearchByPlanoClassificacaoAsync(int idPlanoClassificacao)
+        {
+            _validation.IdValid(idPlanoClassificacao);
+            ICollection<CriterioRestricaoModel> criteriosRestricaoModel = await _criteriosRestricao.SearchByPlanoClassificacaoAsync(idPlanoClassificacao);
+            return criteriosRestricaoModel;
+        }
+        
 
         public async Task UpdateAsync(CriterioRestricaoModel criterioRestricaoModel)
         {
