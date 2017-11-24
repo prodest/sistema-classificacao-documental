@@ -321,6 +321,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
             modelBuilder.Entity<TermoClassificacaoInformacao>(entity =>
             {
+                entity.ToTable("TermoClassificacaoInformacao", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Codigo)
@@ -361,7 +363,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasMaxLength(2000)
                     .IsUnicode(false);
 
-                entity.Property(e => e.GuidUnidade).HasColumnName("guidUnidade");
+                entity.Property(e => e.GuidOrganizacao).HasColumnName("guidOrganizacao");
 
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
 

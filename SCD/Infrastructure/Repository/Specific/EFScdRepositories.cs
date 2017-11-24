@@ -27,6 +27,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             TemporalidadesSpecific = new EFTemporalidadeRepository(context, mapper, UnitOfWork);
 
+            TermosClassificacaoInformacaoSpecific = new EFTermoClassificacaoInformacaoRepository(context, mapper, UnitOfWork);
+
             TiposDocumentaisSpecific = new EFTipoDocumentalRepository(context, mapper, UnitOfWork);            
         }
 
@@ -45,6 +47,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         public IPlanoClassificacaoRepository PlanosClassificacaoSpecific { get; private set; }
 
         public ITemporalidadeRepository TemporalidadesSpecific { get; private set; }
+
+        public ITermoClassificacaoInformacaoRepository TermosClassificacaoInformacaoSpecific { get; private set; }
 
         public ITipoDocumentalRepository TiposDocumentaisSpecific { get; private set; }
 

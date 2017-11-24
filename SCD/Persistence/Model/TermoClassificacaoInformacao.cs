@@ -6,7 +6,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public int Id { get; set; }
         public string Codigo { get; set; }
-        public Guid GuidUnidade { get; set; }
+        public Guid GuidOrganizacao { get; set; }
         public int IdGrauSigilo { get; set; }
         public int IdTipoSigilo { get; set; }
         public string ConteudoSigilo { get; set; }

@@ -19,7 +19,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             string justificativa = "Jsutificativa Teste";
             string fundamentoLegal = "Fundamento Legal Teste";
             bool classificavel = true;
-            CriterioRestricaoModel.GrauSigilo grauSigilo = CriterioRestricaoModel.GrauSigilo.Reservado;
+            GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
             int prazoTermino = 5;
             UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
 
@@ -100,7 +100,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             criterioRestricaoModel.Justificativa = "Jutificativa Teste update";
             criterioRestricaoModel.FundamentoLegal= "Fundamento Legal Teste update";
             criterioRestricaoModel.Classificavel = false;
-            criterioRestricaoModel.Grau = CriterioRestricaoModel.GrauSigilo.Secreto;
+            criterioRestricaoModel.Grau = GrauSigiloModel.Secreto;
             criterioRestricaoModel.PrazoTermino = 1;
             criterioRestricaoModel.UnidadePrazoTermino = UnidadeTempo.Dias;
 

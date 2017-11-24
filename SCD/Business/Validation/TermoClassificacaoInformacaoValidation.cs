@@ -71,9 +71,9 @@ namespace Prodest.Scd.Business.Validation
         internal void Filled(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
             CodigoFilled(termoClassificacaoInformacaoModel.Codigo);
-            DescricaoFilled(termoClassificacaoInformacaoModel.Descricao);
+            //DescricaoFilled(termoClassificacaoInformacaoModel.Descricao);
             ItemPlanoClassificacaoFilled(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
-            TipoDocumentalFilled(termoClassificacaoInformacaoModel.TipoDocumental);
+            //TipoDocumentalFilled(termoClassificacaoInformacaoModel.TipoDocumental);
         }
 
         private void CodigoFilled(string codigo)

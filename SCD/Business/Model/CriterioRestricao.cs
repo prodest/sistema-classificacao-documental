@@ -12,17 +12,10 @@ namespace Prodest.Scd.Business.Model
         public string Justificativa { get; set; }
         public string FundamentoLegal { get; set; }
         public bool Classificavel { get; set; }
-        public GrauSigilo? Grau { get; set; }
+        public GrauSigiloModel? Grau { get; set; }
         public UnidadeTempo? UnidadePrazoTermino { get; set; }
 
         public PlanoClassificacaoModel PlanoClassificacao { get; set; }
         public ICollection<DocumentoModel> Documentos { get; set; }
-
-        public enum GrauSigilo
-        {
-            Reservado = 1,
-            Secreto = 2,
-            UltraSecreto = 3,
-        }
     }
 }

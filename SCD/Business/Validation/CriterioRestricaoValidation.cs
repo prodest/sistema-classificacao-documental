@@ -84,6 +84,9 @@ namespace Prodest.Scd.Business.Validation
 
             if (prazoTermino.HasValue && !unidadePrazoTerminoCriterioRestricao.HasValue)
                 throw new ScdException("A Unidade do Prazo Término deve ser preenchida quando o Prazo de Término é preenchido.");
+
+            if (!prazoTermino.HasValue && unidadePrazoTerminoCriterioRestricao.HasValue)
+                throw new ScdException("A Unidade do Prazo Término deve ser preenchida somente quando o Prazo de Término é preenchido.");
         }
 
         private void FundamentoLegalFilled(string fundamentoLegal)

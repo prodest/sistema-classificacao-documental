@@ -12,6 +12,6 @@ namespace Prodest.Scd.Business.Model
         public TipoDocumentalModel TipoDocumental { get; set; }
         public ICollection<CriterioRestricaoModel> CriteriosRestricao { get; set; }
         public ICollection<TemporalidadeModel> Temporalidades { get; set; }
-        public ICollection<TermoClassificacaoInformacao> TermosClassificacaoInformacao { get; set; }
+        public ICollection<TermoClassificacaoInformacaoModel> TermosClassificacaoInformacao { get; set; }
     }
 }
