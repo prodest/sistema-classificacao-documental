@@ -42,7 +42,7 @@ namespace Prodest.Scd.Presentation
                     {
                         new MessageViewModel{
                             Message = "Item removido com sucesso!",
-                            Type = TypeMessageViewModel.Sucess
+                            Type = TypeMessageViewModel.Success
                         }
                     }
                 };
@@ -116,7 +116,7 @@ namespace Prodest.Scd.Presentation
                     {
                         new MessageViewModel{
                             Message = "Item alterado com sucesso!",
-                            Type = TypeMessageViewModel.Sucess
+                            Type = TypeMessageViewModel.Success
                         }
                     }
                 };
@@ -151,7 +151,7 @@ namespace Prodest.Scd.Presentation
                     {
                         new MessageViewModel{
                             Message = "Item criado com sucesso!",
-                            Type = TypeMessageViewModel.Sucess
+                            Type = TypeMessageViewModel.Success
                         }
                     }
                 };

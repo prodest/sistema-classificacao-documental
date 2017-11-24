@@ -11,11 +11,12 @@ namespace Prodest.Scd.Infrastructure.Configuration
         public InfrastructureProfileAutoMapper()
         {
             #region Critério de Restrição
-            CreateMap<CriterioRestricao, CriterioRestricaoModel>()
+            CreateMap<CriterioRestricao, CriterioRestricaoModel>().PreserveReferences()
                 .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
                 .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino))
                 //.ForMember(dest => dest.Documentos, opt => opt.MapFrom(src => (src.CriteriosRestricaoDocumento != null && src.CriteriosRestricaoDocumento.Count > 0) ? Mapper.Map<ICollection<CriterioRestricaoDocumento>, ICollection<DocumentoModel>>(src.CriteriosRestricaoDocumento) : null))
-                ;
+            //.MaxDepth(1)
+            ;
 
             //CreateMap<CriterioRestricaoDocumento, DocumentoModel>()
             //    .ConvertUsing(src => src.Documento != null ? Mapper.Map<Documento,DocumentoModel>(src.Documento) : null)
@@ -46,8 +47,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Documento
-            CreateMap<Documento, DocumentoModel>()
-                .MaxDepth(2);
+            CreateMap<Documento, DocumentoModel>().PreserveReferences()
+                //.MaxDepth(2)
+                ;
 
             CreateMap<DocumentoModel, Documento>()
                 .ForMember(dest => dest.Id, opt =>
@@ -64,8 +66,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Item do Plano de Classificação
-            CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>();
-                //.MaxDepth(2);
+            CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>().PreserveReferences()
+                //.MaxDepth(2)
+                ;
             CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacao>()
                 .ForMember(dest => dest.Id, opt =>
                  {
@@ -83,7 +86,10 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Nível de Classificação
-            CreateMap<NivelClassificacao, NivelClassificacaoModel>();
+            CreateMap<NivelClassificacao, NivelClassificacaoModel>().PreserveReferences()
+                //.ForMember(x => x.ItensPlanoClassificacao, opt => opt.Ignore())
+                //.ForMember(x => x.Organizacao, opt => opt.MapFrom(src => src.Organizacao))
+                ;
 
             CreateMap<NivelClassificacaoModel, NivelClassificacao>()
                 .ForMember(dest => dest.Organizacao,
@@ -98,7 +104,10 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Organização
-            CreateMap<Organizacao, OrganizacaoModel>().MaxDepth(1);
+            CreateMap<Organizacao, OrganizacaoModel>()
+                .PreserveReferences()
+                //.MaxDepth(1)
+                ;
 
             CreateMap<OrganizacaoModel, Organizacao>()
                 .ForMember(dest => dest.PlanosClassificacao, opt => opt.Ignore());
@@ -106,7 +115,8 @@ namespace Prodest.Scd.Infrastructure.Configuration
 
             #region Plano de Classificação
             CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
-                .MaxDepth(1)
+                //.MaxDepth(1)
+                .PreserveReferences()
             ;
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
@@ -123,11 +133,12 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Temporalidade
-            CreateMap<Temporalidade, TemporalidadeModel>()
+            CreateMap<Temporalidade, TemporalidadeModel>().PreserveReferences()
                 .ForMember(dest => dest.DestinacaoFinal, opt => opt.MapFrom(src => src.IdDestinacaoFinal))
                 .ForMember(dest => dest.UnidadePrazoGuardaFaseCorrente, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseCorrente))
-                .ForMember(dest => dest.UnidadePrazoGuardaFaseIntermediaria, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseIntermediaria))
-                ;
+                .ForMember(dest => dest.UnidadePrazoGuardaFaseIntermediaria, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseIntermediaria));
+                
+
 
             CreateMap<TemporalidadeModel, Temporalidade>()
                 .ForMember(dest => dest.Id, opt =>
@@ -147,7 +158,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
 
             #region Tipo Documental
             CreateMap<TipoDocumental, TipoDocumentalModel>()
-                .MaxDepth(1);
+                .PreserveReferences()
+                //.MaxDepth(1)
+                ;
 
             CreateMap<TipoDocumentalModel, TipoDocumental>()
                 .ForMember(dest => dest.Id, opt =>

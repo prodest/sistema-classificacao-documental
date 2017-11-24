@@ -16,6 +16,7 @@ namespace Prodest.Scd.Presentation.Configuration
             CreateMap<TemporalidadeModel, TemporalidadeEntidade>().ReverseMap();
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacaoEntidade>().MaxDepth(1).ReverseMap();
+            CreateMap<CriterioRestricaoModel, CriterioRestricaoEntidade>().MaxDepth(1).ReverseMap();
             //CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacaoEntidade>().MaxDepth(1).ReverseMap();
             //CreateMap<NivelClassificacaoModel, NivelClassificacaoEntidade>().MaxDepth(1).ReverseMap();
             //CreateMap<TipoDocumentalModel, TipoDocumentalEntidade>().MaxDepth(1).ReverseMap();
