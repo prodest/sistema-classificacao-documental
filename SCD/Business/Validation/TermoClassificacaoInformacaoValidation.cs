@@ -178,9 +178,14 @@ namespace Prodest.Scd.Business.Validation
         {
             CriterioRestricaoModel criterioRestricaoSearchedModel = await _criteriosRestricao.SearchAsync(criterioRestricaoModel.Id);
 
-            DocumentoModel documentoSearchedModel = criterioRestricaoModel.Documentos.SingleOrDefault(d => d.Id == documentoModel.Id);
+            if (criterioRestricaoSearchedModel.Documentos != null)
+            {
+                DocumentoModel documentoSearchedModel = criterioRestricaoSearchedModel.Documentos.SingleOrDefault(d => d.Id == documentoModel.Id);
 
-            if (documentoSearchedModel == null)
+                if (documentoSearchedModel == null)
+                    throw new ScdException("O Critério de Restrição não está associado ao Documento selecionado.");
+            }
+            else
                 throw new ScdException("O Critério de Restrição não está associado ao Documento selecionado.");
         }
         #endregion
@@ -188,36 +193,19 @@ namespace Prodest.Scd.Business.Validation
         internal void Found(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
             if (termoClassificacaoInformacaoModel == null)
-                throw new ScdException("TermoClassificacaoInformacao não encontrado.");
-        }
-
-        internal async Task PlanoClassificacaoEquals(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelNew, TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld)
-        {
-            //PlanoClassificacaoModel planoClassificacaoModelNew = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
-            //PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
-
-            //if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
-            //    throw new ScdException("O Plano de Classificação não pode ser alterado.");
+                throw new ScdException("Termo de Classificação da Informação não encontrado.");
         }
 
         internal async Task CanUpdate(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld)
         {
-            //PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
-
-            //_planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
+            //TODO: Verificar se pode atualizar após a aprovação.
         }
 
         internal async Task CanDelete(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
             await CanUpdate(termoClassificacaoInformacaoModel);
 
-            //TODO: Validar se possui sigilo e temporalidade
-
-            //if (countSigilo > 0)
-            //    throw new ScdException("O TermoClassificacaoInformacao possui Sigilo e não pode ser excluído.");
-
-            //if (countTemporalidade > 0)
-            //    throw new ScdException("O TermoClassificacaoInformacao possui Temporalidade e não pode ser excluído.");
+            //TODO: Verificar se pode remover após a aprovação.
         }
     }
 }

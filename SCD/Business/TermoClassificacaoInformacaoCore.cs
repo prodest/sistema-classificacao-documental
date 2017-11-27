@@ -67,9 +67,10 @@ namespace Prodest.Scd.Business
 
             _validation.Found(termoClassificacaoInformacaoModelOld);
 
-            await _validation.PlanoClassificacaoEquals(termoClassificacaoInformacaoModel, termoClassificacaoInformacaoModelOld);
+            //TODO: Após a aprovação não poderá sofrer atualização.
+            //await _validation.PlanoClassificacaoEquals(termoClassificacaoInformacaoModel, termoClassificacaoInformacaoModelOld);
 
-            await _validation.CanUpdate(termoClassificacaoInformacaoModelOld);
+            //await _validation.CanUpdate(termoClassificacaoInformacaoModelOld);
 
             await _termosClassificacaoInformacao.UpdateAsync(termoClassificacaoInformacaoModel);
         }
