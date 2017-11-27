@@ -31,7 +31,7 @@ namespace Prodest.Scd.Business
             termoClassificacaoInformacaoModel.DataClassificacao = DateTime.Now;
             //TODO: Obter o CPF a partir do usuário logado.
             termoClassificacaoInformacaoModel.GuidOrganizacao = GetGuidOrganizacao();
-            termoClassificacaoInformacaoModel.CpfUsuario = "22222222222";
+            termoClassificacaoInformacaoModel.CpfUsuario = GetCpfUsuario();
 
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
             termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.AddAsync(termoClassificacaoInformacaoModel);
@@ -50,9 +50,13 @@ namespace Prodest.Scd.Business
             return termoClassificacaoInformacaoModel;
         }
 
-        public Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync()
+        public async Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync()
         {
-            throw new System.NotImplementedException();
+            string cpfUsuario = GetCpfUsuario();
+
+            ICollection<TermoClassificacaoInformacaoModel> termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.SearchByUserAsync(cpfUsuario);
+
+            return termoClassificacaoInformacaoModel;
         }
 
         public async Task UpdateAsync(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
@@ -88,5 +92,11 @@ namespace Prodest.Scd.Business
 
             return guidProdest;
         }
+
+        private string GetCpfUsuario()
+        {
+            return "22222222222";
+        }
+
     }
 }

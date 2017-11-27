@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prodest.Scd.Business.Model;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static Prodest.Scd.Business.Model.TermoClassificacaoInformacaoModel;
 
@@ -64,6 +65,7 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             Assert.AreEqual(termoClassificacaoInformacaoModel.UnidadePrazoSigilo, unidadePrazoSigilo);
 
             Assert.IsNotNull(termoClassificacaoInformacaoModel.CpfUsuario);
+            Assert.IsFalse(termoClassificacaoInformacaoModel.GuidOrganizacao.Equals(Guid.Empty));
             Assert.IsTrue(termoClassificacaoInformacaoModel.DataClassificacao >= dataTeste);
 
             Assert.IsFalse(termoClassificacaoInformacaoModel.Documento == null);
@@ -73,31 +75,50 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             Assert.AreEqual(termoClassificacaoInformacaoModel.CriterioRestricao.Id, criterioRestricao.Id);
         }
 
-        //[TestMethod]
-        //public async Task TermoClassificacaoInformacaoTestSearch()
-        //{
-        //    TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await InsertTermoClassificacaoInformacaoAsync();
+        [TestMethod]
+        public async Task TermoClassificacaoInformacaoTestSearch()
+        {
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await InsertTermoClassificacaoInformacaoAsync();
 
-        //    TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelSearched = await _core.SearchAsync(termoClassificacaoInformacaoModel.Id);
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelSearched = await _core.SearchAsync(termoClassificacaoInformacaoModel.Id);
 
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Id, termoClassificacaoInformacaoModelSearched.Id);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Codigo, termoClassificacaoInformacaoModelSearched.Codigo);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Descricao, termoClassificacaoInformacaoModelSearched.Descricao);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Justificativa, termoClassificacaoInformacaoModelSearched.Justificativa);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.FundamentoLegal, termoClassificacaoInformacaoModelSearched.FundamentoLegal);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Classificavel, termoClassificacaoInformacaoModelSearched.Classificavel);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Grau, termoClassificacaoInformacaoModelSearched.Grau);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.PrazoTermino, termoClassificacaoInformacaoModelSearched.PrazoTermino);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.UnidadePrazoTermino, termoClassificacaoInformacaoModelSearched.UnidadePrazoTermino);
-        //    Assert.IsNull(termoClassificacaoInformacaoModel.EventoFim);
+            Assert.IsTrue(termoClassificacaoInformacaoModel.Id > 0);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.Codigo, termoClassificacaoInformacaoModelSearched.Codigo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.GrauSigilo, termoClassificacaoInformacaoModelSearched.GrauSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.TipoSigilo, termoClassificacaoInformacaoModelSearched.TipoSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.ConteudoSigilo, termoClassificacaoInformacaoModelSearched.ConteudoSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.IdentificadorDocumento, termoClassificacaoInformacaoModelSearched.IdentificadorDocumento);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.DataProducaoDocumento, termoClassificacaoInformacaoModelSearched.DataProducaoDocumento);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.FundamentoLegal, termoClassificacaoInformacaoModelSearched.FundamentoLegal);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.Justificativa, termoClassificacaoInformacaoModelSearched.Justificativa);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.CpfIndicacaoAprovador, termoClassificacaoInformacaoModelSearched.CpfIndicacaoAprovador);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.PrazoSigilo, termoClassificacaoInformacaoModelSearched.PrazoSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.UnidadePrazoSigilo, termoClassificacaoInformacaoModelSearched.UnidadePrazoSigilo);
 
-        //    Assert.IsFalse(termoClassificacaoInformacaoModel.PlanoClassificacao == null);
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.PlanoClassificacao.Id == termoClassificacaoInformacaoModelSearched.PlanoClassificacao.Id);
+            Assert.IsNotNull(termoClassificacaoInformacaoModel.CpfUsuario);
+            Assert.IsFalse(termoClassificacaoInformacaoModel.GuidOrganizacao.Equals(Guid.Empty));
+            Assert.AreEqual(termoClassificacaoInformacaoModel.DataClassificacao, termoClassificacaoInformacaoModelSearched.DataClassificacao);
 
-        //    Assert.IsFalse(termoClassificacaoInformacaoModel.Documentos == null);
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.Documentos.Count == 1);
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.Documentos.Single().Id == termoClassificacaoInformacaoModelSearched.Documentos.Single().Id);
-        //}
+            Assert.IsFalse(termoClassificacaoInformacaoModel.Documento == null);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.Documento.Id, termoClassificacaoInformacaoModelSearched.Documento.Id);
+
+            Assert.IsFalse(termoClassificacaoInformacaoModel.CriterioRestricao == null);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.CriterioRestricao.Id, termoClassificacaoInformacaoModelSearched.CriterioRestricao.Id);
+        }
+
+        [TestMethod]
+        public async Task TermoClassificacaoInformacaoTestSearchByUser()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                await InsertTermoClassificacaoInformacaoAsync();
+            }
+ 
+            ICollection<TermoClassificacaoInformacaoModel> termosClassificacaoInformacaoModelSearched = await _core.SearchByUserAsync();
+
+            Assert.IsNotNull(termosClassificacaoInformacaoModelSearched);
+            Assert.IsTrue(termosClassificacaoInformacaoModelSearched.Count >= 10);
+        }
 
         //[TestMethod]
         //public async Task TermoClassificacaoInformacaoTestUpdate()

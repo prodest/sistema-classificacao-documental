@@ -7,6 +7,7 @@ using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Persistence.Model;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Prodest.Scd.Infrastructure.Repository.Specific
 {
@@ -46,6 +47,16 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = _mapper.Map<TermoClassificacaoInformacaoModel>(termoClassificacaoInformacao);
 
             return termoClassificacaoInformacaoModel;
+        }
+
+        public async Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync(string cpfUsuario)
+        {
+            ICollection<TermoClassificacaoInformacao> termosClassificacaoInformacao = await _set.Where(tci => tci.CpfUsuario.Equals(cpfUsuario))
+                                                                                                .ToListAsync();
+
+            ICollection<TermoClassificacaoInformacaoModel> termosClassificacaoInformacaoModel = _mapper.Map<ICollection<TermoClassificacaoInformacaoModel>>(termosClassificacaoInformacao);
+
+            return termosClassificacaoInformacaoModel;
         }
 
         public async Task UpdateAsync(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)

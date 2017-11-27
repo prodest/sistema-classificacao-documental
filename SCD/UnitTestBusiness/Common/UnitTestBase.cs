@@ -302,6 +302,52 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             return tipoDocumentalModel;
         }
 
+        protected async Task<TermoClassificacaoInformacaoModel> InsertTermoClassificacaoInformacaoAsync()
+        {
+            DateTime dataTeste = DateTime.Now;
+
+            string codigo = "01";
+            GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
+            TermoClassificacaoInformacaoModel.TipoSigiloModel tipoSigilo = TermoClassificacaoInformacaoModel.TipoSigiloModel.Parcial;
+            string conteudoSigilo = "Conteúdo Sigilo";
+            string identificadorDocumento = "Identificador Documento";
+            DateTime dataProducaoDocumento = DateTime.Now;
+            string fundamentoLegal = "Fundamento Legal";
+            string justificativa = "Justificativa";
+            string cpfIndicacaoAprovador = "11111111111";
+            int prazoSigilo = 1;
+            UnidadeTempo unidadePrazoSigilo = UnidadeTempo.Anos;
+
+            DocumentoModel documento = await InsertDocumentoAsync();
+            CriterioRestricaoModel criterioRestricao = await InsertCriterioRestricaoAsync(documento);
+
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = new TermoClassificacaoInformacaoModel
+            {
+                Codigo = codigo,
+                GrauSigilo = grauSigilo,
+                TipoSigilo = tipoSigilo,
+                ConteudoSigilo = conteudoSigilo,
+                IdentificadorDocumento = identificadorDocumento,
+                DataProducaoDocumento = dataProducaoDocumento,
+                FundamentoLegal = fundamentoLegal,
+                Justificativa = justificativa,
+                CpfIndicacaoAprovador = cpfIndicacaoAprovador,
+                PrazoSigilo = prazoSigilo,
+                UnidadePrazoSigilo = unidadePrazoSigilo,
+                CpfUsuario = "22222222222",
+                GuidOrganizacao = GetGuidOrganizacao(),
+                DataClassificacao = DateTime.Now,
+
+                Documento = documento,
+                CriterioRestricao = criterioRestricao
+            };
+
+            termoClassificacaoInformacaoModel = await _repositories.TermosClassificacaoInformacaoSpecific.AddAsync(termoClassificacaoInformacaoModel);
+            _idsTermosClassificacaoInformacaoTestados.Add(termoClassificacaoInformacaoModel.Id);
+
+            return termoClassificacaoInformacaoModel;
+        }
+
         protected async Task<ItemPlanoClassificacaoModel> SearchItemPlanoClassificacaoAsync(int idItemPlanoClassificacao)
         {
             ItemPlanoClassificacaoModel itemPlanoClassificacaoModel = await _repositories.ItensPlanoClassificacaoSpecific.SearchAsync(idItemPlanoClassificacao);
