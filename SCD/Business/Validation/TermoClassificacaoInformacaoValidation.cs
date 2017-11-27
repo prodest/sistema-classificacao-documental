@@ -9,52 +9,50 @@ using Prodest.Scd.Business.Repository;
 
 namespace Prodest.Scd.Business.Validation
 {
-    public class DocumentoValidation : CommonValidation
+    public class TermoClassificacaoInformacaoValidation : CommonValidation
     {
         private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
-        private IPlanoClassificacaoRepository _planoClassificacao;
         private ITipoDocumentalRepository _tiposDocumentais;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
-        public DocumentoValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
+        public TermoClassificacaoInformacaoValidation(IScdRepositories repositories, IItemPlanoClassificacaoCore itemPlanoClassificacaoCore, ITipoDocumentalCore tipoDocumentalCore, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
 
             _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
-            _planoClassificacao = repositories.PlanosClassificacaoSpecific;
             _tiposDocumentais = repositories.TiposDocumentaisSpecific;
 
             _planoClassificacaoValidation = planoClassificacaoValidation;
         }
 
-        internal async Task Valid(DocumentoModel documentoModel)
+        internal async Task Valid(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            await BasicValid(documentoModel);
+            await BasicValid(termoClassificacaoInformacaoModel);
 
-            IdValid(documentoModel.Id);
+            IdValid(termoClassificacaoInformacaoModel.Id);
         }
 
         #region Basic Valid
-        internal async Task BasicValid(DocumentoModel documentoModel)
+        internal async Task BasicValid(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            NotNull(documentoModel);
+            NotNull(termoClassificacaoInformacaoModel);
 
-            ItemPlanoClassificacaoNotNull(documentoModel.ItemPlanoClassificacao);
+            ItemPlanoClassificacaoNotNull(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
 
-            TipoDocumentalNotNull(documentoModel.TipoDocumental);
+            //TipoDocumentalNotNull(termoClassificacaoInformacaoModel.);
 
-            Filled(documentoModel);
+            Filled(termoClassificacaoInformacaoModel);
 
-            await ItemPlanoClassificacaoExists(documentoModel.ItemPlanoClassificacao);
+            await ItemPlanoClassificacaoExists(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
 
-            await TipoDocumentalExists(documentoModel.TipoDocumental);
+            //await TipoDocumentalExists(termoClassificacaoInformacaoModel.TipoDocumental);
 
         }
 
-        private void NotNull(DocumentoModel documentoModel)
+        private void NotNull(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            if (documentoModel == null)
-                throw new ScdException("O Documentodo do Item do Plano de Classificação não pode ser nulo.");
+            if (termoClassificacaoInformacaoModel == null)
+                throw new ScdException("O TermoClassificacaoInformacaodo do Item do Plano de Classificação não pode ser nulo.");
         }
 
         private void ItemPlanoClassificacaoNotNull(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
@@ -70,12 +68,12 @@ namespace Prodest.Scd.Business.Validation
         }
 
         #region Filled
-        internal void Filled(DocumentoModel documentoModel)
+        internal void Filled(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            CodigoFilled(documentoModel.Codigo);
-            DescricaoFilled(documentoModel.Descricao);
-            ItemPlanoClassificacaoFilled(documentoModel.ItemPlanoClassificacao);
-            TipoDocumentalFilled(documentoModel.TipoDocumental);
+            CodigoFilled(termoClassificacaoInformacaoModel.Codigo);
+            //DescricaoFilled(termoClassificacaoInformacaoModel.Descricao);
+            ItemPlanoClassificacaoFilled(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
+            //TipoDocumentalFilled(termoClassificacaoInformacaoModel.TipoDocumental);
         }
 
         private void CodigoFilled(string codigo)
@@ -111,14 +109,6 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Item do Plano de Classificação não encontrado.");
         }
 
-        internal async Task PlanoClassificacaoExists(int idPlanoClassificacao)
-        {
-            PlanoClassificacaoModel planoClassificacaoModel = await _planoClassificacao.SearchAsync(idPlanoClassificacao);
-
-            if (planoClassificacaoModel == null)
-                throw new ScdException("Plano de Classificação não encontrado.");
-        }
-
         internal async Task TipoDocumentalExists(TipoDocumentalModel tipoDocumentalModel)
         {
             tipoDocumentalModel = await _tiposDocumentais.SearchAsync(tipoDocumentalModel.Id);
@@ -128,39 +118,39 @@ namespace Prodest.Scd.Business.Validation
         }
         #endregion
 
-        internal void Found(DocumentoModel documentoModel)
+        internal void Found(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            if (documentoModel == null)
-                throw new ScdException("Documento não encontrado.");
+            if (termoClassificacaoInformacaoModel == null)
+                throw new ScdException("TermoClassificacaoInformacao não encontrado.");
         }
 
-        internal async Task PlanoClassificacaoEquals(DocumentoModel documentoModelNew, DocumentoModel documentoModelOld)
+        internal async Task PlanoClassificacaoEquals(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelNew, TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelNew = (await _itensPlanoClassificacao.SearchAsync(documentoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
-            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(documentoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            PlanoClassificacaoModel planoClassificacaoModelNew = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
 
             if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
                 throw new ScdException("O Plano de Classificação não pode ser alterado.");
         }
 
-        internal async Task CanUpdate(DocumentoModel documentoModelOld)
+        internal async Task CanUpdate(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(documentoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
 
             _planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
         }
 
-        internal async Task CanDelete(DocumentoModel documentoModel)
+        internal async Task CanDelete(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            await CanUpdate(documentoModel);
+            await CanUpdate(termoClassificacaoInformacaoModel);
 
             //TODO: Validar se possui sigilo e temporalidade
 
             //if (countSigilo > 0)
-            //    throw new ScdException("O Documento possui Sigilo e não pode ser excluído.");
+            //    throw new ScdException("O TermoClassificacaoInformacao possui Sigilo e não pode ser excluído.");
 
             //if (countTemporalidade > 0)
-            //    throw new ScdException("O Documento possui Temporalidade e não pode ser excluído.");
+            //    throw new ScdException("O TermoClassificacaoInformacao possui Temporalidade e não pode ser excluído.");
         }
     }
 }

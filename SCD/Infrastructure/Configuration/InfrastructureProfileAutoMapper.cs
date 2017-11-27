@@ -47,9 +47,8 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Documento
-            CreateMap<Documento, DocumentoModel>().PreserveReferences()
-                //.MaxDepth(2)
-                ;
+            CreateMap<Documento, DocumentoModel>()
+                .PreserveReferences();
 
             CreateMap<DocumentoModel, Documento>()
                 .ForMember(dest => dest.Id, opt =>
@@ -153,6 +152,25 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.IdDestinacaoFinal, opt => opt.MapFrom(src => src.DestinacaoFinal))
                 .ForMember(dest => dest.IdUnidadePrazoGuardaFaseCorrente, opt => opt.MapFrom(src => src.UnidadePrazoGuardaFaseCorrente))
                 .ForMember(dest => dest.IdUnidadePrazoGuardaFaseIntermediaria, opt => opt.MapFrom(src => src.UnidadePrazoGuardaFaseIntermediaria))
+                ;
+            #endregion
+
+            #region TermoClassificacaoInformacao
+            CreateMap<TermoClassificacaoInformacao, TermoClassificacaoInformacaoModel>()
+                .PreserveReferences();
+
+            CreateMap<TermoClassificacaoInformacaoModel, TermoClassificacaoInformacao>()
+                .ForMember(dest => dest.Id, opt =>
+                {
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        return (destMember == default(int));
+                    });
+                })
+                .ForMember(dest => dest.ItemPlanoClassificacao, opt => opt.Ignore())
+                //.ForMember(dest => dest.TipoDocumental, opt => opt.Ignore())
+                .ForMember(dest => dest.IdItemPlanoClassificacao, opt => opt.MapFrom(src => src.ItemPlanoClassificacao != null ? src.ItemPlanoClassificacao.Id : default(int)))
+                //.ForMember(dest => dest.IdTipoDocumental, opt => opt.MapFrom(src => src.TipoDocumental != null ? src.TipoDocumental.Id : default(int)))
                 ;
             #endregion
 

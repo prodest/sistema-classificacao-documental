@@ -20,6 +20,8 @@ namespace Prodest.Scd.Business.Repository.Base
 
         ITemporalidadeRepository TemporalidadesSpecific { get; }
 
+        ITermoClassificacaoInformacaoRepository TermosClassificacaoInformacaoSpecific { get; }
+
         ITipoDocumentalRepository TiposDocumentaisSpecific { get; }
     }
 }

@@ -1,0 +1,78 @@
+﻿using Prodest.Scd.Business.Base;
+using Prodest.Scd.Business.Model;
+using Prodest.Scd.Business.Repository;
+using Prodest.Scd.Business.Repository.Base;
+using Prodest.Scd.Business.Validation;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+namespace Prodest.Scd.Business
+{
+    public class TermoClassificacaoInformacaoCore : ITermoClassificacaoInformacaoCore
+    {
+        private ITermoClassificacaoInformacaoRepository _termosClassificacaoInformacao;
+
+        private TermoClassificacaoInformacaoValidation _validation;
+
+        public TermoClassificacaoInformacaoCore(IScdRepositories repositories, TermoClassificacaoInformacaoValidation validation)
+        {
+            _termosClassificacaoInformacao = repositories.TermosClassificacaoInformacaoSpecific;
+
+            _validation = validation;
+        }
+
+        public async Task<TermoClassificacaoInformacaoModel> InsertAsync(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
+        {
+            await _validation.BasicValid(termoClassificacaoInformacaoModel);
+
+            _validation.IdInsertValid(termoClassificacaoInformacaoModel.Id);
+
+            //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
+            termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.AddAsync(termoClassificacaoInformacaoModel);
+
+            return termoClassificacaoInformacaoModel;
+        }
+
+        public async Task<TermoClassificacaoInformacaoModel> SearchAsync(int id)
+        {
+            _validation.IdValid(id);
+
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.SearchAsync(id);
+
+            _validation.Found(termoClassificacaoInformacaoModel);
+
+            return termoClassificacaoInformacaoModel;
+        }
+
+        public Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task UpdateAsync(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
+        {
+            await _validation.Valid(termoClassificacaoInformacaoModel);
+
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld = await _termosClassificacaoInformacao.SearchAsync(termoClassificacaoInformacaoModel.Id);
+
+            _validation.Found(termoClassificacaoInformacaoModelOld);
+
+            await _validation.PlanoClassificacaoEquals(termoClassificacaoInformacaoModel, termoClassificacaoInformacaoModelOld);
+
+            await _validation.CanUpdate(termoClassificacaoInformacaoModelOld);
+
+            await _termosClassificacaoInformacao.UpdateAsync(termoClassificacaoInformacaoModel);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.SearchAsync(id);
+
+            _validation.Found(termoClassificacaoInformacaoModel);
+
+            await _validation.CanDelete(termoClassificacaoInformacaoModel);
+
+            await _termosClassificacaoInformacao.RemoveAsync(termoClassificacaoInformacaoModel.Id);
+        }
+    }
+}

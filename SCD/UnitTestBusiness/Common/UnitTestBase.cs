@@ -204,7 +204,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             string justificativa = "Jsutificativa Teste";
             string fundamentoLegal = "Fundamento Legal Teste";
             bool classificavel = true;
-            CriterioRestricaoModel.GrauSigilo grauSigilo = CriterioRestricaoModel.GrauSigilo.Reservado;
+            GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
             int prazoTermino = 5;
             UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
 

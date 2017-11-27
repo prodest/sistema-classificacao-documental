@@ -96,7 +96,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
                                                                .SingleOrDefault();
 
                 bool exists = documento != null ? true : false;
-
+                //TODO Não é possível remover assim, pois dá pau na iteração
                 if (!exists)
                 {
                     criterioRestricaoOld.CriteriosRestricaoDocumento.Remove(criterioRestricaoDocumento);

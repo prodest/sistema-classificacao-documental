@@ -14,6 +14,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
         public virtual DbSet<Organizacao> Organizacao { get; set; }
         public virtual DbSet<PlanoClassificacao> PlanoClassificacao { get; set; }
         public virtual DbSet<Temporalidade> Temporalidade { get; set; }
+        public virtual DbSet<TermoClassificacaoInformacao> TermoClassificacaoInformacao { get; set; }
         public virtual DbSet<TipoDocumental> TipoDocumental { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -316,6 +317,85 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Temporalidade_Documento");
+            });
+
+            modelBuilder.Entity<TermoClassificacaoInformacao>(entity =>
+            {
+                entity.ToTable("TermoClassificacaoInformacao", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasColumnName("codigo")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ConteudoSigilo)
+                    .IsRequired()
+                    .HasColumnName("conteudoSigilo")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CpfIndicacaoAprovador)
+                    .IsRequired()
+                    .HasColumnName("cpfIndicacaoAprovador")
+                    .HasMaxLength(11)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CpfUsuario)
+                    .IsRequired()
+                    .HasColumnName("cpfUsuario")
+                    .HasMaxLength(11)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DataClassificacao)
+                    .HasColumnName("dataClassificacao")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.DataProducaoDocumento)
+                    .HasColumnName("dataProducaoDocumento")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.FundamentoLegal)
+                    .IsRequired()
+                    .HasColumnName("fundamentoLegal")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GuidOrganizacao).HasColumnName("guidOrganizacao");
+
+                entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
+
+                entity.Property(e => e.IdGrauSigilo).HasColumnName("idGrauSigilo");
+
+                entity.Property(e => e.IdItemPlanoClassificacao).HasColumnName("idItemPlanoClassificacao");
+
+                entity.Property(e => e.IdTipoSigilo).HasColumnName("idTipoSigilo");
+
+                entity.Property(e => e.IdentificadorDocumento)
+                    .IsRequired()
+                    .HasColumnName("identificadorDocumento")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Justificativa)
+                    .IsRequired()
+                    .HasColumnName("justificativa")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Documento)
+                    .WithMany(p => p.TermosClassificacaoInformacao)
+                    .HasForeignKey(d => d.IdDocumento)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TermoClassificacaoInformacao_Documento");
+
+                entity.HasOne(d => d.ItemPlanoClassificacao)
+                    .WithMany(p => p.TermosClassificacaoInformacao)
+                    .HasForeignKey(d => d.IdItemPlanoClassificacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TermoClassificacaoInformacao_ItemPlanoClassificacao");
             });
 
             modelBuilder.Entity<TipoDocumental>(entity =>

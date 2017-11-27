@@ -5,6 +5,7 @@ using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Infrastructure.Mapping;
 using Prodest.Scd.Persistence.Model;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,11 +40,30 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return documentoModel;
         }
 
+        public async Task<ICollection<DocumentoModel>> SearchByPlanoAsync(int idPlanoClassificacao)
+        {
+            ICollection<Documento> documentos = await SearchPersistenceByPlanoAsync(idPlanoClassificacao, true);
+            ICollection<DocumentoModel> documentosModel = _mapper.Map<ICollection<DocumentoModel>>(documentos);
+            return documentosModel;
+        }
+
         public async Task<DocumentoModel> SearchAsync(int id)
         {
             Documento documento = await SearchPersistenceAsync(id, true);
 
+
+
+
+
+
+
             DocumentoModel documentoModel = _mapper.Map<DocumentoModel>(documento);
+
+
+
+
+
+
 
             return documentoModel;
         }
@@ -66,6 +86,19 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             _set.Remove(documento);
 
             await _unitOfWork.SaveAsync();
+        }
+
+        private async Task<ICollection<Documento>> SearchPersistenceByPlanoAsync(int idPlanoClassificacao, bool getRelationship = false)
+        {
+            IQueryable<Documento> queryable = _set.Where(d => d.ItemPlanoClassificacao.IdPlanoClassificacao == idPlanoClassificacao);
+
+            if (getRelationship)
+                queryable = queryable.Include(ipc => ipc.ItemPlanoClassificacao)
+                                     .Include(ipc => ipc.TipoDocumental);
+
+            ICollection<Documento> documentos = await queryable.ToListAsync();
+
+            return documentos;
         }
 
         private async Task<Documento> SearchPersistenceAsync(int id, bool getRelationship = false)

@@ -18,11 +18,13 @@ namespace Prodest.Scd.Presentation
     {
         private ICriterioRestricaoCore _core;
         private IPlanoClassificacaoCore _corePlanoClassificacao;
+        private IDocumentoCore _coreDocumento;
         private IMapper _mapper;
 
-        public CriterioRestricaoService(ICriterioRestricaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IMapper mapper)
+        public CriterioRestricaoService(ICriterioRestricaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IDocumentoCore coreDocumento, IMapper mapper)
         {
             _corePlanoClassificacao = corePlanoClassificacao;
+            _coreDocumento = coreDocumento;
             _core = core;
             _mapper = mapper;
         }
@@ -75,9 +77,9 @@ namespace Prodest.Scd.Presentation
         private ICollection<EnumModel> obterListaGraus()
         {
             return new List<EnumModel> {
-                    new EnumModel { Id = (int)GrauSigilo.Reservado, Nome = "Reservado" },
-                    new EnumModel { Id = (int)GrauSigilo.Secreto, Nome = "Secreto" },
-                    new EnumModel { Id = (int)GrauSigilo.Ultrassecreto, Nome = "Ultrassecreto" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Reservado, Nome = "Reservado" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Secreto, Nome = "Secreto" },
+                    new EnumModel { Id = (int)GrauSigiloModel.UltraSecreto, Nome = "Ultrassecreto" },
                 };
         }
 
@@ -90,7 +92,7 @@ namespace Prodest.Scd.Presentation
                 model.entidade = _mapper.Map<CriterioRestricaoEntidade>(await _core.SearchAsync(id));
                 model.graus = obterListaGraus();
                 model.unidadesTempo = obterListaUnidadesTempo();
-
+                model.Documentos = _mapper.Map<ICollection<DocumentoEntidade>>(await _coreDocumento.SearchByPlanoAsync(model.entidade.PlanoClassificacao.Id));
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -191,7 +193,7 @@ namespace Prodest.Scd.Presentation
         }
 
 
-    
+
 
         public async Task<CriterioRestricaoViewModel> Search(FiltroCriterioRestricao filtro)
         {
@@ -213,7 +215,8 @@ namespace Prodest.Scd.Presentation
             try
             {
                 model.Action = "Create";
-                model.entidade = new CriterioRestricaoEntidade {
+                model.entidade = new CriterioRestricaoEntidade
+                {
                     PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
                 };
                 model.graus = obterListaGraus();

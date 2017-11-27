@@ -36,7 +36,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string Justificativa { get; set; }
         public string FundamentoLegal { get; set; }
 
-        public GrauSigilo? Grau { get; set; }
+        public GrauSigiloModel? Grau { get; set; }
         public string GrauDescricao
         {
             get
@@ -98,7 +98,7 @@ namespace Prodest.Scd.Presentation.ViewModel
             {
                 if (value.HasValue)
                 {
-                    Grau = (GrauSigilo)value.Value;
+                    Grau = (GrauSigiloModel)value.Value;
                 }
                 else
                 {
