@@ -22,7 +22,6 @@ namespace Prodest.Scd.Business.Model
 
         public DocumentoModel Documento { get; set; }
         public CriterioRestricaoModel CriterioRestricao { get; set; }
-        public ItemPlanoClassificacaoModel ItemPlanoClassificacao { get; set; }
 
         public enum TipoSigiloModel
         {

@@ -1,86 +1,71 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Prodest.Scd.Business.Common.Exceptions;
 using Prodest.Scd.Business.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using static Prodest.Scd.Business.Model.TermoClassificacaoInformacaoModel;
 
 namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
 {
     [TestClass]
     public class UnitTestTermoClassificacaoInformacao : UnitTestTermoClassificacaoInformacaoCommon
     {
-        //[TestMethod]
-        //public async Task TermoClassificacaoInformacaoTestInsert()
-        //{
-        //    int Id { get; set; }
-        //    string Codigo { get; set; }
-        //    Guid GuidOrganizacao { get; set; }
-        //    GrauSigiloModel GrauSigilo { get; set; }
-        //    TipoSigiloModel TipoSigilo { get; set; }
-        //    string ConteudoSigilo { get; set; }
-        //    string IdentificadorDocumento { get; set; }
-        //    DateTime DataProducaoDocumento { get; set; }
-        //    string FundamentoLegal { get; set; }
-        //    string Justificativa { get; set; }
-        //    DateTime DataClassificacao { get; set; }
-        //    string CpfUsuario { get; set; }
-        //    string CpfIndicacaoAprovador { get; set; }
+        [TestMethod]
+        public async Task TermoClassificacaoInformacaoTestInsert()
+        {
+            DateTime dataTeste = DateTime.Now;
 
-        //    DocumentoModel Documento { get; set; }
-        //    CriterioRestricaoModel CriterioRestricao { get; set; }
-        //    ItemPlanoClassificacaoModel ItemPlanoClassificacao { get; set; }
+            string codigo = "01";
+            GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
+            TipoSigiloModel tipoSigilo = TipoSigiloModel.Parcial;
+            string conteudoSigilo = "Conteúdo Sigilo";
+            string identificadorDocumento = "Identificador Documento";
+            DateTime dataProducaoDocumento = DateTime.Now;
+            string fundamentoLegal = "Fundamento Legal";
+            string justificativa = "Justificativa";
+            string cpfIndicacaoAprovador = "11111111111";
 
-        //    string codigo = "01";
-        //    string descricao = "TermoClassificacaoInformacaoTestInsert";
-        //    string justificativa = "Jsutificativa Teste";
-        //    string fundamentoLegal = "Fundamento Legal Teste";
-        //    bool classificavel = true;
-        //    TermoClassificacaoInformacaoModel.GrauSigilo grauSigilo = TermoClassificacaoInformacaoModel.GrauSigilo.Reservado;
-        //    int prazoTermino = 5;
-        //    UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
+            DocumentoModel documento = await InsertDocumentoAsync();
+            CriterioRestricaoModel criterioRestricao = await InsertCriterioRestricaoAsync(documento);
 
-        //    PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
-        //    DocumentoModel documentoModel = await InsertDocumentoAsync();
+            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = new TermoClassificacaoInformacaoModel
+            {
+                Codigo = codigo,
+                GrauSigilo = grauSigilo,
+                TipoSigilo = tipoSigilo,
+                ConteudoSigilo = conteudoSigilo,
+                IdentificadorDocumento = identificadorDocumento,
+                DataProducaoDocumento = dataProducaoDocumento,
+                FundamentoLegal = fundamentoLegal,
+                Justificativa = justificativa,
+                CpfIndicacaoAprovador = cpfIndicacaoAprovador,
 
-        //    TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = new TermoClassificacaoInformacaoModel
-        //    {
-        //        Codigo = codigo,
-        //        Descricao = descricao,
-        //        Justificativa = justificativa,
-        //        FundamentoLegal = fundamentoLegal,
-        //        Classificavel = classificavel,
-        //        Grau = grauSigilo,
-        //        PrazoTermino = prazoTermino,
-        //        UnidadePrazoTermino = unidadePrazoTermino,
+                Documento = documento,
+                CriterioRestricao = criterioRestricao
+            };
 
-        //        PlanoClassificacao = planoClassificacaoModel,
+            termoClassificacaoInformacaoModel = await _core.InsertAsync(termoClassificacaoInformacaoModel);
+            _idsTermosClassificacaoInformacaoTestados.Add(termoClassificacaoInformacaoModel.Id);
 
-        //        Documentos = new List<DocumentoModel>() { documentoModel }
-        //    };
+            Assert.IsTrue(termoClassificacaoInformacaoModel.Id > 0);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.Codigo, codigo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.GrauSigilo, grauSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.TipoSigilo, tipoSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.ConteudoSigilo, conteudoSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.IdentificadorDocumento, identificadorDocumento);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.DataProducaoDocumento, dataProducaoDocumento);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.FundamentoLegal, fundamentoLegal);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.Justificativa, justificativa);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.CpfIndicacaoAprovador, cpfIndicacaoAprovador);
 
-        //    termoClassificacaoInformacaoModel = await _core.InsertAsync(termoClassificacaoInformacaoModel);
-        //    _idsCriteriosRestricaoTestados.Add(termoClassificacaoInformacaoModel.Id);
+            Assert.IsNotNull(termoClassificacaoInformacaoModel.CpfUsuario);
+            Assert.IsTrue(termoClassificacaoInformacaoModel.DataClassificacao >= dataTeste);
 
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.Id > 0);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Codigo, codigo);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Descricao, descricao);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Justificativa, justificativa);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.FundamentoLegal, fundamentoLegal);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Classificavel, classificavel);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.Grau, grauSigilo);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.PrazoTermino, prazoTermino);
-        //    Assert.AreEqual(termoClassificacaoInformacaoModel.UnidadePrazoTermino, unidadePrazoTermino);
-        //    Assert.IsNull(termoClassificacaoInformacaoModel.EventoFim);
+            Assert.IsFalse(termoClassificacaoInformacaoModel.Documento == null);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.Documento.Id, documento.Id);
 
-        //    Assert.IsFalse(termoClassificacaoInformacaoModel.PlanoClassificacao == null);
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.PlanoClassificacao.Id == planoClassificacaoModel.Id);
-
-        //    Assert.IsFalse(termoClassificacaoInformacaoModel.Documentos == null);
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.Documentos.Count == 1);
-        //    Assert.IsTrue(termoClassificacaoInformacaoModel.Documentos.Single().Id == documentoModel.Id);
-        //}
+            Assert.IsFalse(termoClassificacaoInformacaoModel.CriterioRestricao == null);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.CriterioRestricao.Id, criterioRestricao.Id);
+        }
 
         //[TestMethod]
         //public async Task TermoClassificacaoInformacaoTestSearch()

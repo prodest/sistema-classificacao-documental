@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 using System;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Repository;
+using static Prodest.Scd.Business.Model.TermoClassificacaoInformacaoModel;
+using System.Linq;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class TermoClassificacaoInformacaoValidation : CommonValidation
     {
-        private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
-        private ITipoDocumentalRepository _tiposDocumentais;
+        private IDocumentoRepository _documentos;
+        private ICriterioRestricaoRepository _criteriosRestricao;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
         public TermoClassificacaoInformacaoValidation(IScdRepositories repositories, IItemPlanoClassificacaoCore itemPlanoClassificacaoCore, ITipoDocumentalCore tipoDocumentalCore, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
-
-            _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
-            _tiposDocumentais = repositories.TiposDocumentaisSpecific;
+            _documentos = repositories.DocumentosSpecific;
+            _criteriosRestricao = repositories.CriteriosRestricaoSpecific;
 
             _planoClassificacaoValidation = planoClassificacaoValidation;
         }
@@ -37,16 +38,15 @@ namespace Prodest.Scd.Business.Validation
         {
             NotNull(termoClassificacaoInformacaoModel);
 
-            ItemPlanoClassificacaoNotNull(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
-
-            //TipoDocumentalNotNull(termoClassificacaoInformacaoModel.);
+            DocumentoNotNull(termoClassificacaoInformacaoModel.Documento);
+            CriterioRestricaoNotNull(termoClassificacaoInformacaoModel.CriterioRestricao);
 
             Filled(termoClassificacaoInformacaoModel);
 
-            await ItemPlanoClassificacaoExists(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
+            await DocumentoExists(termoClassificacaoInformacaoModel.Documento);
+            await CriterioRestricaoExists(termoClassificacaoInformacaoModel.CriterioRestricao);
 
-            //await TipoDocumentalExists(termoClassificacaoInformacaoModel.TipoDocumental);
-
+            await DocumentoLinkedCriterioRestricao(termoClassificacaoInformacaoModel.Documento, termoClassificacaoInformacaoModel.CriterioRestricao);
         }
 
         private void NotNull(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
@@ -55,25 +55,32 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O TermoClassificacaoInformacaodo do Item do Plano de Classificação não pode ser nulo.");
         }
 
-        private void ItemPlanoClassificacaoNotNull(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
+        private void DocumentoNotNull(DocumentoModel documentoModel)
         {
-            if (itemPlanoClassificacaoModel == null)
-                throw new ScdException("O Item do Plano de Classificação não pode ser nulo.");
+            if (documentoModel == null)
+                throw new ScdException("O Documento não pode ser nulo.");
         }
 
-        private void TipoDocumentalNotNull(TipoDocumentalModel tipoDocumentalModel)
+        private void CriterioRestricaoNotNull(CriterioRestricaoModel criterioRestricaoModel)
         {
-            if (tipoDocumentalModel == null)
-                throw new ScdException("O Tipo Documental não pode ser nulo.");
+            if (criterioRestricaoModel == null)
+                throw new ScdException("O Critério de Restrição não pode ser nulo.");
         }
 
         #region Filled
         internal void Filled(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
             CodigoFilled(termoClassificacaoInformacaoModel.Codigo);
-            //DescricaoFilled(termoClassificacaoInformacaoModel.Descricao);
-            ItemPlanoClassificacaoFilled(termoClassificacaoInformacaoModel.ItemPlanoClassificacao);
-            //TipoDocumentalFilled(termoClassificacaoInformacaoModel.TipoDocumental);
+            GrauSigiloFilled(termoClassificacaoInformacaoModel.GrauSigilo);
+            TipoSigiloFilled(termoClassificacaoInformacaoModel.TipoSigilo);
+            ConteudoSigiloFilled(termoClassificacaoInformacaoModel.ConteudoSigilo);
+            IdentificadorDocumentoFilled(termoClassificacaoInformacaoModel.IdentificadorDocumento);
+            FundamentoLegalFilled(termoClassificacaoInformacaoModel.FundamentoLegal);
+            JustificativaFilled(termoClassificacaoInformacaoModel.Justificativa);
+            CpfIndicacaoAprovadorFilled(termoClassificacaoInformacaoModel.CpfIndicacaoAprovador);
+
+            DocumentoFilled(termoClassificacaoInformacaoModel.Documento);
+            CriterioRestricaoFilled(termoClassificacaoInformacaoModel.CriterioRestricao);
         }
 
         private void CodigoFilled(string codigo)
@@ -82,39 +89,85 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O código não pode ser vazio ou nulo.");
         }
 
-        private void DescricaoFilled(string descricao)
+        private void GrauSigiloFilled(GrauSigiloModel grauSigiloModel)
         {
-            if (string.IsNullOrWhiteSpace(descricao) || string.IsNullOrWhiteSpace(descricao.Trim()))
-                throw new ScdException("A descrição não pode ser vazia ou nula.");
+            if (!Enum.IsDefined(typeof(GrauSigiloModel), grauSigiloModel))
+                throw new ScdException("O Grau de Sigilo não pode ser vazio ou nulo.");
         }
 
-        private void ItemPlanoClassificacaoFilled(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
+        private void TipoSigiloFilled(TipoSigiloModel tipoSigiloModel)
         {
-            if (itemPlanoClassificacaoModel.Id == default(int))
-                throw new ScdException("Identificador do Item do Plano de Classificação inválido.");
+            if (!Enum.IsDefined(typeof(GrauSigiloModel), tipoSigiloModel))
+                throw new ScdException("O tipo de Sigilo não pode ser vazio ou nulo.");
         }
 
-        private void TipoDocumentalFilled(TipoDocumentalModel tipoDocumentalModel)
+        private void ConteudoSigiloFilled(string conteudoSigilo)
         {
-            if (tipoDocumentalModel.Id == default(int))
-                throw new ScdException("Identificador do Tipo Documental inválido.");
+            if (string.IsNullOrWhiteSpace(conteudoSigilo) || string.IsNullOrWhiteSpace(conteudoSigilo.Trim()))
+                throw new ScdException("O Conteúdo do Sigilo não pode ser vazio ou nulo.");
+        }
+
+        private void IdentificadorDocumentoFilled(string identificadorDocumento)
+        {
+            if (string.IsNullOrWhiteSpace(identificadorDocumento) || string.IsNullOrWhiteSpace(identificadorDocumento.Trim()))
+                throw new ScdException("O Identificador do Documento não pode ser vazio ou nulo.");
+        }
+
+        private void FundamentoLegalFilled(string fundamentoLegal)
+        {
+            if (string.IsNullOrWhiteSpace(fundamentoLegal) || string.IsNullOrWhiteSpace(fundamentoLegal.Trim()))
+                throw new ScdException("O Fundamento Legal não pode ser vazio ou nulo.");
+        }
+
+        private void JustificativaFilled(string justificativa)
+        {
+            if (string.IsNullOrWhiteSpace(justificativa) || string.IsNullOrWhiteSpace(justificativa.Trim()))
+                throw new ScdException("A Jsutificativa não pode ser vazio ou nulo.");
+        }
+
+        private void CpfIndicacaoAprovadorFilled(string cpfIndicacaoAprovador)
+        {
+            if (string.IsNullOrWhiteSpace(cpfIndicacaoAprovador) || string.IsNullOrWhiteSpace(cpfIndicacaoAprovador.Trim()))
+                throw new ScdException("O CPF do Aprovador não pode ser vazio ou nulo.");
+        }
+
+        private void DocumentoFilled(DocumentoModel documentoModel)
+        {
+            if (documentoModel.Id == default(int))
+                throw new ScdException("Identificador do Documento inválido.");
+        }
+
+        private void CriterioRestricaoFilled(CriterioRestricaoModel criterioRestricaoModel)
+        {
+            if (criterioRestricaoModel.Id == default(int))
+                throw new ScdException("Identificador do Critério de Restrição inválido.");
         }
         #endregion
 
-        internal async Task ItemPlanoClassificacaoExists(ItemPlanoClassificacaoModel itemPlanoClassificacaoModel)
+        internal async Task DocumentoExists(DocumentoModel documentoModel)
         {
-            itemPlanoClassificacaoModel = await _itensPlanoClassificacao.SearchAsync(itemPlanoClassificacaoModel.Id);
+            documentoModel = await _documentos.SearchAsync(documentoModel.Id);
 
-            if (itemPlanoClassificacaoModel == null)
-                throw new ScdException("Item do Plano de Classificação não encontrado.");
+            if (documentoModel == null)
+                throw new ScdException("Documento não encontrado.");
         }
 
-        internal async Task TipoDocumentalExists(TipoDocumentalModel tipoDocumentalModel)
+        internal async Task CriterioRestricaoExists(CriterioRestricaoModel criterioRestricaoModel)
         {
-            tipoDocumentalModel = await _tiposDocumentais.SearchAsync(tipoDocumentalModel.Id);
+            criterioRestricaoModel = await _criteriosRestricao.SearchAsync(criterioRestricaoModel.Id);
 
-            if (tipoDocumentalModel == null)
-                throw new ScdException("Tipo Documental não encontrado.");
+            if (criterioRestricaoModel == null)
+                throw new ScdException("Critério de Restrição não encontrado.");
+        }
+
+        private async Task DocumentoLinkedCriterioRestricao(DocumentoModel documentoModel, CriterioRestricaoModel criterioRestricaoModel)
+        {
+            CriterioRestricaoModel criterioRestricaoSearchedModel = await _criteriosRestricao.SearchAsync(criterioRestricaoModel.Id);
+
+            DocumentoModel documentoSearchedModel = criterioRestricaoModel.Documentos.SingleOrDefault(d => d.Id == documentoModel.Id);
+
+            if (documentoSearchedModel == null)
+                throw new ScdException("O Critério de Restrição não está associado ao Documento selecionado.");
         }
         #endregion
 

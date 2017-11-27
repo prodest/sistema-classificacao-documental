@@ -26,6 +26,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
         protected List<int> _idsCriteriosRestricaoTestados = new List<int>();
         protected List<int> _idsTemporalidadesTestados = new List<int>();
         protected List<int> _idsTiposDocumentaisTestados = new List<int>();
+        protected List<int> _idsTermosClassificacaoInformacaoTestados = new List<int>();
         protected EFScdRepositories _repositories;
         //protected Guid _guidGees = new Guid(Environment.GetEnvironmentVariable("GuidGEES"));
 
@@ -58,6 +59,14 @@ namespace Prodest.Scd.UnitTestBusiness.Common
         [TestCleanup]
         public async Task Cleanup()
         {
+            foreach (int idTermoClassificacaoInformacao in _idsTermosClassificacaoInformacaoTestados)
+            {
+                TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await _repositories.TermosClassificacaoInformacaoSpecific.SearchAsync(idTermoClassificacaoInformacao);
+
+                if (termoClassificacaoInformacaoModel != null)
+                    await _repositories.TermosClassificacaoInformacaoSpecific.RemoveAsync(termoClassificacaoInformacaoModel.Id);
+            }
+
             foreach (int idTemporalidade in _idsTemporalidadesTestados)
             {
                 TemporalidadeModel temporalidadeModel = await _repositories.TemporalidadesSpecific.SearchAsync(idTemporalidade);
@@ -197,7 +206,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             return planoClassificacaoModel;
         }
 
-        protected async Task<CriterioRestricaoModel> InsertCriterioRestricaoAsync()
+        protected async Task<CriterioRestricaoModel> InsertCriterioRestricaoAsync(DocumentoModel documentoModel)
         {
             string codigo = "01";
             string descricao = "CriterioRestricaoTestInsert";
@@ -209,7 +218,6 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
 
             PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
-            DocumentoModel documentoModel = await InsertDocumentoAsync();
 
             CriterioRestricaoModel criterioRestricaoModel = new CriterioRestricaoModel
             {
@@ -232,6 +240,13 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             _idsCriteriosRestricaoTestados.Add(criterioRestricaoModel.Id);
 
             return criterioRestricaoModel;
+        }
+
+        protected async Task<CriterioRestricaoModel> InsertCriterioRestricaoAsync()
+        {
+            DocumentoModel documentoModel = await InsertDocumentoAsync();
+
+            return await InsertCriterioRestricaoAsync(documentoModel);
         }
 
         protected async Task<TemporalidadeModel> InsertTemporalidadeAsync()
