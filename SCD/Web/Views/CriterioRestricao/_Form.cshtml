@@ -85,6 +85,36 @@
                 </div>
                 <label for="basic-checkbox">Gera Termo Classificação Informação?</label>
             </div>
+            <div class="mdl-cell mdl-cell--12-col">
+                <section>
+                    <h3>Documentos Associados ao Critério</h3>
+                    <ul class="mdc-list mdc-list--dense">
+                        @if (Model.Documentos.Count==0)
+                        {
+                            <li class="mdc-list-item">Não existem documentos associados a este Plano de Ação.</li>
+                        }
+                        else
+                        {
+                            foreach (var item in Model.Documentos)
+                            {
+                                var chk = Model.entidade.Documentos.Where(doc=>doc.Id == item.Id).Count()>0 ? "checked" : "";
+                                <li class="mdc-list-item">
+                                    <div class="mdc-checkbox">
+                                        <input type="checkbox" @chk asp-for="@item.IsOptionSelected" id="Documentos" name="Documentos"  value="@item.Id" class="mdc-checkbox__native-control">
+                                        <div class="mdc-checkbox__background">
+                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                            </svg>
+                                            <div class="mdc-checkbox__mixedmark"></div>
+                                        </div>
+                                    </div>
+                                    <label for="basic-checkbox">@item.Codigo - @item.Descricao</label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </section>
+            </div>
         </div>
     </div>
 </form>

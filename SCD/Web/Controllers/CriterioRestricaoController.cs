@@ -79,11 +79,16 @@ namespace Web.Controllers
             return PartialView("_Form", model);
         }
 
-        public async Task<IActionResult> Update(CriterioRestricaoViewModel model)
+        public async Task<IActionResult> Update(CriterioRestricaoViewModel model, [FromForm] List<int> Documentos)
         {
             if (model != null && model.entidade != null)
             {
-                model.entidade.Documentos = new List<DocumentoEntidade>();
+                var docs = new List<DocumentoEntidade>();
+                foreach (var item in Documentos)
+                {
+                    docs.Add(new DocumentoEntidade { Id = item });
+                }
+                model.entidade.Documentos = docs;
                 model = await _service.Update(model.entidade);
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)

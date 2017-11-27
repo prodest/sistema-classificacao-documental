@@ -12,14 +12,16 @@ namespace Prodest.Scd.Business.Validation
     public class DocumentoValidation : CommonValidation
     {
         private IItemPlanoClassificacaoRepository _itensPlanoClassificacao;
+        private IPlanoClassificacaoRepository _planoClassificacao;
         private ITipoDocumentalRepository _tiposDocumentais;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
-        public DocumentoValidation(IScdRepositories repositories, IItemPlanoClassificacaoCore itemPlanoClassificacaoCore, ITipoDocumentalCore tipoDocumentalCore, PlanoClassificacaoValidation planoClassificacaoValidation)
+        public DocumentoValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
 
             _itensPlanoClassificacao = repositories.ItensPlanoClassificacaoSpecific;
+            _planoClassificacao = repositories.PlanosClassificacaoSpecific;
             _tiposDocumentais = repositories.TiposDocumentaisSpecific;
 
             _planoClassificacaoValidation = planoClassificacaoValidation;
@@ -107,6 +109,14 @@ namespace Prodest.Scd.Business.Validation
 
             if (itemPlanoClassificacaoModel == null)
                 throw new ScdException("Item do Plano de Classificação não encontrado.");
+        }
+
+        internal async Task PlanoClassificacaoExists(int idPlanoClassificacao)
+        {
+            PlanoClassificacaoModel planoClassificacaoModel = await _planoClassificacao.SearchAsync(idPlanoClassificacao);
+
+            if (planoClassificacaoModel == null)
+                throw new ScdException("Plano de Classificação não encontrado.");
         }
 
         internal async Task TipoDocumentalExists(TipoDocumentalModel tipoDocumentalModel)

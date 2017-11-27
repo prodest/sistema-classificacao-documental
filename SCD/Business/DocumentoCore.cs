@@ -3,6 +3,7 @@ using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business
@@ -42,6 +43,22 @@ namespace Prodest.Scd.Business
 
             return documentoModel;
         }
+
+        public async Task<ICollection<DocumentoModel>>SearchByPlanoAsync(int idPlanoClassificacao)
+        {
+            _validation.IdValid(idPlanoClassificacao);
+
+            await _validation.PlanoClassificacaoExists(idPlanoClassificacao);
+
+            ICollection<DocumentoModel> documentosModel = await _documentos.SearchByPlanoAsync(idPlanoClassificacao);
+
+
+
+
+
+            return documentosModel;
+        }
+        
 
         public async Task UpdateAsync(DocumentoModel documentoModel)
         {
