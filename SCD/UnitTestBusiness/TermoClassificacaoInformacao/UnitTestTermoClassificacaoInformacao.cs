@@ -23,6 +23,8 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             string fundamentoLegal = "Fundamento Legal";
             string justificativa = "Justificativa";
             string cpfIndicacaoAprovador = "11111111111";
+            int prazoSigilo = 1;
+            UnidadeTempo unidadePrazoSigilo = UnidadeTempo.Anos;
 
             DocumentoModel documento = await InsertDocumentoAsync();
             CriterioRestricaoModel criterioRestricao = await InsertCriterioRestricaoAsync(documento);
@@ -38,6 +40,8 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
                 FundamentoLegal = fundamentoLegal,
                 Justificativa = justificativa,
                 CpfIndicacaoAprovador = cpfIndicacaoAprovador,
+                PrazoSigilo = prazoSigilo,
+                UnidadePrazoSigilo = unidadePrazoSigilo,
 
                 Documento = documento,
                 CriterioRestricao = criterioRestricao
@@ -56,6 +60,8 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             Assert.AreEqual(termoClassificacaoInformacaoModel.FundamentoLegal, fundamentoLegal);
             Assert.AreEqual(termoClassificacaoInformacaoModel.Justificativa, justificativa);
             Assert.AreEqual(termoClassificacaoInformacaoModel.CpfIndicacaoAprovador, cpfIndicacaoAprovador);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.PrazoSigilo, prazoSigilo);
+            Assert.AreEqual(termoClassificacaoInformacaoModel.UnidadePrazoSigilo, unidadePrazoSigilo);
 
             Assert.IsNotNull(termoClassificacaoInformacaoModel.CpfUsuario);
             Assert.IsTrue(termoClassificacaoInformacaoModel.DataClassificacao >= dataTeste);

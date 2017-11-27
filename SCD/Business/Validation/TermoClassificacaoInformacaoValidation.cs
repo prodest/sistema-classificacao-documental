@@ -78,6 +78,8 @@ namespace Prodest.Scd.Business.Validation
             FundamentoLegalFilled(termoClassificacaoInformacaoModel.FundamentoLegal);
             JustificativaFilled(termoClassificacaoInformacaoModel.Justificativa);
             CpfIndicacaoAprovadorFilled(termoClassificacaoInformacaoModel.CpfIndicacaoAprovador);
+            PrazoSigiloFilled(termoClassificacaoInformacaoModel.PrazoSigilo);
+            UnidadePrazoSigiloFilled(termoClassificacaoInformacaoModel.UnidadePrazoSigilo);
 
             DocumentoFilled(termoClassificacaoInformacaoModel.Documento);
             CriterioRestricaoFilled(termoClassificacaoInformacaoModel.CriterioRestricao);
@@ -97,7 +99,7 @@ namespace Prodest.Scd.Business.Validation
 
         private void TipoSigiloFilled(TipoSigiloModel tipoSigiloModel)
         {
-            if (!Enum.IsDefined(typeof(GrauSigiloModel), tipoSigiloModel))
+            if (!Enum.IsDefined(typeof(TipoSigiloModel), tipoSigiloModel))
                 throw new ScdException("O tipo de Sigilo não pode ser vazio ou nulo.");
         }
 
@@ -129,6 +131,18 @@ namespace Prodest.Scd.Business.Validation
         {
             if (string.IsNullOrWhiteSpace(cpfIndicacaoAprovador) || string.IsNullOrWhiteSpace(cpfIndicacaoAprovador.Trim()))
                 throw new ScdException("O CPF do Aprovador não pode ser vazio ou nulo.");
+        }
+
+        private void PrazoSigiloFilled(int prazoSigilo)
+        {
+            if (prazoSigilo <= 0)
+                throw new ScdException("O Prazo do Sigilo não pode ser menor ou igual a zero.");
+        }
+
+        private void UnidadePrazoSigiloFilled(UnidadeTempo unidadePrazoSigilo)
+        {
+            if (!Enum.IsDefined(typeof(UnidadeTempo), unidadePrazoSigilo))
+                throw new ScdException("A Unidade do Prazo do Sigilo não pode ser vazio ou nulo.");
         }
 
         private void DocumentoFilled(DocumentoModel documentoModel)

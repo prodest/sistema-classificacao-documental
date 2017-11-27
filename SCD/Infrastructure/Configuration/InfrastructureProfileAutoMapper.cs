@@ -157,7 +157,11 @@ namespace Prodest.Scd.Infrastructure.Configuration
 
             #region TermoClassificacaoInformacao
             CreateMap<TermoClassificacaoInformacao, TermoClassificacaoInformacaoModel>()
-                .PreserveReferences();
+                .PreserveReferences()
+                .ForMember(dest => dest.GrauSigilo, opt => opt.MapFrom(src => src.IdGrauSigilo))
+                .ForMember(dest => dest.TipoSigilo, opt => opt.MapFrom(src => src.IdTipoSigilo))
+                .ForMember(dest => dest.UnidadePrazoSigilo, opt => opt.MapFrom(src => src.IdUnidadePrazoSigilo))
+                ;
 
             CreateMap<TermoClassificacaoInformacaoModel, TermoClassificacaoInformacao>()
                 .ForMember(dest => dest.Id, opt =>
@@ -167,10 +171,13 @@ namespace Prodest.Scd.Infrastructure.Configuration
                         return (destMember == default(int));
                     });
                 })
-                //.ForMember(dest => dest.ItemPlanoClassificacao, opt => opt.Ignore())
-                //.ForMember(dest => dest.TipoDocumental, opt => opt.Ignore())
-                //.ForMember(dest => dest.IdItemPlanoClassificacao, opt => opt.MapFrom(src => src.ItemPlanoClassificacao != null ? src.ItemPlanoClassificacao.Id : default(int)))
-                //.ForMember(dest => dest.IdTipoDocumental, opt => opt.MapFrom(src => src.TipoDocumental != null ? src.TipoDocumental.Id : default(int)))
+                .ForMember(dest => dest.Documento, opt => opt.Ignore())
+                .ForMember(dest => dest.CriterioRestricao, opt => opt.Ignore())
+                .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Documento != null ? src.Documento.Id : default(int)))
+                .ForMember(dest => dest.IdCriterioRestricao, opt => opt.MapFrom(src => src.CriterioRestricao != null ? src.CriterioRestricao.Id : default(int)))
+                .ForMember(dest => dest.IdGrauSigilo, opt => opt.MapFrom(src => src.GrauSigilo))
+                .ForMember(dest => dest.IdTipoSigilo, opt => opt.MapFrom(src => src.TipoSigilo))
+                .ForMember(dest => dest.IdUnidadePrazoSigilo, opt => opt.MapFrom(src => src.UnidadePrazoSigilo))
                 ;
             #endregion
 

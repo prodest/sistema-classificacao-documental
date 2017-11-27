@@ -373,6 +373,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.IdTipoSigilo).HasColumnName("idTipoSigilo");
 
+                entity.Property(e => e.IdUnidadePrazoSigilo).HasColumnName("idUnidadePrazoSigilo");
+
                 entity.Property(e => e.IdentificadorDocumento)
                     .IsRequired()
                     .HasColumnName("identificadorDocumento")
@@ -384,6 +386,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasColumnName("justificativa")
                     .HasMaxLength(2000)
                     .IsUnicode(false);
+
+                entity.Property(e => e.PrazoSigilo).HasColumnName("prazoSigilo");
 
                 entity.HasOne(d => d.CriterioRestricao)
                     .WithMany(p => p.TermosClassificacaoInformacao)

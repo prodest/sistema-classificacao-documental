@@ -19,6 +19,8 @@ namespace Prodest.Scd.Persistence.Model
         public DateTime DataClassificacao { get; set; }
         public string CpfUsuario { get; set; }
         public string CpfIndicacaoAprovador { get; set; }
+        public int PrazoSigilo { get; set; }
+        public int IdUnidadePrazoSigilo { get; set; }
 
         public CriterioRestricao CriterioRestricao { get; set; }
         public Documento Documento { get; set; }

@@ -19,6 +19,8 @@ namespace Prodest.Scd.Business.Model
         public DateTime DataClassificacao { get; set; }
         public string CpfUsuario { get; set; }
         public string CpfIndicacaoAprovador { get; set; }
+        public int PrazoSigilo { get; set; }
+        public UnidadeTempo UnidadePrazoSigilo { get; set; }
 
         public DocumentoModel Documento { get; set; }
         public CriterioRestricaoModel CriterioRestricao { get; set; }
