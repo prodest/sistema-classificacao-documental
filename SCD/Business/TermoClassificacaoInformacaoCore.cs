@@ -5,6 +5,7 @@ using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace Prodest.Scd.Business
 {
@@ -26,6 +27,11 @@ namespace Prodest.Scd.Business
             await _validation.BasicValid(termoClassificacaoInformacaoModel);
 
             _validation.IdInsertValid(termoClassificacaoInformacaoModel.Id);
+
+            termoClassificacaoInformacaoModel.DataClassificacao = DateTime.Now;
+            //TODO: Obter o CPF a partir do usuário logado.
+            termoClassificacaoInformacaoModel.GuidOrganizacao = GetGuidOrganizacao();
+            termoClassificacaoInformacaoModel.CpfUsuario = "22222222222";
 
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
             termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.AddAsync(termoClassificacaoInformacaoModel);
@@ -73,6 +79,14 @@ namespace Prodest.Scd.Business
             await _validation.CanDelete(termoClassificacaoInformacaoModel);
 
             await _termosClassificacaoInformacao.RemoveAsync(termoClassificacaoInformacaoModel.Id);
+        }
+
+        private Guid GetGuidOrganizacao()
+        {
+            //TODO: Retirar este trecho quando o sistema conseguir obter organzação do usuário
+            Guid guidProdest = new Guid(Environment.GetEnvironmentVariable("guidProdest"));
+
+            return guidProdest;
         }
     }
 }

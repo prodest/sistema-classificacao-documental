@@ -9,6 +9,7 @@ namespace Prodest.Scd.Persistence.Model
         public CriterioRestricao()
         {
             CriteriosRestricaoDocumento = new HashSet<CriterioRestricaoDocumento>();
+            TermosClassificacaoInformacao = new HashSet<TermoClassificacaoInformacao>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace Prodest.Scd.Persistence.Model
 
         public PlanoClassificacao PlanoClassificacao { get; set; }
         public ICollection<CriterioRestricaoDocumento> CriteriosRestricaoDocumento { get; set; }
+        public ICollection<TermoClassificacaoInformacao> TermosClassificacaoInformacao { get; set; }
     }
 }

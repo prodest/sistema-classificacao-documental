@@ -365,13 +365,15 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.GuidOrganizacao).HasColumnName("guidOrganizacao");
 
+                entity.Property(e => e.IdCriterioRestricao).HasColumnName("idCriterioRestricao");
+
                 entity.Property(e => e.IdDocumento).HasColumnName("idDocumento");
 
                 entity.Property(e => e.IdGrauSigilo).HasColumnName("idGrauSigilo");
 
-                entity.Property(e => e.IdItemPlanoClassificacao).HasColumnName("idItemPlanoClassificacao");
-
                 entity.Property(e => e.IdTipoSigilo).HasColumnName("idTipoSigilo");
+
+                entity.Property(e => e.IdUnidadePrazoSigilo).HasColumnName("idUnidadePrazoSigilo");
 
                 entity.Property(e => e.IdentificadorDocumento)
                     .IsRequired()
@@ -385,17 +387,20 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasMaxLength(2000)
                     .IsUnicode(false);
 
+                entity.Property(e => e.PrazoSigilo).HasColumnName("prazoSigilo");
+
+                entity.HasOne(d => d.CriterioRestricao)
+                    .WithMany(p => p.TermosClassificacaoInformacao)
+                    .HasForeignKey(d => d.IdCriterioRestricao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TermoClassificacaoInformacao_CriterioRestricao");
+
+
                 entity.HasOne(d => d.Documento)
                     .WithMany(p => p.TermosClassificacaoInformacao)
                     .HasForeignKey(d => d.IdDocumento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TermoClassificacaoInformacao_Documento");
-
-                entity.HasOne(d => d.ItemPlanoClassificacao)
-                    .WithMany(p => p.TermosClassificacaoInformacao)
-                    .HasForeignKey(d => d.IdItemPlanoClassificacao)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_TermoClassificacaoInformacao_ItemPlanoClassificacao");
             });
 
             modelBuilder.Entity<TipoDocumental>(entity =>

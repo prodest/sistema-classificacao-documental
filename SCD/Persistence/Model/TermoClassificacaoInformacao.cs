@@ -10,7 +10,7 @@ namespace Prodest.Scd.Persistence.Model
         public int IdGrauSigilo { get; set; }
         public int IdTipoSigilo { get; set; }
         public string ConteudoSigilo { get; set; }
-        public int IdItemPlanoClassificacao { get; set; }
+        public int IdCriterioRestricao { get; set; }
         public int IdDocumento { get; set; }
         public string IdentificadorDocumento { get; set; }
         public DateTime DataProducaoDocumento { get; set; }
@@ -19,8 +19,10 @@ namespace Prodest.Scd.Persistence.Model
         public DateTime DataClassificacao { get; set; }
         public string CpfUsuario { get; set; }
         public string CpfIndicacaoAprovador { get; set; }
+        public int PrazoSigilo { get; set; }
+        public int IdUnidadePrazoSigilo { get; set; }
 
+        public CriterioRestricao CriterioRestricao { get; set; }
         public Documento Documento { get; set; }
-        public ItemPlanoClassificacao ItemPlanoClassificacao { get; set; }
     }
 }

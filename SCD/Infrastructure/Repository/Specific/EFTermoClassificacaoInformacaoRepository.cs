@@ -73,7 +73,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             IQueryable<TermoClassificacaoInformacao> queryable = _set.Where(ipc => ipc.Id == id);
 
             if (getRelationship)
-                queryable = queryable.Include(ipc => ipc.ItemPlanoClassificacao)
+                //queryable = queryable.Include(ipc => ipc.ItemPlanoClassificacao)
                                      //.Include(ipc => ipc.TipoDocumental)
                                      ;
 
@@ -85,7 +85,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         //TODO: Verificar como utilizar este método
         private IQueryable<TermoClassificacaoInformacao> GetRelationship()
         {
-            IQueryable<TermoClassificacaoInformacao> queryable = _set.Include(ipc => ipc.ItemPlanoClassificacao)
+            IQueryable<TermoClassificacaoInformacao> queryable = _set/*.Include(ipc => ipc.ItemPlanoClassificacao)*/
                                                   //.Include(ipc => ipc.TipoDocumental)
                                                   ;
 
