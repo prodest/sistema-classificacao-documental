@@ -167,9 +167,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
                         return (destMember == default(int));
                     });
                 })
-                .ForMember(dest => dest.ItemPlanoClassificacao, opt => opt.Ignore())
+                //.ForMember(dest => dest.ItemPlanoClassificacao, opt => opt.Ignore())
                 //.ForMember(dest => dest.TipoDocumental, opt => opt.Ignore())
-                .ForMember(dest => dest.IdItemPlanoClassificacao, opt => opt.MapFrom(src => src.ItemPlanoClassificacao != null ? src.ItemPlanoClassificacao.Id : default(int)))
+                //.ForMember(dest => dest.IdItemPlanoClassificacao, opt => opt.MapFrom(src => src.ItemPlanoClassificacao != null ? src.ItemPlanoClassificacao.Id : default(int)))
                 //.ForMember(dest => dest.IdTipoDocumental, opt => opt.MapFrom(src => src.TipoDocumental != null ? src.TipoDocumental.Id : default(int)))
                 ;
             #endregion

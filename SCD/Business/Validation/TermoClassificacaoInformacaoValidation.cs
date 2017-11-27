@@ -179,18 +179,18 @@ namespace Prodest.Scd.Business.Validation
 
         internal async Task PlanoClassificacaoEquals(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelNew, TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelNew = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
-            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            //PlanoClassificacaoModel planoClassificacaoModelNew = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelNew.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            //PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
 
-            if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
-                throw new ScdException("O Plano de Classificação não pode ser alterado.");
+            //if (planoClassificacaoModelNew.Id != planoClassificacaoModelOld.Id)
+            //    throw new ScdException("O Plano de Classificação não pode ser alterado.");
         }
 
         internal async Task CanUpdate(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld)
         {
-            PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
+            //PlanoClassificacaoModel planoClassificacaoModelOld = (await _itensPlanoClassificacao.SearchAsync(termoClassificacaoInformacaoModelOld.ItemPlanoClassificacao.Id)).PlanoClassificacao;
 
-            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
+            //_planoClassificacaoValidation.CanUpdate(planoClassificacaoModelOld);
         }
 
         internal async Task CanDelete(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
