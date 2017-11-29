@@ -14,8 +14,6 @@ dotnet restore
 
 npm install
 
-rm -rf bin
-
 dotnet publish -c release -r debian.8-x64 -o publish ./
 
 cd ../../

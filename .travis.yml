@@ -2,7 +2,7 @@ language: csharp
 dist: trusty
 sudo: required
 mono: none
-dotnet: 2.0.2
+dotnet: 2.0.3
 services:
   - docker
 install:
