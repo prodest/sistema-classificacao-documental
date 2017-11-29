@@ -10,6 +10,8 @@ export DOCKER_IMAGE=prodest/scd
 
 cd SCD/Web/
 
+rm -rf bin
+
 dotnet restore
 
 npm install
