@@ -10,11 +10,11 @@ export DOCKER_IMAGE=prodest/scd
 
 cd SCD/Web/
 
-rm -rf bin
-
 dotnet restore
 
 npm install
+
+rm -rf bin
 
 dotnet publish -c release -r debian.8-x64 -o publish ./
 

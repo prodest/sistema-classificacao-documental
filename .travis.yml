@@ -13,7 +13,7 @@ deploy:
   - provider: script
     script: . ./scripts/.develop.sh
     on:
-      branch: develop
+      branch: travis
   - provider: script
     script: . ./scripts/.release.sh
     on:
