@@ -1,36 +1,29 @@
-﻿using Prodest.Scd.Integration.Organograma.Model;
+﻿using Prodest.Scd.Business.Model;
+using Prodest.Scd.Integration.Organograma.Model;
 using Prodest.Scd.Presentation.ViewModel.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static Prodest.Scd.Business.Model.TermoClassificacaoInformacaoModel;
 
 namespace Prodest.Scd.Presentation.ViewModel
 {
     public class TermoClassificacaoInformacaoViewModel : BaseViewModel
     {
+        public PlanoClassificacaoEntidade plano { get; set; }
         public List<TermoClassificacaoInformacaoEntidade> entidades { get; set; }
         public TermoClassificacaoInformacaoEntidade entidade { get; set; }
+        public ICollection<CriterioRestricaoEntidade> Criterios { get; set; }
         public FiltroTermoClassificacaoInformacao filtro { get; set; }
-        public bool EncerrarDataVigencia
-        {
-            get
-            {
-                return Action != null && Action.Equals("UpdateVigencia") ? true : false;
-            }
-        }
-        public string DisableInput
-        {
-            get
-            {
-                return EncerrarDataVigencia ? "disabled" : "";
-            }
-        }
+        public ICollection<EnumModel> graus { get; set; }
+        public ICollection<EnumModel> tiposSigilo { get; set; }
     }
-
 
     public class FiltroTermoClassificacaoInformacao
     {
         public string pesquisa { get; set; }
+        public int IdPlanoClassificacao { get; set; }
+
     }
 
     public class TermoClassificacaoInformacaoEntidade
@@ -39,62 +32,102 @@ namespace Prodest.Scd.Presentation.ViewModel
         [Required(ErrorMessage = "Obrigatório")]
         public string Codigo { get; set; }
         [Required(ErrorMessage = "Obrigatório")]
-        public string Descricao { get; set; }
-        [Required(ErrorMessage = "Obrigatório")]
-        public bool AreaFim { get; set; }
 
-        public string AreaFimDescricao
+
+
+        public GrauSigiloModel GrauSigilo { get; set; }
+        public string GrauDescricao
         {
             get
             {
-                return AreaFim ? "Fim" : "Meio";
+                return GrauSigilo > 0 ? GrauSigilo.ToString() : "Não informado";
             }
         }
-      
+        public TipoSigiloModel TipoSigilo { get; set; }
+        public string TipoSigiloDescricao
+        {
+            get
+            {
+                return TipoSigilo > 0 ? TipoSigilo.ToString() : "Não informado";
+            }
+        }
+        public string ConteudoSigilo { get; set; }
+        public CriterioRestricaoEntidade CriterioRestricao { get; set; }
+        public DocumentoEntidade Documento { get; set; }
+        public string IdentificadorDocumento { get; set; }
+        public string FundamentoLegal { get; set; }
+        public string Justificativa { get; set; }
+        public int? PrazoTermino { get; set; }
+        public UnidadeTempo? UnidadePrazoTermino { get; set; }
+        public int? IdUnidadePrazoTermino
+        {
+            get
+            {
+                if (UnidadePrazoTermino != null)
+                {
+                    return (int)UnidadePrazoTermino;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    UnidadePrazoTermino = (UnidadeTempo)value.Value;
+                }
+                else
+                {
+                    UnidadePrazoTermino = null;
+                }
+            }
+        }
+
+        public int IdGrau
+        {
+            get
+            {
+                return (int)GrauSigilo;
+            }
+            set
+            {
+                GrauSigilo = (GrauSigiloModel)value;
+            }
+        }
+
+        public int IdTipoSigilo
+        {
+            get
+            {
+                return (int)TipoSigilo;
+            }
+            set
+            {
+                TipoSigilo = (TipoSigiloModel)value;
+            }
+        }
 
         [DataType(DataType.Date)]
-        public DateTime? Aprovacao { get; set; }
-
+        public DateTime? DataProducaoDocumento { get; set; }
         [DataType(DataType.Date)]
-        public DateTime? Publicacao { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime? InicioVigencia { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime? FimVigencia { get; set; }
-
-        public string AprovacaoDescricao
+        public DateTime? DataClassificacao { get; set; }
+        public string DataProducaoDocumentoDescricao
         {
             get
             {
-                return Aprovacao.HasValue ? Aprovacao.Value.ToString("dd/MM/yyyy") : "-";
+                return DataProducaoDocumento.HasValue ? DataProducaoDocumento.Value.ToString("dd/MM/yyyy") : "-";
             }
         }
-        public string PublicacaoDescricao
+        public string DataClassificacaoDescricao
         {
             get
             {
-                return Publicacao.HasValue ? Publicacao.Value.ToString("dd/MM/yyyy") : "-";
-            }
-        }
-        public string InicioVigenciaDescricao
-        {
-            get
-            {
-                return InicioVigencia.HasValue ? InicioVigencia.Value.ToString("dd/MM/yyyy") : "-";
-            }
-        }
-        public string FimVigenciaDescricao
-        {
-            get
-            {
-                return FimVigencia.HasValue ? FimVigencia.Value.ToString("dd/MM/yyyy") : "-";
+                return DataClassificacao.HasValue ? DataClassificacao.Value.ToString("dd/MM/yyyy") : "-";
             }
         }
 
-
-        
 
     }
 

@@ -10,28 +10,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Prodest.Scd.Business.Model.CriterioRestricaoModel;
+using static Prodest.Scd.Business.Model.TermoClassificacaoInformacaoModel;
 
 namespace Prodest.Scd.Presentation
 {
-    public class CriterioRestricaoService : ICriterioRestricaoService
+    public class TermoClassificacaoInformacaoService : ITermoClassificacaoInformacaoService
     {
-        private ICriterioRestricaoCore _core;
+        private ITermoClassificacaoInformacaoCore _core;
+        private ICriterioRestricaoCore _coreCriterio;
         private IPlanoClassificacaoCore _corePlanoClassificacao;
         private IDocumentoCore _coreDocumento;
         private IMapper _mapper;
 
-        public CriterioRestricaoService(ICriterioRestricaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IDocumentoCore coreDocumento, IMapper mapper)
+        public TermoClassificacaoInformacaoService(ITermoClassificacaoInformacaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IDocumentoCore coreDocumento, ICriterioRestricaoCore coreCriterio, IMapper mapper)
         {
-            _corePlanoClassificacao = corePlanoClassificacao;
-            _coreDocumento = coreDocumento;
             _core = core;
             _mapper = mapper;
+            _corePlanoClassificacao = corePlanoClassificacao;
+            _coreDocumento = coreDocumento;
+            _coreCriterio = coreCriterio;
         }
 
-        public async Task<CriterioRestricaoViewModel> Delete(int id)
+        public async Task<TermoClassificacaoInformacaoViewModel> Delete(int id)
         {
-            var model = new CriterioRestricaoViewModel();
+            var model = new TermoClassificacaoInformacaoViewModel();
             try
             {
                 await _core.DeleteAsync(id);
@@ -64,35 +66,28 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        private ICollection<EnumModel> obterListaUnidadesTempo()
+        public async Task<TermoClassificacaoInformacaoViewModel> SearchDocumentosByCriterio(int IdCriterio)
         {
-            return new List<EnumModel> {
-                    new EnumModel { Id = (int)UnidadeTempo.Anos, Nome = UnidadeTempo.Anos.ToString() },
-                    new EnumModel { Id = (int)UnidadeTempo.Dias, Nome = UnidadeTempo.Dias.ToString()  },
-                    new EnumModel { Id = (int)UnidadeTempo.Meses, Nome = UnidadeTempo.Meses.ToString()  },
-                    new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
-                };
-        }
-
-        private ICollection<EnumModel> obterListaGraus()
-        {
-            return new List<EnumModel> {
-                    new EnumModel { Id = (int)GrauSigiloModel.Reservado, Nome = "Reservado" },
-                    new EnumModel { Id = (int)GrauSigiloModel.Secreto, Nome = "Secreto" },
-                    new EnumModel { Id = (int)GrauSigiloModel.Ultrassecreto, Nome = "Ultrassecreto" },
-                };
-        }
-
-        public async Task<CriterioRestricaoViewModel> Edit(int id)
-        {
-            var model = new CriterioRestricaoViewModel();
+            var model = new TermoClassificacaoInformacaoViewModel();
             try
             {
-                model.Action = "Update";
-                model.entidade = _mapper.Map<CriterioRestricaoEntidade>(await _core.SearchAsync(id));
-                model.graus = obterListaGraus();
-                model.unidadesTempo = obterListaUnidadesTempo();
-                model.Documentos = _mapper.Map<ICollection<DocumentoEntidade>>(await _coreDocumento.SearchByPlanoAsync(model.entidade.PlanoClassificacao.Id));
+                if (IdCriterio != 0)
+                {
+                    model.entidade = new TermoClassificacaoInformacaoEntidade
+                    {
+                        CriterioRestricao = _mapper.Map<CriterioRestricaoEntidade>(await _coreCriterio.SearchAsync(IdCriterio))
+                    };
+                }
+                else
+                {
+                    model.entidade = new TermoClassificacaoInformacaoEntidade
+                    {
+                        CriterioRestricao = new CriterioRestricaoEntidade
+                        {
+                            Documentos = new List<DocumentoEntidade>()
+                        }
+                    };
+                }
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -115,13 +110,44 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<CriterioRestricaoViewModel> Update(CriterioRestricaoEntidade entidade)
+        public async Task<TermoClassificacaoInformacaoViewModel> Edit(int id)
         {
-            var model = new CriterioRestricaoViewModel();
+            var model = new TermoClassificacaoInformacaoViewModel();
+            try
+            {
+                model.Action = "Update";
+                model.entidade = _mapper.Map<TermoClassificacaoInformacaoEntidade>(await _core.SearchAsync(id));
+                model.graus = obterListaGraus();
+                model.tiposSigilo = obterListaTiposSigilo();
+                model.Result = new ResultViewModel
+                {
+                    Ok = true
+                };
+            }
+            catch (ScdException e)
+            {
+                model.Result = new ResultViewModel
+                {
+                    Ok = false,
+                    Messages = new List<MessageViewModel>()
+                    {
+                        new MessageViewModel{
+                            Message = e.Message,
+                            Type = TypeMessageViewModel.Fail
+                        }
+                    }
+                };
+            }
+            return model;
+        }
+
+        public async Task<TermoClassificacaoInformacaoViewModel> Update(TermoClassificacaoInformacaoEntidade entidade)
+        {
+            var model = new TermoClassificacaoInformacaoViewModel();
             model.entidade = entidade;
             try
             {
-                await _core.UpdateAsync(_mapper.Map<CriterioRestricaoModel>(entidade));
+                await _core.UpdateAsync(_mapper.Map<TermoClassificacaoInformacaoModel>(entidade));
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -151,13 +177,30 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<CriterioRestricaoViewModel> Create(CriterioRestricaoEntidade entidade)
+
+        private ICollection<EnumModel> obterListaGraus()
         {
-            var model = new CriterioRestricaoViewModel();
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)GrauSigiloModel.Reservado, Nome = "Reservado" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Secreto, Nome = "Secreto" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Ultrassecreto, Nome = "Ultrassecreto" },
+                };
+        }
+
+        private ICollection<EnumModel> obterListaTiposSigilo()
+        {
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)TipoSigiloModel.Parcial, Nome = "Parcial" },
+                    new EnumModel { Id = (int)TipoSigiloModel.Total, Nome = "Total" },
+                };
+        }
+
+        public async Task<TermoClassificacaoInformacaoViewModel> Create(TermoClassificacaoInformacaoEntidade entidade)
+        {
+            var model = new TermoClassificacaoInformacaoViewModel();
             try
             {
-                var modelInsert = await _core.InsertAsync(_mapper.Map<CriterioRestricaoModel>(entidade));
-                model.entidade = _mapper.Map<CriterioRestricaoEntidade>(modelInsert);
+                await _core.InsertAsync(_mapper.Map<TermoClassificacaoInformacaoModel>(entidade));
                 model.Result = new ResultViewModel
                 {
                     Ok = true,
@@ -172,11 +215,6 @@ namespace Prodest.Scd.Presentation
             }
             catch (ScdException e)
             {
-                //Necessário configurar a tela para continuar a ação 
-                model.Action = "Create";
-                model.graus = obterListaGraus();
-                model.unidadesTempo = obterListaUnidadesTempo();
-                model.entidade = entidade;
                 model.Result = new ResultViewModel
                 {
                     Ok = false,
@@ -192,15 +230,12 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-
-
-
-        public async Task<CriterioRestricaoViewModel> Search(FiltroCriterioRestricao filtro)
+        public async Task<TermoClassificacaoInformacaoViewModel> Search(FiltroTermoClassificacaoInformacao filtro)
         {
-            var model = new CriterioRestricaoViewModel();
+            var model = new TermoClassificacaoInformacaoViewModel();
             model.plano = new PlanoClassificacaoEntidade { Id = filtro.IdPlanoClassificacao };
-            var entidades = await _core.SearchByPlanoClassificacaoAsync(filtro.IdPlanoClassificacao);
-            model.entidades = _mapper.Map<ICollection<CriterioRestricaoEntidade>>(entidades);
+            var entidades = await _core.SearchByUserAsync();
+            model.entidades = _mapper.Map<List<TermoClassificacaoInformacaoEntidade>>(entidades);
             model.Result = new ResultViewModel
             {
                 Ok = true
@@ -208,18 +243,23 @@ namespace Prodest.Scd.Presentation
             return model;
         }
 
-        public async Task<CriterioRestricaoViewModel> New(int idPlanoClassificacao)
+        public async Task<TermoClassificacaoInformacaoViewModel> New(int idPlanoClassificacao)
         {
-            var model = new CriterioRestricaoViewModel();
+            var model = new TermoClassificacaoInformacaoViewModel();
             try
             {
                 model.Action = "Create";
-                model.entidade = new CriterioRestricaoEntidade
+                model.entidade = new TermoClassificacaoInformacaoEntidade
                 {
-                    PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
+                    CriterioRestricao = new CriterioRestricaoEntidade
+                    {
+                        PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
+                        Documentos = new List<DocumentoEntidade>()
+                    }
                 };
                 model.graus = obterListaGraus();
-                model.unidadesTempo = obterListaUnidadesTempo();
+                model.tiposSigilo = obterListaTiposSigilo();
+                model.Criterios = _mapper.Map<List<CriterioRestricaoEntidade>>(await _coreCriterio.SearchByPlanoClassificacaoAsync(idPlanoClassificacao));
                 model.Result = new ResultViewModel
                 {
                     Ok = true

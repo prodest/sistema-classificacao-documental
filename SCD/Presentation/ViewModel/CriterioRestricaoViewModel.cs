@@ -33,6 +33,15 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string Codigo { get; set; }
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
+
+        public string CodigoDescricao
+        {
+            get
+            {
+                return $"{Codigo} - {Descricao}";
+            }
+        }
+
         public string Justificativa { get; set; }
         public string FundamentoLegal { get; set; }
 
@@ -41,7 +50,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         {
             get
             {
-                return Grau>0 ? Grau.ToString() : "Não informado";
+                return Grau > 0 ? Grau.ToString() : "Não informado";
             }
         }
         public bool Classificavel { get; set; }

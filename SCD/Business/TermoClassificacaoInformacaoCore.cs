@@ -5,6 +5,7 @@ using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace Prodest.Scd.Business
 {
@@ -23,56 +24,96 @@ namespace Prodest.Scd.Business
 
         public async Task<TermoClassificacaoInformacaoModel> InsertAsync(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            await _validation.BasicValid(termoClassificacaoInformacaoModel);
-
-            _validation.IdInsertValid(termoClassificacaoInformacaoModel.Id);
-
-            //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
-            termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.AddAsync(termoClassificacaoInformacaoModel);
-
-            return termoClassificacaoInformacaoModel;
+            return new TermoClassificacaoInformacaoModel()
+            {
+                Id = 2,
+                Codigo = "ABCDEFGHIJK",
+                ConteudoSigilo = "ABCDEFGHIJK",
+                CpfIndicacaoAprovador = "ABCDEFGHIJK",
+                CpfUsuario = "ABCDEFGHIJK",
+                CriterioRestricao = new CriterioRestricaoModel { Codigo = "ABCDEFGHIJK", Descricao = "ABCDEFGHIJK" },
+                DataClassificacao = DateTime.Now,
+                DataProducaoDocumento = DateTime.Now,
+                Documento = new DocumentoModel { Codigo = "ABCDEFGHIJK", Descricao = "ABCDEFGHIJK" },
+                FundamentoLegal = "ABCDEFGHIJK",
+                GrauSigilo = GrauSigiloModel.Reservado,
+                IdentificadorDocumento = "ABCDEFGHIJK",
+                Justificativa = "ABCDEFGHIJK",
+                TipoSigilo = TermoClassificacaoInformacaoModel.TipoSigiloModel.Parcial
+            };
         }
 
         public async Task<TermoClassificacaoInformacaoModel> SearchAsync(int id)
         {
-            _validation.IdValid(id);
-
-            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.SearchAsync(id);
-
-            _validation.Found(termoClassificacaoInformacaoModel);
-
-            return termoClassificacaoInformacaoModel;
+            return new TermoClassificacaoInformacaoModel()
+            {
+                Id = 2,
+                Codigo = "ABCDEFGHIJK",
+                ConteudoSigilo = "ABCDEFGHIJK",
+                CpfIndicacaoAprovador = "ABCDEFGHIJK",
+                CpfUsuario = "ABCDEFGHIJK",
+                CriterioRestricao = new CriterioRestricaoModel { Codigo = "ABCDEFGHIJK", Descricao = "ABCDEFGHIJK" },
+                DataClassificacao = DateTime.Now,
+                DataProducaoDocumento = DateTime.Now,
+                Documento = new DocumentoModel { Codigo = "ABCDEFGHIJK", Descricao = "ABCDEFGHIJK" },
+                FundamentoLegal = "ABCDEFGHIJK",
+                GrauSigilo = GrauSigiloModel.Reservado,
+                IdentificadorDocumento = "ABCDEFGHIJK",
+                Justificativa = "ABCDEFGHIJK",
+                TipoSigilo = TermoClassificacaoInformacaoModel.TipoSigiloModel.Parcial
+            };
         }
 
-        public Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync()
+        public async Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync()
         {
-            throw new System.NotImplementedException();
+            List<TermoClassificacaoInformacaoModel> retorno = new List<TermoClassificacaoInformacaoModel>
+            {
+                new TermoClassificacaoInformacaoModel()
+                {
+                    Id = 1,
+                    Codigo = "ABCDEFGHIJK",
+                    ConteudoSigilo = "ABCDEFGHIJK",
+                    CpfIndicacaoAprovador = "ABCDEFGHIJK",
+                    CpfUsuario = "ABCDEFGHIJK",
+                    CriterioRestricao = new CriterioRestricaoModel { Codigo = "ABCDEFGHIJK",Descricao= "ABCDEFGHIJK"},
+                    DataClassificacao = DateTime.Now,
+                    DataProducaoDocumento= DateTime.Now,
+                    Documento = new DocumentoModel { Codigo = "ABCDEFGHIJK",Descricao= "ABCDEFGHIJK"},
+                    FundamentoLegal= "ABCDEFGHIJK",
+                    GrauSigilo = GrauSigiloModel.Reservado,
+                    IdentificadorDocumento= "ABCDEFGHIJK",
+                    Justificativa= "ABCDEFGHIJK",
+                    TipoSigilo = TermoClassificacaoInformacaoModel.TipoSigiloModel.Parcial
+                },
+                new TermoClassificacaoInformacaoModel()
+                {
+                    Id = 2,
+                    Codigo = "ABCDEFGHIJK",
+                    ConteudoSigilo = "ABCDEFGHIJK",
+                    CpfIndicacaoAprovador = "ABCDEFGHIJK",
+                    CpfUsuario = "ABCDEFGHIJK",
+                    CriterioRestricao = new CriterioRestricaoModel { Codigo = "ABCDEFGHIJK",Descricao= "ABCDEFGHIJK"},
+                    DataClassificacao = DateTime.Now,
+                    DataProducaoDocumento= DateTime.Now,
+                    Documento = new DocumentoModel { Codigo = "ABCDEFGHIJK",Descricao= "ABCDEFGHIJK"},
+                    FundamentoLegal= "ABCDEFGHIJK",
+                    GrauSigilo = GrauSigiloModel.Reservado,
+                    IdentificadorDocumento= "ABCDEFGHIJK",
+                    Justificativa= "ABCDEFGHIJK",
+                    TipoSigilo = TermoClassificacaoInformacaoModel.TipoSigiloModel.Parcial
+                }
+            };
+            return retorno;
         }
 
         public async Task UpdateAsync(TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel)
         {
-            await _validation.Valid(termoClassificacaoInformacaoModel);
-
-            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModelOld = await _termosClassificacaoInformacao.SearchAsync(termoClassificacaoInformacaoModel.Id);
-
-            _validation.Found(termoClassificacaoInformacaoModelOld);
-
-            await _validation.PlanoClassificacaoEquals(termoClassificacaoInformacaoModel, termoClassificacaoInformacaoModelOld);
-
-            await _validation.CanUpdate(termoClassificacaoInformacaoModelOld);
-
-            await _termosClassificacaoInformacao.UpdateAsync(termoClassificacaoInformacaoModel);
+            
         }
 
         public async Task DeleteAsync(int id)
         {
-            TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await _termosClassificacaoInformacao.SearchAsync(id);
-
-            _validation.Found(termoClassificacaoInformacaoModel);
-
-            await _validation.CanDelete(termoClassificacaoInformacaoModel);
-
-            await _termosClassificacaoInformacao.RemoveAsync(termoClassificacaoInformacaoModel.Id);
+            
         }
     }
 }
