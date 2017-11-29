@@ -47,6 +47,10 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             return documentosModel;
         }
 
+        
+
+        
+
         public async Task<DocumentoModel> SearchAsync(int id)
         {
             Documento documento = await SearchPersistenceAsync(id, true);
@@ -87,7 +91,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             await _unitOfWork.SaveAsync();
         }
-
+        
         private async Task<ICollection<Documento>> SearchPersistenceByPlanoAsync(int idPlanoClassificacao, bool getRelationship = false)
         {
             IQueryable<Documento> queryable = _set.Where(d => d.ItemPlanoClassificacao.IdPlanoClassificacao == idPlanoClassificacao);
@@ -100,6 +104,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             return documentos;
         }
+
+    
 
         private async Task<Documento> SearchPersistenceAsync(int id, bool getRelationship = false)
         {

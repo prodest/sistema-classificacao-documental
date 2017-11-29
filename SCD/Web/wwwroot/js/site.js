@@ -29,6 +29,16 @@ $('#DivConteudo').on('click', 'button.BotaoAjax, li.ItemAjax', function (e) {
     });
 });
 
+$('#DivConteudo').on('change', '#entidade_CriterioRestricao_Id', function (e) {
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    var id = $('#entidade_CriterioRestricao_Id').val();
+    $.get('/TermoClassificacaoInformacao/DocumentosByCriterio?idCriterioRestricao='+id).then(function (dados) {
+        $('#DivCriterioRestricaoDocumentos').html(dados);
+        $.validator.unobtrusive.parse($('form'));
+    });
+});
+
 function ShowMessage(item, index) {
     message = item.message;
     tipo = item.type; //para uso futuro
