@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:2.0
+    working_directory: ~/scd
+    steps:
+      - checkout
+      - run: ./scripts/.travis.sh
+workflows:
+  version: 2
+  build-with-context:
+    jobs:
+      - build

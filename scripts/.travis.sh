@@ -12,7 +12,7 @@ cd SCD/Web/
 
 dotnet restore
 
-npm install
+#npm install
 
 dotnet publish -c release -r debian.8-x64 -o publish ./
 
