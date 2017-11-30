@@ -20,7 +20,7 @@ namespace Prodest.Scd.Business.Model
                 else if (FimPrazoSigilo <= DataProducaoDocumento.AddYears(15))
                     grauSigilo = GrauSigiloModel.Secreto;
                 else if (FimPrazoSigilo <= DataProducaoDocumento.AddYears(25))
-                    grauSigilo = GrauSigiloModel.UltraSecreto;
+                    grauSigilo = GrauSigiloModel.Ultrassecreto;
 
                 return grauSigilo;
             }

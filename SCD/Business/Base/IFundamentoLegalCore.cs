@@ -11,12 +11,12 @@ namespace Prodest.Scd.Business.Base
 
         Task DeleteAsync(int id);
 
-        Task<FundamentoLegalModel> InsertAsync(FundamentoLegalModel nivelClassificacao);
+        Task<FundamentoLegalModel> InsertAsync(FundamentoLegalModel fundamentoLegal);
 
         Task<FundamentoLegalModel> SearchAsync(int id);
 
         Task<ICollection<FundamentoLegalModel>> SearchAsync(Guid guidOrganizacao, int page, int count);
 
-        Task UpdateAsync(FundamentoLegalModel nivelClassificacao);
+        Task UpdateAsync(FundamentoLegalModel fundamentoLegal);
     }
 }

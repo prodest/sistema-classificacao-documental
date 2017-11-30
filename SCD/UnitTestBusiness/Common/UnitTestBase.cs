@@ -324,7 +324,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = new TermoClassificacaoInformacaoModel
             {
                 Codigo = codigo,
-                GrauSigilo = grauSigilo,
+                //GrauSigilo = grauSigilo,
                 TipoSigilo = tipoSigilo,
                 ConteudoSigilo = conteudoSigilo,
                 IdentificadorDocumento = identificadorDocumento,
