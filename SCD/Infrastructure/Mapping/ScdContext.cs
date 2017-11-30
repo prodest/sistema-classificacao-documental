@@ -9,6 +9,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
         public virtual DbSet<CriterioRestricao> CriterioRestricao { get; set; }
         public virtual DbSet<CriterioRestricaoDocumento> CriterioRestricaoDocumento { get; set; }
         public virtual DbSet<Documento> Documento { get; set; }
+        public virtual DbSet<FundamentoLegal> FundamentoLegal { get; set; }
         public virtual DbSet<ItemPlanoClassificacao> ItemPlanoClassificacao { get; set; }
         public virtual DbSet<NivelClassificacao> NivelClassificacao { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
@@ -140,6 +141,33 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasForeignKey(d => d.IdTipoDocumental)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Documento_TipoDocumental");
+            });
+
+            modelBuilder.Entity<FundamentoLegal>(entity =>
+            {
+                entity.ToTable("FundamentoLegal", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasColumnName("codigo")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
+
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.FundamentosLegais)
+                    .HasForeignKey(d => d.IdOrganizacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FundamentoLegal_Organizacao");
             });
 
             modelBuilder.Entity<ItemPlanoClassificacao>(entity =>
