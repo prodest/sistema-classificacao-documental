@@ -70,7 +70,7 @@ namespace Prodest.Scd.Business
             //TODO: Após a aprovação não poderá sofrer atualização.
             //await _validation.PlanoClassificacaoEquals(termoClassificacaoInformacaoModel, termoClassificacaoInformacaoModelOld);
 
-            //await _validation.CanUpdate(termoClassificacaoInformacaoModelOld);
+            await _validation.CanUpdate(termoClassificacaoInformacaoModelOld);
 
             await _termosClassificacaoInformacao.UpdateAsync(termoClassificacaoInformacaoModel);
         }

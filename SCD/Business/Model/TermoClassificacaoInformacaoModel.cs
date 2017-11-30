@@ -9,7 +9,40 @@ namespace Prodest.Scd.Business.Model
         public int Id { get; set; }
         public string Codigo { get; set; }
         public Guid GuidOrganizacao { get; set; }
-        public GrauSigiloModel GrauSigilo { get; set; }
+        public GrauSigiloModel GrauSigilo
+        {
+            get
+            {
+                GrauSigiloModel grauSigilo = default(GrauSigiloModel);
+
+                if (FimPrazoSigilo <= DataProducaoDocumento.AddYears(5))
+                    grauSigilo = GrauSigiloModel.Reservado;
+                else if (FimPrazoSigilo <= DataProducaoDocumento.AddYears(15))
+                    grauSigilo = GrauSigiloModel.Secreto;
+                else if (FimPrazoSigilo <= DataProducaoDocumento.AddYears(25))
+                    grauSigilo = GrauSigiloModel.UltraSecreto;
+
+                return grauSigilo;
+            }
+        }
+        public DateTime FimPrazoSigilo
+        {
+            get
+            {
+                DateTime fimPrazoSigilo = default(DateTime);
+
+                if (UnidadeTempo.Anos.Equals(UnidadePrazoSigilo))
+                    fimPrazoSigilo = DataProducaoDocumento.AddYears(PrazoSigilo);
+                else if (UnidadeTempo.Meses.Equals(UnidadePrazoSigilo))
+                    fimPrazoSigilo = DataProducaoDocumento.AddMonths(PrazoSigilo);
+                else if (UnidadeTempo.Dias.Equals(UnidadePrazoSigilo))
+                    fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo);
+                else if (UnidadeTempo.Semanas.Equals(UnidadePrazoSigilo))
+                    fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo * 7);
+
+                return fimPrazoSigilo;
+            }
+        }
         public TipoSigiloModel TipoSigilo { get; set; }
         public string ConteudoSigilo { get; set; }
         public string IdentificadorDocumento { get; set; }
