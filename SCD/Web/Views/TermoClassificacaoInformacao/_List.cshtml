@@ -43,7 +43,7 @@
                             <button title="Editar" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--grey BotaoAjax" data-url="/TermoClassificacaoInformacao/Edit/@item.Id">
                                 <i class="material-icons">edit</i>
                             </button>
-                            <button title="Excluir" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--red BotaoAjax" data-url="/TermoClassificacaoInformacao/Delete/@item.Id">
+                            <button title="Excluir" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-color--red BotaoAjax" data-url="/TermoClassificacaoInformacao/Delete?id=@item.Id&idPlanoClassificacao=@Model.plano.Id">
                                 <i class="material-icons">delete</i>
                             </button>
                         </td>

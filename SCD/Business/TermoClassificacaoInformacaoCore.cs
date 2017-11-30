@@ -67,6 +67,10 @@ namespace Prodest.Scd.Business
 
             _validation.Found(termoClassificacaoInformacaoModelOld);
 
+            termoClassificacaoInformacaoModel.CpfUsuario = termoClassificacaoInformacaoModelOld.CpfUsuario;
+            termoClassificacaoInformacaoModel.GuidOrganizacao = termoClassificacaoInformacaoModelOld.GuidOrganizacao;
+            termoClassificacaoInformacaoModel.DataClassificacao = termoClassificacaoInformacaoModelOld.DataClassificacao;
+
             //TODO: Após a aprovação não poderá sofrer atualização.
             //await _validation.PlanoClassificacaoEquals(termoClassificacaoInformacaoModel, termoClassificacaoInformacaoModelOld);
 

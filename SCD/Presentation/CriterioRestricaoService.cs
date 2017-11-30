@@ -217,7 +217,10 @@ namespace Prodest.Scd.Presentation
                 model.entidade = new CriterioRestricaoEntidade
                 {
                     PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
+                    Documentos = new List<DocumentoEntidade>()
                 };
+
+                model.Documentos = _mapper.Map<ICollection<DocumentoEntidade>>(await _coreDocumento.SearchByPlanoAsync(idPlanoClassificacao));
                 model.graus = obterListaGraus();
                 model.unidadesTempo = obterListaUnidadesTempo();
                 model.Result = new ResultViewModel

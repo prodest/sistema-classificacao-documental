@@ -16,6 +16,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public ICollection<CriterioRestricaoEntidade> Criterios { get; set; }
         public FiltroTermoClassificacaoInformacao filtro { get; set; }
         public ICollection<EnumModel> graus { get; set; }
+        public ICollection<EnumModel> unidadesTempo { get; set; }
         public ICollection<EnumModel> tiposSigilo { get; set; }
     }
 
@@ -57,15 +58,18 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string IdentificadorDocumento { get; set; }
         public string FundamentoLegal { get; set; }
         public string Justificativa { get; set; }
-        public int? PrazoTermino { get; set; }
-        public UnidadeTempo? UnidadePrazoTermino { get; set; }
-        public int? IdUnidadePrazoTermino
+
+        public string CpfIndicacaoAprovador { get; set; }
+
+        public int? PrazoSigilo { get; set; }
+        public UnidadeTempo? UnidadePrazoSigilo { get; set; }
+        public int? IdUnidadePrazoSigilo
         {
             get
             {
-                if (UnidadePrazoTermino != null)
+                if (UnidadePrazoSigilo != null)
                 {
-                    return (int)UnidadePrazoTermino;
+                    return (int)UnidadePrazoSigilo;
                 }
                 else
                 {
@@ -76,11 +80,11 @@ namespace Prodest.Scd.Presentation.ViewModel
             {
                 if (value.HasValue)
                 {
-                    UnidadePrazoTermino = (UnidadeTempo)value.Value;
+                    UnidadePrazoSigilo = (UnidadeTempo)value.Value;
                 }
                 else
                 {
-                    UnidadePrazoTermino = null;
+                    UnidadePrazoSigilo = null;
                 }
             }
         }

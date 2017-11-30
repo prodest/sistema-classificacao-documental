@@ -52,7 +52,7 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id, int idPlanoClassificacao)
         {
             var model = await _service.Edit(id);
             AddHttpContextMessages(model.Result.Messages);
@@ -62,7 +62,7 @@ namespace Web.Controllers
             }
             else
             {
-                return await List(model.plano.Id);
+                return await List(idPlanoClassificacao);
             }
         }
 
@@ -70,18 +70,27 @@ namespace Web.Controllers
         public async Task<IActionResult> New(int idPlanoClassificacao)
         {
             var model = await _service.New(idPlanoClassificacao);
-            return PartialView("_Form", model);
+            AddHttpContextMessages(model.Result.Messages);
+            if (model.Result.Ok)
+            {
+                return PartialView("_Form", model);
+            }
+            else
+            {
+                return await List(idPlanoClassificacao);
+            }
         }
 
         public async Task<IActionResult> Create(TermoClassificacaoInformacaoViewModel model)
         {
             if (model != null && model.entidade != null)
             {
+                var modelAux = model.Clone() as TermoClassificacaoInformacaoViewModel;
                 model = await _service.Create(model.entidade);
                 AddHttpContextMessages(model.Result.Messages);
                 if (model.Result.Ok)
                 {
-                    return await List(model.entidade.CriterioRestricao.PlanoClassificacao.Id);
+                    return await List(modelAux.entidade.CriterioRestricao.PlanoClassificacao.Id);
                 }
             }
             //Se de tudo der errado, volta para o formulário
@@ -99,7 +108,7 @@ namespace Web.Controllers
                     return await List(model.entidade.CriterioRestricao.PlanoClassificacao.Id);
                 }
             }
-            return await Edit(model.entidade.Id);
+            return await Edit(model.entidade.Id, model.entidade.CriterioRestricao.PlanoClassificacao.Id);
         }
     }
 }

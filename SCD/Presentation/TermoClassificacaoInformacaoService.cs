@@ -117,8 +117,10 @@ namespace Prodest.Scd.Presentation
             {
                 model.Action = "Update";
                 model.entidade = _mapper.Map<TermoClassificacaoInformacaoEntidade>(await _core.SearchAsync(id));
+                model.unidadesTempo = obterListaUnidadesTempo();
                 model.graus = obterListaGraus();
                 model.tiposSigilo = obterListaTiposSigilo();
+                model.Criterios = _mapper.Map<List<CriterioRestricaoEntidade>>(await _coreCriterio.SearchByPlanoClassificacaoAsync(model.entidade.CriterioRestricao.PlanoClassificacao.Id));
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -195,6 +197,17 @@ namespace Prodest.Scd.Presentation
                 };
         }
 
+        private ICollection<EnumModel> obterListaUnidadesTempo()
+        {
+            return new List<EnumModel> {
+                    new EnumModel { Id = (int)UnidadeTempo.Anos, Nome = UnidadeTempo.Anos.ToString() },
+                    new EnumModel { Id = (int)UnidadeTempo.Dias, Nome = UnidadeTempo.Dias.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempo.Meses, Nome = UnidadeTempo.Meses.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
+                };
+        }
+
+
         public async Task<TermoClassificacaoInformacaoViewModel> Create(TermoClassificacaoInformacaoEntidade entidade)
         {
             var model = new TermoClassificacaoInformacaoViewModel();
@@ -258,6 +271,7 @@ namespace Prodest.Scd.Presentation
                     }
                 };
                 model.graus = obterListaGraus();
+                model.unidadesTempo = obterListaUnidadesTempo();
                 model.tiposSigilo = obterListaTiposSigilo();
                 model.Criterios = _mapper.Map<List<CriterioRestricaoEntidade>>(await _coreCriterio.SearchByPlanoClassificacaoAsync(idPlanoClassificacao));
                 model.Result = new ResultViewModel
