@@ -24,15 +24,20 @@ namespace Prodest.Scd.Presentation.ViewModel
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
         [Required(ErrorMessage = "Obrigatório")]
-        public bool Ativo { get; set; }
+        public string Codigo { get; set; }
+        [Required(ErrorMessage = "Obrigatório")]
 
-        public string AtivoDescricao
-        {
-            get
-            {
-                return Ativo ? "Ativo" : "Inativo";
-            }
-        }
+
+
+        //public bool Ativo { get; set; }
+
+        //public string AtivoDescricao
+        //{
+        //    get
+        //    {
+        //        return Ativo ? "Ativo" : "Inativo";
+        //    }
+        //}
 
     }
 

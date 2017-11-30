@@ -12,6 +12,13 @@
                 </button>
             </div>
             <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.Codigo" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="entidade.Codigo">Código..</label>
+                    <span asp-validation-for="entidade.Codigo" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
                 <input hidden asp-for="entidade.Id" />
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -20,14 +27,15 @@
                     <span asp-validation-for="entidade.Descricao" class=""></span>
                 </div>
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
+            
+            @*<div class="mdl-cell mdl-cell--3-col">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="entidade_Ativo">
                         <input type="checkbox" asp-for="entidade.Ativo" class="mdl-checkbox__input">
                         <span class="mdl-checkbox__label">Ativo?</span>
                     </label>
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </form>
