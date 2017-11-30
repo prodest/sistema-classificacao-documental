@@ -9,6 +9,7 @@ namespace Prodest.Scd.Business.Repository.Base
         ICriterioRestricaoRepository CriteriosRestricaoSpecific { get; }
 
         IDocumentoRepository DocumentosSpecific { get; }
+        IFundamentoLegalRepository FundamentosLegaisSpecific { get; }
 
         IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; }
 

@@ -7,6 +7,7 @@ namespace Prodest.Scd.Persistence.Model
     {
         public Organizacao()
         {
+            FundamentosLegais = new HashSet<FundamentoLegal>();
             NiveisClassificacao = new HashSet<NivelClassificacao>();
             PlanosClassificacao = new HashSet<PlanoClassificacao>();
             TiposDocumentais = new HashSet<TipoDocumental>();
@@ -15,6 +16,7 @@ namespace Prodest.Scd.Persistence.Model
         public int Id { get; set; }
         public Guid GuidOrganizacao { get; set; }
 
+        public ICollection<FundamentoLegal> FundamentosLegais { get; set; }
         public ICollection<NivelClassificacao> NiveisClassificacao { get; set; }
         public ICollection<PlanoClassificacao> PlanosClassificacao { get; set; }
         public ICollection<TipoDocumental> TiposDocumentais { get; set; }

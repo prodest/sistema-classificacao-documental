@@ -15,6 +15,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             DocumentosSpecific = new EFDocumentoRepository(context, mapper, UnitOfWork);
 
+            FundamentosLegaisSpecific = new EFFundamentoLegalRepository(context, mapper, UnitOfWork);
+
             ItensPlanoClassificacaoSpecific = new EFItemPlanoClassificacaoRepository(context, mapper, UnitOfWork);
 
             NiveisClassificacaoSpecific = new EFNivelClassificacaoRepository(context, mapper, UnitOfWork);
@@ -37,6 +39,8 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         public ICriterioRestricaoRepository CriteriosRestricaoSpecific { get; private set; }
 
         public IDocumentoRepository DocumentosSpecific { get; private set; }
+
+        public IFundamentoLegalRepository FundamentosLegaisSpecific { get; private set; }
 
         public IItemPlanoClassificacaoRepository ItensPlanoClassificacaoSpecific { get; private set; }
 

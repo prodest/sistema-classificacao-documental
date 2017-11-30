@@ -34,7 +34,7 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = new TermoClassificacaoInformacaoModel
             {
                 Codigo = codigo,
-                GrauSigilo = grauSigilo,
+                //GrauSigilo = grauSigilo,
                 TipoSigilo = tipoSigilo,
                 ConteudoSigilo = conteudoSigilo,
                 IdentificadorDocumento = identificadorDocumento,
@@ -129,7 +129,7 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = await InsertTermoClassificacaoInformacaoAsync();
 
             termoClassificacaoInformacaoModel.Codigo = "02";
-            termoClassificacaoInformacaoModel.GrauSigilo = GrauSigiloModel.Secreto;
+            //termoClassificacaoInformacaoModel.GrauSigilo = GrauSigiloModel.Secreto;
             termoClassificacaoInformacaoModel.TipoSigilo = TermoClassificacaoInformacaoModel.TipoSigiloModel.Total;
             termoClassificacaoInformacaoModel.ConteudoSigilo = "Conteúdo Sigilo update";
             termoClassificacaoInformacaoModel.IdentificadorDocumento = "Identificador Documento update";

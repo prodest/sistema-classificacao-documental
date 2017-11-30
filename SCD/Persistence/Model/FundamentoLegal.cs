@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Prodest.Scd.Business.Model
+namespace Prodest.Scd.Persistence.Model
 {
-    public class FundamentoLegalModel
+    public partial class FundamentoLegal
     {
         public int Id { get; set; }
         public string Codigo { get; set; }
         public string Descricao { get; set; }
+        public int IdOrganizacao { get; set; }
 
-        public OrganizacaoModel Organizacao { get; set; }
+        public Organizacao Organizacao { get; set; }
     }
 }
