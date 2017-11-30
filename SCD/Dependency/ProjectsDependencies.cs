@@ -28,6 +28,8 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
             dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
             dependencies.Add(typeof(IPlanoClassificacaoCore), typeof(PlanoClassificacaoCore));
+            dependencies.Add(typeof(ITermoClassificacaoInformacaoCore), typeof(TermoClassificacaoInformacaoCore));
+
             dependencies.Add(typeof(ITemporalidadeCore), typeof(TemporalidadeCore));
             dependencies.Add(typeof(ITipoDocumentalCore), typeof(TipoDocumentalCore));
             #endregion
@@ -37,6 +39,7 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(DocumentoValidation), typeof(DocumentoValidation));
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
+            dependencies.Add(typeof(TermoClassificacaoInformacaoValidation), typeof(TermoClassificacaoInformacaoValidation));
             dependencies.Add(typeof(ItemPlanoClassificacaoValidation), typeof(ItemPlanoClassificacaoValidation));
             dependencies.Add(typeof(NivelClassificacaoValidation), typeof(NivelClassificacaoValidation));
             dependencies.Add(typeof(TemporalidadeValidation), typeof(TemporalidadeValidation));
@@ -54,6 +57,7 @@ namespace Prodest.Scd.Dependency
 
             #region Presentation
             dependencies.Add(typeof(IPlanoClassificacaoService), typeof(PlanoClassificacaoService));
+            dependencies.Add(typeof(ITermoClassificacaoInformacaoService), typeof(TermoClassificacaoInformacaoService));
             dependencies.Add(typeof(IItemPlanoClassificacaoService), typeof(ItemPlanoClassificacaoService));
             dependencies.Add(typeof(INivelClassificacaoService), typeof(NivelClassificacaoService));
             dependencies.Add(typeof(ITipoDocumentalService), typeof(TipoDocumentalService));
@@ -67,6 +71,7 @@ namespace Prodest.Scd.Dependency
             dependencies.Add(typeof(IDocumentoRepository), typeof(EFDocumentoRepository));
             dependencies.Add(typeof(IItemPlanoClassificacaoRepository), typeof(EFItemPlanoClassificacaoRepository));
             dependencies.Add(typeof(IPlanoClassificacaoRepository), typeof(EFPlanoClassificacaoRepository));
+            dependencies.Add(typeof(ITermoClassificacaoInformacaoRepository), typeof(EFTermoClassificacaoInformacaoRepository));
             dependencies.Add(typeof(INivelClassificacaoRepository), typeof(EFNivelClassificacaoRepository));
             dependencies.Add(typeof(IOrganizacaoRepository), typeof(EFOrganizacaoRepository));
             dependencies.Add(typeof(ITemporalidadeRepository), typeof(EFTemporalidadeRepository));

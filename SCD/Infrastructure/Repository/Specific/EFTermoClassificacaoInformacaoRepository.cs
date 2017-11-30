@@ -46,12 +46,20 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             TermoClassificacaoInformacaoModel termoClassificacaoInformacaoModel = _mapper.Map<TermoClassificacaoInformacaoModel>(termoClassificacaoInformacao);
 
+            //TODO: Verificar uma forma melhor de fazer isso
+            if (termoClassificacaoInformacaoModel != null && termoClassificacaoInformacaoModel.CriterioRestricao != null )
+            {
+                termoClassificacaoInformacaoModel.CriterioRestricao.Documentos = _mapper.Map<ICollection<DocumentoModel>>(termoClassificacaoInformacao.CriterioRestricao.CriteriosRestricaoDocumento.Select(crd => crd.Documento).ToList());
+            }
+
             return termoClassificacaoInformacaoModel;
         }
 
         public async Task<ICollection<TermoClassificacaoInformacaoModel>> SearchByUserAsync(string cpfUsuario)
         {
             ICollection<TermoClassificacaoInformacao> termosClassificacaoInformacao = await _set.Where(tci => tci.CpfUsuario.Equals(cpfUsuario))
+                                                                                                .Include(tci => tci.CriterioRestricao)
+                                                                                                .Include(tci => tci.Documento)
                                                                                                 .ToListAsync();
 
             ICollection<TermoClassificacaoInformacaoModel> termosClassificacaoInformacaoModel = _mapper.Map<ICollection<TermoClassificacaoInformacaoModel>>(termosClassificacaoInformacao);
@@ -84,9 +92,11 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
             IQueryable<TermoClassificacaoInformacao> queryable = _set.Where(ipc => ipc.Id == id);
 
             if (getRelationship)
-                //queryable = queryable.Include(ipc => ipc.ItemPlanoClassificacao)
-                                     //.Include(ipc => ipc.TipoDocumental)
-                                     ;
+            {
+                queryable = queryable.Include(ipc => ipc.CriterioRestricao).ThenInclude(cr => cr.PlanoClassificacao)
+                    .Include(ipc => ipc.CriterioRestricao).ThenInclude(cr => cr.CriteriosRestricaoDocumento).ThenInclude(crd => crd.Documento)
+                .Include(ipc => ipc.Documento);
+            }
 
             TermoClassificacaoInformacao termoClassificacaoInformacao = await queryable.SingleOrDefaultAsync();
 
@@ -97,7 +107,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
         private IQueryable<TermoClassificacaoInformacao> GetRelationship()
         {
             IQueryable<TermoClassificacaoInformacao> queryable = _set/*.Include(ipc => ipc.ItemPlanoClassificacao)*/
-                                                  //.Include(ipc => ipc.TipoDocumental)
+                                                                     //.Include(ipc => ipc.TipoDocumental)
                                                   ;
 
             return queryable;

@@ -79,7 +79,7 @@ namespace Prodest.Scd.Presentation
             return new List<EnumModel> {
                     new EnumModel { Id = (int)GrauSigiloModel.Reservado, Nome = "Reservado" },
                     new EnumModel { Id = (int)GrauSigiloModel.Secreto, Nome = "Secreto" },
-                    new EnumModel { Id = (int)GrauSigiloModel.UltraSecreto, Nome = "Ultrassecreto" },
+                    new EnumModel { Id = (int)GrauSigiloModel.Ultrassecreto, Nome = "Ultrassecreto" },
                 };
         }
 
@@ -198,8 +198,7 @@ namespace Prodest.Scd.Presentation
         public async Task<CriterioRestricaoViewModel> Search(FiltroCriterioRestricao filtro)
         {
             var model = new CriterioRestricaoViewModel();
-            var plano = await _corePlanoClassificacao.SearchAsync(filtro.IdPlanoClassificacao);
-            model.plano = _mapper.Map<PlanoClassificacaoEntidade>(plano);
+            model.plano = new PlanoClassificacaoEntidade { Id = filtro.IdPlanoClassificacao };
             var entidades = await _core.SearchByPlanoClassificacaoAsync(filtro.IdPlanoClassificacao);
             model.entidades = _mapper.Map<ICollection<CriterioRestricaoEntidade>>(entidades);
             model.Result = new ResultViewModel
@@ -218,7 +217,10 @@ namespace Prodest.Scd.Presentation
                 model.entidade = new CriterioRestricaoEntidade
                 {
                     PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
+                    Documentos = new List<DocumentoEntidade>()
                 };
+
+                model.Documentos = _mapper.Map<ICollection<DocumentoEntidade>>(await _coreDocumento.SearchByPlanoAsync(idPlanoClassificacao));
                 model.graus = obterListaGraus();
                 model.unidadesTempo = obterListaUnidadesTempo();
                 model.Result = new ResultViewModel

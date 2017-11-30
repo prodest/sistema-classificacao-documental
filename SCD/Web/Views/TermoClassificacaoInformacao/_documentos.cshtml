@@ -1,0 +1,5 @@
+﻿@model  Prodest.Scd.Presentation.ViewModel.TermoClassificacaoInformacaoViewModel
+<select class="mdc-select" asp-for="entidade.Documento.Id" required asp-items="@(new SelectList(Model.entidade.CriterioRestricao.Documentos,"Id","CodigoDescricao")) ">
+    <option value="">Selecione um Documento</option>
+</select>
+<span asp-validation-for="entidade.Documento.Id" class=""></span>

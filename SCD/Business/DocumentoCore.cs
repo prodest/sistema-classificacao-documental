@@ -52,13 +52,10 @@ namespace Prodest.Scd.Business
 
             ICollection<DocumentoModel> documentosModel = await _documentos.SearchByPlanoAsync(idPlanoClassificacao);
 
-
-
-
-
             return documentosModel;
         }
         
+
 
         public async Task UpdateAsync(DocumentoModel documentoModel)
         {

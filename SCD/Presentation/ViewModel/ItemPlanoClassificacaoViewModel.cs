@@ -29,6 +29,13 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string Codigo { get; set; }
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
+        public string CodigoDescricao
+        {
+            get
+            {
+                return $"{Codigo} - {Descricao}";
+            }
+        }
 
         public int? IdItemPlanoClassificacaoParent
         {
