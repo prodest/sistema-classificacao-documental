@@ -29,13 +29,6 @@
             </div>
             <div class="mdl-cell mdl-cell--3-col">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input asp-for="entidade.Justificativa" class="mdl-textfield__input" type="text" required />
-                    <label class="mdl-textfield__label" asp-for="entidade.Justificativa">Justificativa..</label>
-                    <span asp-validation-for="entidade.Justificativa" class=""></span>
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input asp-for="entidade.FundamentoLegal" class="mdl-textfield__input" type="text" required />
                     <label class="mdl-textfield__label" asp-for="entidade.FundamentoLegal">Fundamento Legal..</label>
                     <span asp-validation-for="entidade.FundamentoLegal" class=""></span>
@@ -43,34 +36,9 @@
             </div>
             <div class="mdl-cell mdl-cell--3-col">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <select class="mdc-select" asp-for="entidade.IdGrau" required asp-items="@(new SelectList(Model.graus,"Id","Nome")) ">
-                        <option value=""></option>
-                    </select>
-                    <span asp-validation-for="entidade.IdGrau" class=""></span>
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input asp-for="entidade.PrazoTermino" class="mdl-textfield__input" type="number" />
-                    <label class="mdl-textfield__label" for="entidade.PrazoTermino">Prazo Término..</label>
-                    <span asp-validation-for="entidade.PrazoTermino" class=""></span>
-
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <select class="mdc-select" asp-for="entidade.IdUnidadePrazoTermino" asp-items="@(new SelectList(Model.unidadesTempo,"Id","Nome"))">
-                        <option value=""> </option>
-                    </select>
-                </div>
-            </div>
-
-
-            <div class="mdl-cell mdl-cell--3-col">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input asp-for="entidade.EventoFim" class="mdl-textfield__input" type="text" />
-                    <label class="mdl-textfield__label" for="entidade.EventoFim">Evento Fim..</label>
-                    <span asp-validation-for="entidade.EventoFim" class=""></span>
+                    <input asp-for="entidade.Justificativa" class="mdl-textfield__input" type="text" required />
+                    <label class="mdl-textfield__label" asp-for="entidade.Justificativa">Justificativa..</label>
+                    <span asp-validation-for="entidade.Justificativa" class=""></span>
                 </div>
             </div>
             <div class="mdc-form-field">
@@ -84,6 +52,40 @@
                     </div>
                 </div>
                 <label for="basic-checkbox">Gera Termo Classificação Informação?</label>
+            </div>
+            @*<div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" asp-for="entidade.IdGrau" required asp-items="@(new SelectList(Model.graus,"Id","Nome")) ">
+                        <option value=""></option>
+                    </select>
+                    <span asp-validation-for="entidade.IdGrau" class=""></span>
+                </div>
+            </div>*@
+            @{ 
+                string display = Model.entidade.Classificavel ?"": "display:none" ;
+            }
+            <div class="mdl-cell mdl-cell--3-col" id="DivPrazoTermino" style="@display">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.PrazoTermino" class="mdl-textfield__input" type="number" required />
+                    <label class="mdl-textfield__label" for="entidade.PrazoTermino">Prazo Término..</label>
+                    <span asp-validation-for="entidade.PrazoTermino" class=""></span>
+
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col"  id="DivUnidadePrazo" style="@display">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <select class="mdc-select" required asp-for="entidade.IdUnidadePrazoTermino" asp-items="@(new SelectList(Model.unidadesTempo,"Id","Nome"))">
+                        <option value="">Selecione uma unidade de tempo</option>
+                    </select>
+                    <span asp-validation-for="entidade.IdUnidadePrazoTermino" class=""></span>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col" id="DivEventoFim" style="@display">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input asp-for="entidade.EventoFim" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="entidade.EventoFim">Evento Fim..</label>
+                    <span asp-validation-for="entidade.EventoFim" class=""></span>
+                </div>
             </div>
             <div class="mdl-cell mdl-cell--12-col">
                 <section>

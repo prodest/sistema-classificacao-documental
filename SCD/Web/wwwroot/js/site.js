@@ -33,11 +33,30 @@ $('#DivConteudo').on('change', '#entidade_CriterioRestricao_Id', function (e) {
     e.stopImmediatePropagation();
     e.preventDefault();
     var id = $('#entidade_CriterioRestricao_Id').val();
-    $.get('/TermoClassificacaoInformacao/DocumentosByCriterio?idCriterioRestricao='+id).then(function (dados) {
+    $.get('/TermoClassificacaoInformacao/DocumentosByCriterio?idCriterioRestricao=' + id).then(function (dados) {
         $('#DivCriterioRestricaoDocumentos').html(dados);
         $.validator.unobtrusive.parse($('form'));
     });
 });
+
+$('#DivConteudo').on('change', '#entidade_Classificavel', function (e) {
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    var valor = $('#entidade_Classificavel')["0"].checked;
+    if (valor === true) {
+        $('#DivPrazoTermino').show();
+        $('#DivUnidadePrazo').show();
+        $('#DivEventoFim').show();
+    } else {
+        $('#DivPrazoTermino').hide();
+        $('#entidade_PrazoTermino').val('')
+        $('#DivUnidadePrazo').hide();
+        $('#entidade_IdUnidadePrazoTermino').val('')
+        $('#DivEventoFim').hide();
+        $('#entidade_EventoFim').val('')
+    }
+});
+
 
 function ShowMessage(item, index) {
     message = item.message;
@@ -62,5 +81,5 @@ function AdicionarMDCTextField(item, index) {
 function AdicionarAcaoMenu(item, index) {
     let id = $(item).attr('data-id');
     let menuAcoes = new mdc.menu.MDCSimpleMenu(item);
-    document.querySelector('.toggle[data-id="'+id+'"]').addEventListener('click', () => menuAcoes.open = !menuAcoes.open);
+    document.querySelector('.toggle[data-id="' + id + '"]').addEventListener('click', () => menuAcoes.open = !menuAcoes.open);
 }
