@@ -12,6 +12,7 @@ namespace Prodest.Scd.Presentation.ViewModel
     {
         public PlanoClassificacaoEntidade plano { get; set; }
         public ICollection<DocumentoEntidade> Documentos { get; set; }
+        public ICollection<FundamentoLegalEntidade> FundamentosLegais { get; set; }
         public ICollection<CriterioRestricaoEntidade> entidades { get; set; }
         public ICollection<EnumModel> unidadesTempo { get; set; }
         public ICollection<EnumModel> graus { get; set; }
@@ -43,7 +44,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         }
 
         public string Justificativa { get; set; }
-        public string FundamentoLegal { get; set; }
+        public FundamentoLegalEntidade FundamentoLegal { get; set; }
 
         //public GrauSigiloModel? Grau { get; set; }
         //public string GrauDescricao

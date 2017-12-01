@@ -29,9 +29,10 @@
             </div>
             <div class="mdl-cell mdl-cell--3-col">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input asp-for="entidade.FundamentoLegal" class="mdl-textfield__input" type="text" required />
-                    <label class="mdl-textfield__label" asp-for="entidade.FundamentoLegal">Fundamento Legal..</label>
-                    <span asp-validation-for="entidade.FundamentoLegal" class=""></span>
+                    <select class="mdc-select" asp-for="entidade.FundamentoLegal.Id" required asp-items="@(new SelectList(Model.FundamentosLegais,"Id","Codigo")) ">
+                        <option value="">Selecione um Fundamento Legal</option>
+                    </select>
+                    <span asp-validation-for="entidade.FundamentoLegal.Id" class=""></span>
                 </div>
             </div>
             <div class="mdl-cell mdl-cell--3-col">

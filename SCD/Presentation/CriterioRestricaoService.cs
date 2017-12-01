@@ -19,12 +19,14 @@ namespace Prodest.Scd.Presentation
         private ICriterioRestricaoCore _core;
         private IPlanoClassificacaoCore _corePlanoClassificacao;
         private IDocumentoCore _coreDocumento;
+        private IFundamentoLegalCore _coreFundamentoLegal;
         private IMapper _mapper;
 
-        public CriterioRestricaoService(ICriterioRestricaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IDocumentoCore coreDocumento, IMapper mapper)
+        public CriterioRestricaoService(ICriterioRestricaoCore core, IPlanoClassificacaoCore corePlanoClassificacao, IDocumentoCore coreDocumento, IFundamentoLegalCore coreFundamentoLegal, IMapper mapper)
         {
             _corePlanoClassificacao = corePlanoClassificacao;
             _coreDocumento = coreDocumento;
+            _coreFundamentoLegal = coreFundamentoLegal;
             _core = core;
             _mapper = mapper;
         }
@@ -93,6 +95,8 @@ namespace Prodest.Scd.Presentation
                 model.graus = obterListaGraus();
                 model.unidadesTempo = obterListaUnidadesTempo();
                 model.Documentos = _mapper.Map<ICollection<DocumentoEntidade>>(await _coreDocumento.SearchByPlanoAsync(model.entidade.PlanoClassificacao.Id));
+                var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
+                model.FundamentosLegais = _mapper.Map<ICollection<FundamentoLegalEntidade>>(await _coreFundamentoLegal.SearchAsync(guid,1,1000));
                 model.Result = new ResultViewModel
                 {
                     Ok = true
@@ -219,7 +223,8 @@ namespace Prodest.Scd.Presentation
                     PlanoClassificacao = new PlanoClassificacaoEntidade { Id = idPlanoClassificacao },
                     Documentos = new List<DocumentoEntidade>()
                 };
-
+                var guid = new Guid("fe88eb2a-a1f3-4cb1-a684-87317baf5a57");
+                model.FundamentosLegais = _mapper.Map<ICollection<FundamentoLegalEntidade>>(await _coreFundamentoLegal.SearchAsync(guid, 1, 1000));
                 model.Documentos = _mapper.Map<ICollection<DocumentoEntidade>>(await _coreDocumento.SearchByPlanoAsync(idPlanoClassificacao));
                 model.graus = obterListaGraus();
                 model.unidadesTempo = obterListaUnidadesTempo();
