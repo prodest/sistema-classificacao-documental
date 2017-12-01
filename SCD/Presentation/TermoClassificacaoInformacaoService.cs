@@ -203,7 +203,7 @@ namespace Prodest.Scd.Presentation
                     new EnumModel { Id = (int)UnidadeTempo.Anos, Nome = UnidadeTempo.Anos.ToString() },
                     new EnumModel { Id = (int)UnidadeTempo.Dias, Nome = UnidadeTempo.Dias.ToString()  },
                     new EnumModel { Id = (int)UnidadeTempo.Meses, Nome = UnidadeTempo.Meses.ToString()  },
-                    new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
+                    //new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
                 };
         }
 

@@ -37,8 +37,8 @@ namespace Prodest.Scd.Business.Model
                     fimPrazoSigilo = DataProducaoDocumento.AddMonths(PrazoSigilo);
                 else if (UnidadeTempo.Dias.Equals(UnidadePrazoSigilo))
                     fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo);
-                else if (UnidadeTempo.Semanas.Equals(UnidadePrazoSigilo))
-                    fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo * 7);
+                //else if (UnidadeTempo.Semanas.Equals(UnidadePrazoSigilo))
+                //    fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo * 7);
 
                 return fimPrazoSigilo;
             }
