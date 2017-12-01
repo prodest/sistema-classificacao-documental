@@ -18,6 +18,7 @@ namespace Prodest.Scd.Business.Validation
 
         public CriterioRestricaoValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
+            _criteriosRestricao = repositories.CriteriosRestricaoSpecific;
             _fundamentosLegais = repositories.FundamentosLegaisSpecific;
             _planosClassificacao = repositories.PlanosClassificacaoSpecific;
 
