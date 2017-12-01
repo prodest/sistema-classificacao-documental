@@ -43,7 +43,7 @@ namespace Prodest.Scd.Business
             CriterioRestricaoModel criterioRestricaoModel = await _criteriosRestricao.SearchAsync(id);
 
             _validation.Found(criterioRestricaoModel);
-            //TODO fazer validação
+
             return criterioRestricaoModel;
         }
 
@@ -66,6 +66,7 @@ namespace Prodest.Scd.Business
             _validation.PlanoClassificacaoEquals(criterioRestricaoModel, criterioRestricaoModelOld);
 
             await _validation.CanUpdate(criterioRestricaoModelOld);
+
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
 
             await _criteriosRestricao.UpdateAsync(criterioRestricaoModel);
@@ -78,6 +79,7 @@ namespace Prodest.Scd.Business
             _validation.Found(criterioRestricaoModel);
 
             await _validation.CanDelete(criterioRestricaoModel);
+
             //TODO: Verificar se o usuário pode inserir quando o sistema conseguir obter organzação do usuário
 
             await _criteriosRestricao.RemoveAsync(criterioRestricaoModel.Id);

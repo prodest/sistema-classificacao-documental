@@ -12,7 +12,6 @@ namespace Prodest.Scd.Infrastructure.Configuration
         {
             #region Critério de Restrição
             CreateMap<CriterioRestricao, CriterioRestricaoModel>().PreserveReferences()
-                .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
                 .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino))
             ;
 
@@ -26,7 +25,6 @@ namespace Prodest.Scd.Infrastructure.Configuration
                  })
                 .ForMember(dest => dest.PlanoClassificacao, opt => opt.Ignore())
                 .ForMember(dest => dest.IdPlanoClassificacao, opt => opt.MapFrom(src => src.PlanoClassificacao != null ? src.PlanoClassificacao.Id : default(int)))
-                .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau)) 
                 .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
                 .ForMember(dest => dest.CriteriosRestricaoDocumento, opt => opt.Ignore())
                 ;
@@ -97,7 +95,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                         return (destMember == null);
                     });
                 })
-                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)));
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.OrganizacaoPatriarca != null ? src.OrganizacaoPatriarca.Id : default(int)));
             #endregion
 
             #region Organização
@@ -120,7 +118,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                         return (destMember == default(int));
                     });
                 })
-                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)))
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.OrganizacaoPatriarca != null ? src.OrganizacaoPatriarca.Id : default(int)))
                 .ForMember(dest => dest.Organizacao, opt => opt.Ignore())
                 .ForMember(dest => dest.ItensPlanoClassificacao, opt => opt.Ignore());
             #endregion

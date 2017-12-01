@@ -196,7 +196,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
                 Descricao = "Plano Classificação Teste",
                 AreaFim = true,
                 GuidOrganizacao = GetGuidOrganizacao(),
-                Organizacao = await GetOrganizacaoPatricarcaModel()
+                OrganizacaoPatriarca = await GetOrganizacaoPatricarcaModel()
             };
 
             planoClassificacaoModel = await _repositories.PlanosClassificacaoSpecific.AddAsync(planoClassificacaoModel);
@@ -224,9 +224,8 @@ namespace Prodest.Scd.UnitTestBusiness.Common
                 Codigo = codigo,
                 Descricao = descricao,
                 Justificativa = justificativa,
-                FundamentoLegal = fundamentoLegal,
+                //FundamentoLegal = ,
                 Classificavel = classificavel,
-                Grau = grauSigilo,
                 PrazoTermino = prazoTermino,
                 UnidadePrazoTermino = unidadePrazoTermino,
 

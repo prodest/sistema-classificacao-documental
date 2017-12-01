@@ -67,7 +67,7 @@ namespace Prodest.Scd.Business.Validation
 
         internal void CanUpdate(FundamentoLegalModel newFundamentoLegalModel, FundamentoLegalModel oldFundamentoLegalModel)
         {
-            if (newFundamentoLegalModel.Organizacao != null && (oldFundamentoLegalModel.Organizacao.Id != newFundamentoLegalModel.Organizacao.Id || !oldFundamentoLegalModel.Organizacao.GuidOrganizacao.Equals(newFundamentoLegalModel.Organizacao.GuidOrganizacao)))
+            if (newFundamentoLegalModel.OrganizacaoPatriarca != null && (oldFundamentoLegalModel.OrganizacaoPatriarca.Id != newFundamentoLegalModel.OrganizacaoPatriarca.Id || !oldFundamentoLegalModel.OrganizacaoPatriarca.GuidOrganizacao.Equals(newFundamentoLegalModel.OrganizacaoPatriarca.GuidOrganizacao)))
             {
                 throw new ScdException("Não é possível atualizar a Organização do Nível de Classificação.");
             }
