@@ -149,6 +149,8 @@ namespace Prodest.Scd.Infrastructure.Mapping
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Ativo).HasColumnName("ativo");
+
                 entity.Property(e => e.Codigo)
                     .IsRequired()
                     .HasColumnName("codigo")

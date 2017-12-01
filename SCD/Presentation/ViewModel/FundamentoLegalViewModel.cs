@@ -13,7 +13,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public FiltroPlanoClassificacao filtro { get; set; }
     }
 
-        public class FiltroFundamentoLegal
+    public class FiltroFundamentoLegal
     {
         public string pesquisa { get; set; }
     }
@@ -21,23 +21,23 @@ namespace Prodest.Scd.Presentation.ViewModel
     public class FundamentoLegalEntidade
     {
         public int Id { get; set; }
+
         [Required(ErrorMessage = "Obrigatório")]
         public string Descricao { get; set; }
+
         [Required(ErrorMessage = "Obrigatório")]
         public string Codigo { get; set; }
+
         [Required(ErrorMessage = "Obrigatório")]
+        public bool Ativo { get; set; }
 
-
-
-        //public bool Ativo { get; set; }
-
-        //public string AtivoDescricao
-        //{
-        //    get
-        //    {
-        //        return Ativo ? "Ativo" : "Inativo";
-        //    }
-        //}
+        public string AtivoDescricao
+        {
+            get
+            {
+                return Ativo ? "Ativo" : "Inativo";
+            }
+        }
 
     }
 

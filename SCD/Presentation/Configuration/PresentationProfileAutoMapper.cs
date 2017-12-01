@@ -12,7 +12,7 @@ namespace Prodest.Scd.Presentation.Configuration
             CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacaoEntidade>().ReverseMap();
             CreateMap<NivelClassificacaoModel, NivelClassificacaoEntidade>().ReverseMap();
             CreateMap<TipoDocumentalModel, TipoDocumentalEntidade>().ReverseMap();
-            //CreateMap<DocumentoModel, DocumentoEntidade>().ReverseMap();
+            CreateMap<FundamentoLegalModel, FundamentoLegalEntidade>().ReverseMap();
             CreateMap<TemporalidadeModel, TemporalidadeEntidade>().ReverseMap();
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacaoEntidade>().MaxDepth(1).ReverseMap();

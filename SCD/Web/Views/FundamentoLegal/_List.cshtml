@@ -22,6 +22,8 @@
             <thead>
                 <tr>
                     <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
+
+                    <th class="mdl-data-table__cell--non-numeric">Código</th>
                     <th class="mdl-data-table__cell--non-numeric">Descrição</th>
                     <th class="mdl-data-table__cell--non-numeric">Ativo</th>
                     <th class="mdl-data-table__cell--non-numeric">Ações</th>
@@ -31,6 +33,7 @@
                 @foreach (var item in Model.entidades)
                 {
                     <tr>
+                        <td class="mdl-data-table__cell--non-numeric">@item.Codigo</td>
                         <td class="mdl-data-table__cell--non-numeric">@item.Descricao</td>
                         <td class="mdl-data-table__cell--non-numeric">@item.AtivoDescricao</td>
                         <td class="mdl-data-table__cell--non-numeric">

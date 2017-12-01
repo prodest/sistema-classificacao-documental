@@ -24,6 +24,7 @@ namespace Prodest.Scd.Dependency
             #region Core
             dependencies.Add(typeof(ICriterioRestricaoCore), typeof(CriterioRestricaoCore));
             dependencies.Add(typeof(IDocumentoCore), typeof(DocumentoCore));
+            dependencies.Add(typeof(IFundamentoLegalCore), typeof(FundamentoLegalCore));
             dependencies.Add(typeof(IItemPlanoClassificacaoCore), typeof(ItemPlanoClassificacaoCore));
             dependencies.Add(typeof(INivelClassificacaoCore), typeof(NivelClassificacaoCore));
             dependencies.Add(typeof(IOrganizacaoCore), typeof(OrganizacaoCore));
@@ -37,6 +38,7 @@ namespace Prodest.Scd.Dependency
             #region Validation
             dependencies.Add(typeof(CriterioRestricaoValidation), typeof(CriterioRestricaoValidation));
             dependencies.Add(typeof(DocumentoValidation), typeof(DocumentoValidation));
+            dependencies.Add(typeof(FundamentoLegalValidation), typeof(FundamentoLegalValidation));
             dependencies.Add(typeof(OrganizacaoValidation), typeof(OrganizacaoValidation));
             dependencies.Add(typeof(PlanoClassificacaoValidation), typeof(PlanoClassificacaoValidation));
             dependencies.Add(typeof(TermoClassificacaoInformacaoValidation), typeof(TermoClassificacaoInformacaoValidation));
@@ -58,6 +60,7 @@ namespace Prodest.Scd.Dependency
             #region Presentation
             dependencies.Add(typeof(IPlanoClassificacaoService), typeof(PlanoClassificacaoService));
             dependencies.Add(typeof(ITermoClassificacaoInformacaoService), typeof(TermoClassificacaoInformacaoService));
+            dependencies.Add(typeof(IFundamentoLegalService), typeof(FundamentoLegalService));
             dependencies.Add(typeof(IItemPlanoClassificacaoService), typeof(ItemPlanoClassificacaoService));
             dependencies.Add(typeof(INivelClassificacaoService), typeof(NivelClassificacaoService));
             dependencies.Add(typeof(ITipoDocumentalService), typeof(TipoDocumentalService));
@@ -69,6 +72,7 @@ namespace Prodest.Scd.Dependency
             #region Infrastructure
             dependencies.Add(typeof(ICriterioRestricaoRepository), typeof(EFCriterioRestricaoRepository));
             dependencies.Add(typeof(IDocumentoRepository), typeof(EFDocumentoRepository));
+            dependencies.Add(typeof(IFundamentoLegalRepository), typeof(EFFundamentoLegalRepository));
             dependencies.Add(typeof(IItemPlanoClassificacaoRepository), typeof(EFItemPlanoClassificacaoRepository));
             dependencies.Add(typeof(IPlanoClassificacaoRepository), typeof(EFPlanoClassificacaoRepository));
             dependencies.Add(typeof(ITermoClassificacaoInformacaoRepository), typeof(EFTermoClassificacaoInformacaoRepository));

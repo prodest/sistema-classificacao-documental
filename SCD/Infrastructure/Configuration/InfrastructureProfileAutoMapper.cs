@@ -14,15 +14,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
             CreateMap<CriterioRestricao, CriterioRestricaoModel>().PreserveReferences()
                 .ForMember(dest => dest.Grau, opt => opt.MapFrom(src => src.IdGrau))
                 .ForMember(dest => dest.UnidadePrazoTermino, opt => opt.MapFrom(src => src.IdUnidadePrazoTermino))
-                //.ForMember(dest => dest.Documentos, opt => opt.MapFrom(src => (src.CriteriosRestricaoDocumento != null && src.CriteriosRestricaoDocumento.Count > 0) ? Mapper.Map<ICollection<CriterioRestricaoDocumento>, ICollection<DocumentoModel>>(src.CriteriosRestricaoDocumento) : null))
-            //.MaxDepth(1)
             ;
 
-            //CreateMap<CriterioRestricaoDocumento, DocumentoModel>()
-            //    .ConvertUsing(src => src.Documento != null ? Mapper.Map<Documento,DocumentoModel>(src.Documento) : null)
-            //    ;
-
-            CreateMap<CriterioRestricaoModel, CriterioRestricao>()
+            CreateMap<CriterioRestricaoModel, CriterioRestricao>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                  {
                      opt.Condition((src, dest, srcMember, destMember) =>
@@ -35,14 +29,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.IdGrau, opt => opt.MapFrom(src => src.Grau)) 
                 .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
                 .ForMember(dest => dest.CriteriosRestricaoDocumento, opt => opt.Ignore())
-                //.ForMember(dest => dest.CriteriosRestricaoDocumento, opt => opt.MapFrom(src => src.Documentos != null ? Mapper.Map<ICollection<DocumentoModel>, ICollection<CriterioRestricaoDocumento>>(src.Documentos) : null))
                 ;
-
-            //CreateMap<CriterioRestricaoModel, CriterioRestricaoDocumento>()
-            //    .ForMember(dest => dest.Id, opt => opt.Ignore())
-            //    .ForMember(dest => dest.IdCriterioRestricao, opt => opt.MapFrom(src => src.Id))
-            //    .ForMember(dest => dest.IdDocumento, opt => opt.MapFrom(src => src.Do))
-            //    ;
 
             #endregion
 
@@ -50,7 +37,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
             CreateMap<Documento, DocumentoModel>()
                 .PreserveReferences();
 
-            CreateMap<DocumentoModel, Documento>()
+            CreateMap<DocumentoModel, Documento>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                     {
                         opt.Condition((src, dest, srcMember, destMember) =>
@@ -66,9 +53,8 @@ namespace Prodest.Scd.Infrastructure.Configuration
 
             #region Item do Plano de Classificação
             CreateMap<ItemPlanoClassificacao, ItemPlanoClassificacaoModel>().PreserveReferences()
-                //.MaxDepth(2)
                 ;
-            CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacao>()
+            CreateMap<ItemPlanoClassificacaoModel, ItemPlanoClassificacao>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                  {
                      opt.Condition((src, dest, srcMember, destMember) =>
@@ -85,12 +71,24 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Nível de Classificação
-            CreateMap<NivelClassificacao, NivelClassificacaoModel>().PreserveReferences()
-                //.ForMember(x => x.ItensPlanoClassificacao, opt => opt.Ignore())
-                //.ForMember(x => x.Organizacao, opt => opt.MapFrom(src => src.Organizacao))
-                ;
+            CreateMap<NivelClassificacao, NivelClassificacaoModel>().PreserveReferences();
 
-            CreateMap<NivelClassificacaoModel, NivelClassificacao>()
+            CreateMap<NivelClassificacaoModel, NivelClassificacao>().PreserveReferences()
+                .ForMember(dest => dest.Organizacao,
+                opt =>
+                {
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        return (destMember == null);
+                    });
+                })
+                .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(src => src.Organizacao != null ? src.Organizacao.Id : default(int)));
+            #endregion
+
+            #region Fundamento Legal
+            CreateMap<FundamentoLegal, FundamentoLegalModel>().PreserveReferences();
+
+            CreateMap<FundamentoLegalModel, FundamentoLegal>().PreserveReferences()
                 .ForMember(dest => dest.Organizacao,
                 opt =>
                 {
@@ -105,20 +103,16 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #region Organização
             CreateMap<Organizacao, OrganizacaoModel>()
                 .PreserveReferences()
-                //.MaxDepth(1)
                 ;
 
-            CreateMap<OrganizacaoModel, Organizacao>()
+            CreateMap<OrganizacaoModel, Organizacao>().PreserveReferences()
                 .ForMember(dest => dest.PlanosClassificacao, opt => opt.Ignore());
             #endregion
 
             #region Plano de Classificação
-            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>()
-                //.MaxDepth(1)
-                .PreserveReferences()
-            ;
+            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>().PreserveReferences();
 
-            CreateMap<PlanoClassificacaoModel, PlanoClassificacao>()
+            CreateMap<PlanoClassificacaoModel, PlanoClassificacao>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                 {
                     opt.Condition((src, dest, srcMember, destMember) =>
@@ -139,7 +133,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 
 
 
-            CreateMap<TemporalidadeModel, Temporalidade>()
+            CreateMap<TemporalidadeModel, Temporalidade>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                  {
                      opt.Condition((src, dest, srcMember, destMember) =>
@@ -163,7 +157,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.UnidadePrazoSigilo, opt => opt.MapFrom(src => src.IdUnidadePrazoSigilo))
                 ;
 
-            CreateMap<TermoClassificacaoInformacaoModel, TermoClassificacaoInformacao>()
+            CreateMap<TermoClassificacaoInformacaoModel, TermoClassificacaoInformacao>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                 {
                     opt.Condition((src, dest, srcMember, destMember) =>
@@ -184,10 +178,10 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #region Tipo Documental
             CreateMap<TipoDocumental, TipoDocumentalModel>()
                 .PreserveReferences()
-                //.MaxDepth(1)
+                
                 ;
 
-            CreateMap<TipoDocumentalModel, TipoDocumental>()
+            CreateMap<TipoDocumentalModel, TipoDocumental>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
                 {
                     opt.Condition((src, dest, srcMember, destMember) =>
