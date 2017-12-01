@@ -45,14 +45,14 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string Justificativa { get; set; }
         public string FundamentoLegal { get; set; }
 
-        public GrauSigiloModel? Grau { get; set; }
-        public string GrauDescricao
-        {
-            get
-            {
-                return Grau > 0 ? Grau.ToString() : "Não informado";
-            }
-        }
+        //public GrauSigiloModel? Grau { get; set; }
+        //public string GrauDescricao
+        //{
+        //    get
+        //    {
+        //        return Grau > 0 ? Grau.ToString() : "Não informado";
+        //    }
+        //}
         public bool Classificavel { get; set; }
         public string ClassificavelDescricao
         {
@@ -90,31 +90,31 @@ namespace Prodest.Scd.Presentation.ViewModel
             }
         }
 
-        public int? IdGrau
-        {
-            get
-            {
-                if (Grau != null)
-                {
-                    return (int)Grau;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                if (value.HasValue)
-                {
-                    Grau = (GrauSigiloModel)value.Value;
-                }
-                else
-                {
-                    Grau = null;
-                }
-            }
-        }
+        //public int? IdGrau
+        //{
+        //    get
+        //    {
+        //        if (Grau != null)
+        //        {
+        //            return (int)Grau;
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    set
+        //    {
+        //        if (value.HasValue)
+        //        {
+        //            Grau = (GrauSigiloModel)value.Value;
+        //        }
+        //        else
+        //        {
+        //            Grau = null;
+        //        }
+        //    }
+        //}
 
         public ICollection<DocumentoEntidade> Documentos { get; set; }
         public PlanoClassificacaoEntidade PlanoClassificacao { get; set; }
