@@ -21,7 +21,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             bool classificavel = true;
             GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
             int prazoTermino = 5;
-            UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoTermino = UnidadeTempoModel.Anos;
 
             PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
             DocumentoModel documentoModel = await InsertDocumentoAsync();
@@ -102,7 +102,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             criterioRestricaoModel.Classificavel = false;
             criterioRestricaoModel.Grau = GrauSigiloModel.Secreto;
             criterioRestricaoModel.PrazoTermino = 1;
-            criterioRestricaoModel.UnidadePrazoTermino = UnidadeTempo.Dias;
+            criterioRestricaoModel.UnidadePrazoTermino = UnidadeTempoModel.Dias;
 
             await _core.UpdateAsync(criterioRestricaoModel);
 

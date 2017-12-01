@@ -26,7 +26,7 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             string justificativa = "Justificativa";
             string cpfIndicacaoAprovador = "11111111111";
             int prazoSigilo = 1;
-            UnidadeTempo unidadePrazoSigilo = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoSigilo = UnidadeTempoModel.Anos;
 
             DocumentoModel documento = await InsertDocumentoAsync();
             CriterioRestricaoModel criterioRestricao = await InsertCriterioRestricaoAsync(documento);
@@ -138,7 +138,7 @@ namespace Prodest.Scd.UnitTestBusiness.TermoClassificacaoInformacao
             termoClassificacaoInformacaoModel.Justificativa = "Justificativa update";
             termoClassificacaoInformacaoModel.CpfIndicacaoAprovador = "33333333333";
             termoClassificacaoInformacaoModel.PrazoSigilo = 30;
-            termoClassificacaoInformacaoModel.UnidadePrazoSigilo = UnidadeTempo.Meses;
+            termoClassificacaoInformacaoModel.UnidadePrazoSigilo = UnidadeTempoModel.Meses;
 
             await _core.UpdateAsync(termoClassificacaoInformacaoModel);
 

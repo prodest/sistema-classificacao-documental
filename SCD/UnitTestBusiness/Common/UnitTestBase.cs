@@ -215,7 +215,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             bool classificavel = true;
             GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
             int prazoTermino = 5;
-            UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoTermino = UnidadeTempoModel.Anos;
 
             PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
 
@@ -256,10 +256,10 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             string codigo = "01";
             string descricao = "TemporalidadeTestInsert";
             int prazoGuardaFaseCorrente = 5;
-            UnidadeTempo unidadePrazoGuardaFaseCorrente = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoGuardaFaseCorrente = UnidadeTempoModel.Anos;
             //string eventoFimFaseCorrente = "Evento fim fase corrente";
             int prazoGuardaFaseIntermediaria = 10;
-            UnidadeTempo unidadePrazoGuardaFaseIntermediaria = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoGuardaFaseIntermediaria = UnidadeTempoModel.Anos;
             //string eventoFimFaseIntermediaria = "Evento fim fase intermediária";
             DestinacaoFinal destinacaoFinal = DestinacaoFinal.Eliminacao;
             string observacao = "Observação";
@@ -316,7 +316,7 @@ namespace Prodest.Scd.UnitTestBusiness.Common
             string justificativa = "Justificativa";
             string cpfIndicacaoAprovador = "11111111111";
             int prazoSigilo = 1;
-            UnidadeTempo unidadePrazoSigilo = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoSigilo = UnidadeTempoModel.Anos;
 
             DocumentoModel documento = await InsertDocumentoAsync();
             CriterioRestricaoModel criterioRestricao = await InsertCriterioRestricaoAsync(documento);

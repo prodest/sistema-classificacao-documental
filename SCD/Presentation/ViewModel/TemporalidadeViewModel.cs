@@ -43,8 +43,8 @@ namespace Prodest.Scd.Presentation.ViewModel
         public DocumentoEntidade Documento { get; set; }
 
         public DestinacaoFinal DestinacaoFinal { get; set; }
-        public UnidadeTempo? UnidadePrazoGuardaFaseCorrente { get; set; }
-        public UnidadeTempo? UnidadePrazoGuardaFaseIntermediaria { get; set; }
+        public UnidadeTempoModel? UnidadePrazoGuardaFaseCorrente { get; set; }
+        public UnidadeTempoModel? UnidadePrazoGuardaFaseIntermediaria { get; set; }
 
         public int? IdUnidadePrazoGuardaFaseCorrente
         {
@@ -63,7 +63,7 @@ namespace Prodest.Scd.Presentation.ViewModel
             {
                 if (value.HasValue)
                 {
-                    UnidadePrazoGuardaFaseCorrente = (UnidadeTempo)value.Value;
+                    UnidadePrazoGuardaFaseCorrente = (UnidadeTempoModel)value.Value;
                 }
                 else
                 {
@@ -88,7 +88,7 @@ namespace Prodest.Scd.Presentation.ViewModel
             {
                 if (value.HasValue)
                 {
-                    UnidadePrazoGuardaFaseIntermediaria = (UnidadeTempo)value.Value;
+                    UnidadePrazoGuardaFaseIntermediaria = (UnidadeTempoModel)value.Value;
                 }
                 else
                 {

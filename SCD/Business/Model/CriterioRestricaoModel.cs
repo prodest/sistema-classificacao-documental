@@ -13,7 +13,7 @@ namespace Prodest.Scd.Business.Model
         public string FundamentoLegal { get; set; }
         public bool Classificavel { get; set; }
         public GrauSigiloModel? Grau { get; set; }
-        public UnidadeTempo? UnidadePrazoTermino { get; set; }
+        public UnidadeTempoModel? UnidadePrazoTermino { get; set; }
 
         public PlanoClassificacaoModel PlanoClassificacao { get; set; }
         public ICollection<DocumentoModel> Documentos { get; set; }

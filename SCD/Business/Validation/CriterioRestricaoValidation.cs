@@ -135,11 +135,11 @@ namespace Prodest.Scd.Business.Validation
                 DateTime limitDate = now.AddYears(25);
                 DateTime referenceDate = default(DateTime);
 
-                if (UnidadeTempo.Dias.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                if (UnidadeTempoModel.Dias.Equals(criterioRestricaoModel.UnidadePrazoTermino))
                     referenceDate = now.AddDays(criterioRestricaoModel.PrazoTermino.Value);
-                else if (UnidadeTempo.Meses.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                else if (UnidadeTempoModel.Meses.Equals(criterioRestricaoModel.UnidadePrazoTermino))
                     referenceDate = now.AddMonths(criterioRestricaoModel.PrazoTermino.Value);
-                else if (UnidadeTempo.Anos.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                else if (UnidadeTempoModel.Anos.Equals(criterioRestricaoModel.UnidadePrazoTermino))
                     referenceDate = now.AddYears(criterioRestricaoModel.PrazoTermino.Value);
 
                 if (referenceDate > limitDate)

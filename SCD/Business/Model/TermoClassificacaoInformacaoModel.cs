@@ -31,13 +31,13 @@ namespace Prodest.Scd.Business.Model
             {
                 DateTime fimPrazoSigilo = default(DateTime);
 
-                if (UnidadeTempo.Anos.Equals(UnidadePrazoSigilo))
+                if (UnidadeTempoModel.Anos.Equals(UnidadePrazoSigilo))
                     fimPrazoSigilo = DataProducaoDocumento.AddYears(PrazoSigilo);
-                else if (UnidadeTempo.Meses.Equals(UnidadePrazoSigilo))
+                else if (UnidadeTempoModel.Meses.Equals(UnidadePrazoSigilo))
                     fimPrazoSigilo = DataProducaoDocumento.AddMonths(PrazoSigilo);
-                else if (UnidadeTempo.Dias.Equals(UnidadePrazoSigilo))
+                else if (UnidadeTempoModel.Dias.Equals(UnidadePrazoSigilo))
                     fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo);
-                else if (UnidadeTempo.Semanas.Equals(UnidadePrazoSigilo))
+                else if (UnidadeTempoModel.Semanas.Equals(UnidadePrazoSigilo))
                     fimPrazoSigilo = DataProducaoDocumento.AddDays(PrazoSigilo * 7);
 
                 return fimPrazoSigilo;
@@ -53,7 +53,8 @@ namespace Prodest.Scd.Business.Model
         public string CpfUsuario { get; set; }
         public string CpfIndicacaoAprovador { get; set; }
         public int PrazoSigilo { get; set; }
-        public UnidadeTempo UnidadePrazoSigilo { get; set; }
+        public UnidadeTempoModel UnidadePrazoSigilo { get; set; }
+        public StatusTermoClassificacaoInformacaoModel? Status { get; set; }
 
         public DocumentoModel Documento { get; set; }
         public CriterioRestricaoModel CriterioRestricao { get; set; }
@@ -62,6 +63,16 @@ namespace Prodest.Scd.Business.Model
         {
             Parcial = 1,
             Total = 2
+        }
+
+        public enum StatusTermoClassificacaoInformacaoModel
+        {
+            Solicitado = 1,
+            Cancelado = 2,
+            Aprovado = 3,
+            Reprovado = 4,
+            Reclassificado = 5,
+            Desclassificado = 6
         }
     }
 }

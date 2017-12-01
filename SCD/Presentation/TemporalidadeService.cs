@@ -176,10 +176,10 @@ namespace Prodest.Scd.Presentation
         private ICollection<EnumModel> obterListaUnidadesTempo()
         {
             return new List<EnumModel> {
-                    new EnumModel { Id = (int)UnidadeTempo.Anos, Nome = UnidadeTempo.Anos.ToString() },
-                    new EnumModel { Id = (int)UnidadeTempo.Dias, Nome = UnidadeTempo.Dias.ToString()  },
-                    new EnumModel { Id = (int)UnidadeTempo.Meses, Nome = UnidadeTempo.Meses.ToString()  },
-                    new EnumModel { Id = (int)UnidadeTempo.Semanas, Nome = UnidadeTempo.Semanas.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempoModel.Anos, Nome = UnidadeTempoModel.Anos.ToString() },
+                    new EnumModel { Id = (int)UnidadeTempoModel.Dias, Nome = UnidadeTempoModel.Dias.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempoModel.Meses, Nome = UnidadeTempoModel.Meses.ToString()  },
+                    new EnumModel { Id = (int)UnidadeTempoModel.Semanas, Nome = UnidadeTempoModel.Semanas.ToString()  },
                 };
         }
 

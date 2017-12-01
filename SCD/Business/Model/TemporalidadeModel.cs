@@ -10,10 +10,10 @@ namespace Prodest.Scd.Business.Model
         public string Codigo { get; set; }
         public string Descricao { get; set; }
         public int? PrazoGuardaFaseCorrente { get; set; }
-        public UnidadeTempo? UnidadePrazoGuardaFaseCorrente { get; set; }
+        public UnidadeTempoModel? UnidadePrazoGuardaFaseCorrente { get; set; }
         public string EventoFimFaseCorrente { get; set; }
         public int? PrazoGuardaFaseIntermediaria { get; set; }
-        public UnidadeTempo? UnidadePrazoGuardaFaseIntermediaria { get; set; }
+        public UnidadeTempoModel? UnidadePrazoGuardaFaseIntermediaria { get; set; }
         public string EventoFimFaseIntermediaria { get; set; }
         public DestinacaoFinal DestinacaoFinal { get; set; }
         public string Observacao { get; set; }
