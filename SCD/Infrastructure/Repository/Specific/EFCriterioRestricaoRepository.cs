@@ -89,17 +89,21 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             _context.Entry(criterioRestricaoOld).CurrentValues.SetValues(criterioRestricaoNew);
 
+            List<int> idsRemove = criterioRestricaoOld.CriteriosRestricaoDocumento.Select(crd => crd.Id).ToList();
+
             //Remover as associações que não existem mais
-            foreach (var criterioRestricaoDocumento in criterioRestricaoOld.CriteriosRestricaoDocumento)
+            foreach (var criterioRestricaoDocumentoID in idsRemove)
             {
-                var documento = criterioRestricaoModel.Documentos.Where(d => d.Id == criterioRestricaoDocumento.IdDocumento)
+                var documento = criterioRestricaoModel.Documentos.Where(d => d.Id == criterioRestricaoDocumentoID)
                                                                .SingleOrDefault();
 
                 bool exists = documento != null ? true : false;
-                //TODO Não é possível remover assim, pois dá pau na iteração
+                //TODO: Não é possível remover assim, pois dá pau na iteração
                 if (!exists)
                 {
+                    var criterioRestricaoDocumento = criterioRestricaoOld.CriteriosRestricaoDocumento.Single(crd => crd.Id == criterioRestricaoDocumentoID);
                     criterioRestricaoOld.CriteriosRestricaoDocumento.Remove(criterioRestricaoDocumento);
+                    _setCriterioRestricaoDocumento.Remove(criterioRestricaoDocumento);
                 }
             }
 
@@ -142,6 +146,7 @@ namespace Prodest.Scd.Infrastructure.Repository.Specific
 
             if (getRelationship)
                 queryable = queryable.Include(cr => cr.PlanoClassificacao)
+                                                            .Include(cr => cr.FundamentoLegal)
                                      .Include(cr => cr.CriteriosRestricaoDocumento).ThenInclude(crd => crd.Documento);
 
             CriterioRestricao criterioRestricao = await queryable.SingleOrDefaultAsync();

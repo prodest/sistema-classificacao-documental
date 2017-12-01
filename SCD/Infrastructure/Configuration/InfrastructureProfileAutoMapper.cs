@@ -25,6 +25,8 @@ namespace Prodest.Scd.Infrastructure.Configuration
                  })
                 .ForMember(dest => dest.PlanoClassificacao, opt => opt.Ignore())
                 .ForMember(dest => dest.IdPlanoClassificacao, opt => opt.MapFrom(src => src.PlanoClassificacao != null ? src.PlanoClassificacao.Id : default(int)))
+                .ForMember(dest => dest.FundamentoLegal, opt => opt.Ignore())
+                .ForMember(dest => dest.IdFundamentoLegal, opt => opt.MapFrom(src => src.FundamentoLegal != null ? src.FundamentoLegal.Id : default(int)))
                 .ForMember(dest => dest.IdUnidadePrazoTermino, opt => opt.MapFrom(src => src.UnidadePrazoTermino))
                 .ForMember(dest => dest.CriteriosRestricaoDocumento, opt => opt.Ignore())
                 ;
@@ -84,7 +86,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Fundamento Legal
-            CreateMap<FundamentoLegal, FundamentoLegalModel>().PreserveReferences();
+            CreateMap<FundamentoLegal, FundamentoLegalModel>().PreserveReferences()
+                .ForMember(dest => dest.OrganizacaoPatriarca, opt => opt.MapFrom(src => src.Organizacao))
+                ;
 
             CreateMap<FundamentoLegalModel, FundamentoLegal>().PreserveReferences()
                 .ForMember(dest => dest.Organizacao,
@@ -108,7 +112,9 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #endregion
 
             #region Plano de Classificação
-            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>().PreserveReferences();
+            CreateMap<PlanoClassificacao, PlanoClassificacaoModel>().PreserveReferences()
+                .ForMember(dest => dest.OrganizacaoPatriarca, opt => opt.MapFrom(src => src.Organizacao))
+                ;
 
             CreateMap<PlanoClassificacaoModel, PlanoClassificacao>().PreserveReferences()
                 .ForMember(dest => dest.Id, opt =>
@@ -128,7 +134,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
                 .ForMember(dest => dest.DestinacaoFinal, opt => opt.MapFrom(src => src.IdDestinacaoFinal))
                 .ForMember(dest => dest.UnidadePrazoGuardaFaseCorrente, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseCorrente))
                 .ForMember(dest => dest.UnidadePrazoGuardaFaseIntermediaria, opt => opt.MapFrom(src => src.IdUnidadePrazoGuardaFaseIntermediaria));
-                
+
 
 
             CreateMap<TemporalidadeModel, Temporalidade>().PreserveReferences()
@@ -176,7 +182,7 @@ namespace Prodest.Scd.Infrastructure.Configuration
             #region Tipo Documental
             CreateMap<TipoDocumental, TipoDocumentalModel>()
                 .PreserveReferences()
-                
+
                 ;
 
             CreateMap<TipoDocumentalModel, TipoDocumental>().PreserveReferences()
