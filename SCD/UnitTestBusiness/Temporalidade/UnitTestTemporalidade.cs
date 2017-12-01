@@ -15,10 +15,10 @@ namespace Prodest.Scd.UnitTestBusiness.Temporalidade
             string codigo = "01";
             string descricao = "TemporalidadeTestInsert";
             int prazoGuardaFaseCorrente = 5;
-            UnidadeTempo unidadePrazoGuardaFaseCorrente = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoGuardaFaseCorrente = UnidadeTempoModel.Anos;
             //string eventoFimFaseCorrente = "Evento fim fase corrente";
             int prazoGuardaFaseIntermediaria = 10;
-            UnidadeTempo unidadePrazoGuardaFaseIntermediaria = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoGuardaFaseIntermediaria = UnidadeTempoModel.Anos;
             //string eventoFimFaseIntermediaria = "Evento fim fase intermediária";
             DestinacaoFinal destinacaoFinal = DestinacaoFinal.Eliminacao;
             string observacao = "Observação";
@@ -88,10 +88,10 @@ namespace Prodest.Scd.UnitTestBusiness.Temporalidade
             temporalidadeModel.Codigo = "02";
             temporalidadeModel.Descricao = "Descrição updated";
             temporalidadeModel.PrazoGuardaFaseCorrente = 1;
-            temporalidadeModel.UnidadePrazoGuardaFaseCorrente = UnidadeTempo.Meses;
+            temporalidadeModel.UnidadePrazoGuardaFaseCorrente = UnidadeTempoModel.Meses;
             //temporalidadeModel.EventoFimFaseCorrente = "Evento fim fase corrente update";
             temporalidadeModel.PrazoGuardaFaseIntermediaria = 2;
-            temporalidadeModel.UnidadePrazoGuardaFaseIntermediaria = UnidadeTempo.Dias;
+            temporalidadeModel.UnidadePrazoGuardaFaseIntermediaria = UnidadeTempoModel.Dias;
             //temporalidadeModel.EventoFimFaseIntermediaria = "Evento fim fase intermediária update";
             temporalidadeModel.DestinacaoFinal = DestinacaoFinal.GuardaPermanente;
             temporalidadeModel.Observacao = "Observação update";

@@ -62,7 +62,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         public string CpfIndicacaoAprovador { get; set; }
 
         public int? PrazoSigilo { get; set; }
-        public UnidadeTempo? UnidadePrazoSigilo { get; set; }
+        public UnidadeTempoModel? UnidadePrazoSigilo { get; set; }
         public int? IdUnidadePrazoSigilo
         {
             get
@@ -80,7 +80,7 @@ namespace Prodest.Scd.Presentation.ViewModel
             {
                 if (value.HasValue)
                 {
-                    UnidadePrazoSigilo = (UnidadeTempo)value.Value;
+                    UnidadePrazoSigilo = (UnidadeTempoModel)value.Value;
                 }
                 else
                 {

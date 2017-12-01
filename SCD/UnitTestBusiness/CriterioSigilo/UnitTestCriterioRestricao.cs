@@ -21,7 +21,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             bool classificavel = true;
             GrauSigiloModel grauSigilo = GrauSigiloModel.Reservado;
             int prazoTermino = 5;
-            UnidadeTempo unidadePrazoTermino = UnidadeTempo.Anos;
+            UnidadeTempoModel unidadePrazoTermino = UnidadeTempoModel.Anos;
 
             PlanoClassificacaoModel planoClassificacaoModel = await InsertPlanoClassificacaoAsync();
             DocumentoModel documentoModel = await InsertDocumentoAsync();
@@ -31,9 +31,8 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
                 Codigo = codigo,
                 Descricao = descricao,
                 Justificativa = justificativa,
-                FundamentoLegal = fundamentoLegal,
+                //FundamentoLegal = fundamentoLegal,
                 Classificavel = classificavel,
-                Grau = grauSigilo,
                 PrazoTermino = prazoTermino,
                 UnidadePrazoTermino = unidadePrazoTermino,
 
@@ -51,7 +50,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             Assert.AreEqual(criterioRestricaoModel.Justificativa, justificativa);
             Assert.AreEqual(criterioRestricaoModel.FundamentoLegal, fundamentoLegal);
             Assert.AreEqual(criterioRestricaoModel.Classificavel, classificavel);
-            Assert.AreEqual(criterioRestricaoModel.Grau, grauSigilo);
+            //Assert.AreEqual(criterioRestricaoModel.Grau, grauSigilo);
             Assert.AreEqual(criterioRestricaoModel.PrazoTermino, prazoTermino);
             Assert.AreEqual(criterioRestricaoModel.UnidadePrazoTermino, unidadePrazoTermino);
             Assert.IsNull(criterioRestricaoModel.EventoFim);
@@ -77,7 +76,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             Assert.AreEqual(criterioRestricaoModel.Justificativa, criterioRestricaoModelSearched.Justificativa);
             Assert.AreEqual(criterioRestricaoModel.FundamentoLegal, criterioRestricaoModelSearched.FundamentoLegal);
             Assert.AreEqual(criterioRestricaoModel.Classificavel, criterioRestricaoModelSearched.Classificavel);
-            Assert.AreEqual(criterioRestricaoModel.Grau, criterioRestricaoModelSearched.Grau);
+            //Assert.AreEqual(criterioRestricaoModel.Grau, criterioRestricaoModelSearched.Grau);
             Assert.AreEqual(criterioRestricaoModel.PrazoTermino, criterioRestricaoModelSearched.PrazoTermino);
             Assert.AreEqual(criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModelSearched.UnidadePrazoTermino);
             Assert.IsNull(criterioRestricaoModel.EventoFim);
@@ -98,11 +97,11 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             criterioRestricaoModel.Codigo = "02";
             criterioRestricaoModel.Descricao = "Descrição updated";
             criterioRestricaoModel.Justificativa = "Jutificativa Teste update";
-            criterioRestricaoModel.FundamentoLegal= "Fundamento Legal Teste update";
+            //criterioRestricaoModel.FundamentoLegal= "Fundamento Legal Teste update";
             criterioRestricaoModel.Classificavel = false;
-            criterioRestricaoModel.Grau = GrauSigiloModel.Secreto;
+            //criterioRestricaoModel.Grau = GrauSigiloModel.Secreto;
             criterioRestricaoModel.PrazoTermino = 1;
-            criterioRestricaoModel.UnidadePrazoTermino = UnidadeTempo.Dias;
+            criterioRestricaoModel.UnidadePrazoTermino = UnidadeTempoModel.Dias;
 
             await _core.UpdateAsync(criterioRestricaoModel);
 
@@ -114,7 +113,7 @@ namespace Prodest.Scd.UnitTestBusiness.CriterioRestricao
             Assert.AreEqual(criterioRestricaoModel.Justificativa, criterioRestricaoModelSearched.Justificativa);
             Assert.AreEqual(criterioRestricaoModel.FundamentoLegal, criterioRestricaoModelSearched.FundamentoLegal);
             Assert.AreEqual(criterioRestricaoModel.Classificavel, criterioRestricaoModelSearched.Classificavel);
-            Assert.AreEqual(criterioRestricaoModel.Grau, criterioRestricaoModelSearched.Grau);
+            //Assert.AreEqual(criterioRestricaoModel.Grau, criterioRestricaoModelSearched.Grau);
             Assert.AreEqual(criterioRestricaoModel.PrazoTermino, criterioRestricaoModelSearched.PrazoTermino);
             Assert.AreEqual(criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModelSearched.UnidadePrazoTermino);
             Assert.IsNull(criterioRestricaoModel.EventoFim);

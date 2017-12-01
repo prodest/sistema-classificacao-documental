@@ -64,7 +64,7 @@ namespace Prodest.Scd.Presentation.ViewModel
         }
         public string EventoFim { get; set; }
         public int? PrazoTermino { get; set; }
-        public UnidadeTempo? UnidadePrazoTermino { get; set; }
+        public UnidadeTempoModel? UnidadePrazoTermino { get; set; }
         public int? IdUnidadePrazoTermino
         {
             get
@@ -82,7 +82,7 @@ namespace Prodest.Scd.Presentation.ViewModel
             {
                 if (value.HasValue)
                 {
-                    UnidadePrazoTermino = (UnidadeTempo)value.Value;
+                    UnidadePrazoTermino = (UnidadeTempoModel)value.Value;
                 }
                 else
                 {

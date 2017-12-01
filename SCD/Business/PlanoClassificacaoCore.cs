@@ -55,7 +55,7 @@ namespace Prodest.Scd.Business
             _validation.IdInsertValid(planoClassificacaoModel.Id);
 
             planoClassificacaoModel.GuidOrganizacao = GetGuidOrganizacao();
-            planoClassificacaoModel.Organizacao = await GetOrganizacaoPatricarcaModel();
+            planoClassificacaoModel.OrganizacaoPatriarca = await GetOrganizacaoPatricarcaModel();
 
             planoClassificacaoModel = await _planosClassificacao.AddAsync(planoClassificacaoModel);
 
@@ -106,7 +106,7 @@ namespace Prodest.Scd.Business
             _validation.CanUpdate(planoClassificacaoModelOld);
 
             planoClassificacaoModel.GuidOrganizacao = GetGuidOrganizacao();
-            planoClassificacaoModel.Organizacao = await GetOrganizacaoPatricarcaModel();
+            planoClassificacaoModel.OrganizacaoPatriarca = await GetOrganizacaoPatricarcaModel();
 
             await _planosClassificacao.UpdateAsync(planoClassificacaoModel);
         }

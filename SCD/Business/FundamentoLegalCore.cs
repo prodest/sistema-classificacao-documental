@@ -49,7 +49,7 @@ namespace Prodest.Scd.Business
 
             _validation.IdInsertValid(fundamentoLegalModel.Id);
 
-            fundamentoLegalModel.Organizacao = await GetOrganizacao();
+            fundamentoLegalModel.OrganizacaoPatriarca = await GetOrganizacao();
 
             //fundamentoLegalModel.Ativo = true;
 
@@ -88,7 +88,7 @@ namespace Prodest.Scd.Business
 
             _validation.CanUpdate(fundamentoLegalModel, fundamentoLegalModelOld);
 
-            fundamentoLegalModel.Organizacao = await GetOrganizacao();
+            fundamentoLegalModel.OrganizacaoPatriarca = await GetOrganizacao();
 
             await _fundamentosLegais.UpdateAsync(fundamentoLegalModel);
         }

@@ -58,13 +58,7 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FundamentoLegal)
-                    .IsRequired()
-                    .HasColumnName("fundamentoLegal")
-                    .HasMaxLength(2000)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdGrau).HasColumnName("idGrau");
+                entity.Property(e => e.IdFundamentoLegal).HasColumnName("idFundamentoLegal");
 
                 entity.Property(e => e.IdPlanoClassificacao).HasColumnName("idPlanoClassificacao");
 
@@ -77,6 +71,12 @@ namespace Prodest.Scd.Infrastructure.Mapping
                     .IsUnicode(false);
 
                 entity.Property(e => e.PrazoTermino).HasColumnName("prazoTermino");
+
+                entity.HasOne(d => d.FundamentoLegal)
+                    .WithMany(p => p.CriteriosRestricao)
+                    .HasForeignKey(d => d.IdFundamentoLegal)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CriterioRestricao_FundamentoLegal");
 
                 entity.HasOne(d => d.PlanoClassificacao)
                     .WithMany(p => p.CriteriosRestricao)

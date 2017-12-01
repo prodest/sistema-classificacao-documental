@@ -69,7 +69,7 @@ namespace Prodest.Scd.Business.Validation
         {
             if (!planoClassificacao.GuidOrganizacao.Equals(Guid.Empty))
                 throw new ScdException("Não é possível editar a Organização do Plano de Classificação.");
-            if (planoClassificacao.Organizacao != null)
+            if (planoClassificacao.OrganizacaoPatriarca != null)
                 throw new ScdException("Não é possível editar a Organização do Plano de Classificação.");
         }
 
@@ -94,6 +94,12 @@ namespace Prodest.Scd.Business.Validation
 
             if ((fimVigencia.HasValue && inicioVigencia.HasValue) && (fimVigencia.Value < inicioVigencia.Value))
                 throw new ScdException("A data de fim de vigência deve ser maior ou igual à data de início de vigência.");
+
+            DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day);
+
+            if (fimVigencia.HasValue && fimVigencia.Value < now)
+                throw new ScdException("A data de fim de vigência deve ser maior ou igual à data atual.");
         }
         #endregion
 

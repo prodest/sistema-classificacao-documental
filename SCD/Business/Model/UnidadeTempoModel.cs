@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Prodest.Scd.Business.Model
 {
-    public enum UnidadeTempo
+    public enum UnidadeTempoModel
     {
         Dias = 1,
         //Semanas = 2,

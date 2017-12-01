@@ -57,7 +57,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             PlanoClassificacaoModel planoClassificacaoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim };
 
             _planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
-            _planoClassificacaoModel.Organizacao = null;
+            _planoClassificacaoModel.OrganizacaoPatriarca = null;
             _planoClassificacaoModel.GuidOrganizacao = Guid.Empty;
 
             DateTime now = DateTime.Now;
@@ -65,7 +65,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             PlanoClassificacaoModel planoClassificacaoPublicadoModel = new PlanoClassificacaoModel { Codigo = codigo, Descricao = descricao, AreaFim = areaFim, Aprovacao = now, Publicacao = now, InicioVigencia = now };
 
             _planoClassificacaoPublicadoModel = await _core.InsertAsync(planoClassificacaoPublicadoModel);
-            _planoClassificacaoPublicadoModel.Organizacao = null;
+            _planoClassificacaoPublicadoModel.OrganizacaoPatriarca = null;
             _planoClassificacaoPublicadoModel.GuidOrganizacao = Guid.Empty;
         }
 
@@ -416,7 +416,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             };
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
-            planoClassificacaoModel.Organizacao = null;
+            planoClassificacaoModel.OrganizacaoPatriarca = null;
             planoClassificacaoModel.GuidOrganizacao = Guid.Empty;
 
             int id = planoClassificacaoModel.Id;
@@ -455,7 +455,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
             planoClassificacaoModel.GuidOrganizacao = Guid.Empty;
-            planoClassificacaoModel.Organizacao = null;
+            planoClassificacaoModel.OrganizacaoPatriarca = null;
 
             DateTime now = DateTime.Now;
 
@@ -496,7 +496,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             };
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
-            planoClassificacaoModel.Organizacao = null;
+            planoClassificacaoModel.OrganizacaoPatriarca = null;
             planoClassificacaoModel.GuidOrganizacao = Guid.Empty;
 
             DateTime now = DateTime.Now;
@@ -542,7 +542,7 @@ namespace Prodest.Scd.UnitTestBusiness.PlanoClassificacao
             };
 
             planoClassificacaoModel = await _core.InsertAsync(planoClassificacaoModel);
-            planoClassificacaoModel.Organizacao = null;
+            planoClassificacaoModel.OrganizacaoPatriarca = null;
             planoClassificacaoModel.GuidOrganizacao = Guid.Empty;
 
             DateTime now = DateTime.Now;

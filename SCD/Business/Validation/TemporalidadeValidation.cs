@@ -81,7 +81,7 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
         
-        private void PrazoGuardaFilled(int? prazoGuarda, UnidadeTempo? unidadePrazoGuarda, string eventoFim)
+        private void PrazoGuardaFilled(int? prazoGuarda, UnidadeTempoModel? unidadePrazoGuarda, string eventoFim)
         {
             if (!prazoGuarda.HasValue && string.IsNullOrWhiteSpace(eventoFim))
                 throw new ScdException("Ou Prazo de Guarda ou o Evento Fim deve ser preenchido.");

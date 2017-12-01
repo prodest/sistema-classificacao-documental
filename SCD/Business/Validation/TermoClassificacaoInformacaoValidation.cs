@@ -139,9 +139,9 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O Prazo do Sigilo não pode ser menor ou igual a zero.");
         }
 
-        private void UnidadePrazoSigiloFilled(UnidadeTempo unidadePrazoSigilo)
+        private void UnidadePrazoSigiloFilled(UnidadeTempoModel unidadePrazoSigilo)
         {
-            if (!Enum.IsDefined(typeof(UnidadeTempo), unidadePrazoSigilo))
+            if (!Enum.IsDefined(typeof(UnidadeTempoModel), unidadePrazoSigilo))
                 throw new ScdException("A Unidade do Prazo do Sigilo não pode ser vazio ou nulo.");
         }
 

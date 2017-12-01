@@ -11,6 +11,7 @@ namespace Prodest.Scd.Business.Model
         public string Descricao { get; set; }
         public bool Ativo { get; set; }
 
-        public OrganizacaoModel Organizacao { get; set; }
+        public OrganizacaoModel OrganizacaoPatriarca { get; set; }
+        public ICollection<CriterioRestricaoModel> CriteriosRestricao { get; set; }
     }
 }

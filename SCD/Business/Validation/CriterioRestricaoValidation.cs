@@ -3,19 +3,23 @@ using Prodest.Scd.Business.Model;
 using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation.Common;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace Prodest.Scd.Business.Validation
 {
     public class CriterioRestricaoValidation : CommonValidation
     {
+        private ICriterioRestricaoRepository _criteriosRestricao;
+        private IFundamentoLegalRepository _fundamentosLegais;
         private IPlanoClassificacaoRepository _planosClassificacao;
 
         private PlanoClassificacaoValidation _planoClassificacaoValidation;
 
         public CriterioRestricaoValidation(IScdRepositories repositories, PlanoClassificacaoValidation planoClassificacaoValidation)
         {
+            _criteriosRestricao = repositories.CriteriosRestricaoSpecific;
+            _fundamentosLegais = repositories.FundamentosLegaisSpecific;
             _planosClassificacao = repositories.PlanosClassificacaoSpecific;
 
             _planoClassificacaoValidation = planoClassificacaoValidation;
@@ -34,10 +38,14 @@ namespace Prodest.Scd.Business.Validation
             NotNull(criterioRestricaoModel);
 
             PlanoClassificacaoNotNull(criterioRestricaoModel.PlanoClassificacao);
+            FundamentoLegalNotNull(criterioRestricaoModel.FundamentoLegal);
 
             Filled(criterioRestricaoModel);
 
             await PlanoClassificacaoExists(criterioRestricaoModel.PlanoClassificacao);
+            await FundamentoLegalExists(criterioRestricaoModel.FundamentoLegal);
+
+            await PlanoClassificacaoFundamenoLegalBelongSameOrganizacao(criterioRestricaoModel.PlanoClassificacao, criterioRestricaoModel.FundamentoLegal);
 
             PrazoTerminoNotExceedLimit(criterioRestricaoModel);
         }
@@ -54,15 +62,21 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("O Plano de Classificação não pode ser nulo.");
         }
 
+        private void FundamentoLegalNotNull(FundamentoLegalModel fundamentoLegal)
+        {
+            if (fundamentoLegal == null)
+                throw new ScdException("O Fundamento Legal não pode ser nulo.");
+        }
+
         #region Filled
         internal void Filled(CriterioRestricaoModel criterioRestricaoModel)
         {
+            PlanoClassificacaoFilled(criterioRestricaoModel.PlanoClassificacao);
             CodigoFilled(criterioRestricaoModel.Codigo);
             DescricaoFilled(criterioRestricaoModel.Descricao);
-            JustificativaFilled(criterioRestricaoModel.Justificativa);
             FundamentoLegalFilled(criterioRestricaoModel.FundamentoLegal);
+            JustificativaFilled(criterioRestricaoModel.Justificativa);
             PrazoTerminoOrEventoFimFilled(criterioRestricaoModel);
-            PlanoClassificacaoFilled(criterioRestricaoModel.PlanoClassificacao);
         }
 
         private void CodigoFilled(string codigo)
@@ -100,16 +114,16 @@ namespace Prodest.Scd.Business.Validation
             }
         }
 
-        private void FundamentoLegalFilled(string fundamentoLegal)
-        {
-            if (string.IsNullOrWhiteSpace(fundamentoLegal))
-                throw new ScdException("O Fundamento Legal não pode ser vazia ou nula.");
-        }
-
         private void JustificativaFilled(string justificativa)
         {
             if (string.IsNullOrWhiteSpace(justificativa))
                 throw new ScdException("A Justificativa não pode ser vazia ou nula.");
+        }
+
+        private void FundamentoLegalFilled(FundamentoLegalModel fundamentoLegalModel)
+        {
+            if (fundamentoLegalModel.Id == default(int))
+                throw new ScdException("Identificador do Fundamento Legal inválido.");
         }
 
         private void PlanoClassificacaoFilled(PlanoClassificacaoModel planoClassificacaoModel)
@@ -127,6 +141,23 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("Plano de Classificação não encontrado.");
         }
 
+        private async Task FundamentoLegalExists(FundamentoLegalModel fundamentoLegal)
+        {
+            fundamentoLegal = await _fundamentosLegais.SearchAsync(fundamentoLegal.Id);
+            
+            if (fundamentoLegal == null)
+                throw new ScdException("Fundamento Legal não encontrado.");
+        }
+
+        private async Task PlanoClassificacaoFundamenoLegalBelongSameOrganizacao(PlanoClassificacaoModel planoClassificacao, FundamentoLegalModel fundamentoLegal)
+        {
+            planoClassificacao = await _planosClassificacao.SearchAsync(planoClassificacao.Id);
+            fundamentoLegal = await _fundamentosLegais.SearchAsync(fundamentoLegal.Id);
+
+            if (planoClassificacao.OrganizacaoPatriarca.Id != fundamentoLegal.OrganizacaoPatriarca.Id)
+                throw new ScdException("A Organização Patriarca do Plano de Classificação deve ser igual à do Fundamento Legal.");
+        }
+
         private void PrazoTerminoNotExceedLimit(CriterioRestricaoModel criterioRestricaoModel)
         {
             if (criterioRestricaoModel.Classificavel)
@@ -135,11 +166,11 @@ namespace Prodest.Scd.Business.Validation
                 DateTime limitDate = now.AddYears(25);
                 DateTime referenceDate = default(DateTime);
 
-                if (UnidadeTempo.Dias.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                if (UnidadeTempoModel.Dias.Equals(criterioRestricaoModel.UnidadePrazoTermino))
                     referenceDate = now.AddDays(criterioRestricaoModel.PrazoTermino.Value);
-                else if (UnidadeTempo.Meses.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                else if (UnidadeTempoModel.Meses.Equals(criterioRestricaoModel.UnidadePrazoTermino))
                     referenceDate = now.AddMonths(criterioRestricaoModel.PrazoTermino.Value);
-                else if (UnidadeTempo.Anos.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                else if (UnidadeTempoModel.Anos.Equals(criterioRestricaoModel.UnidadePrazoTermino))
                     referenceDate = now.AddYears(criterioRestricaoModel.PrazoTermino.Value);
 
                 if (referenceDate > limitDate)
@@ -164,19 +195,51 @@ namespace Prodest.Scd.Business.Validation
         {
             PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(criterioRestricaoModel.PlanoClassificacao.Id);
 
-            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
+            DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day);
+
+            if (planoClassificacaoModel.FimVigencia.HasValue && planoClassificacaoModel.FimVigencia.Value < now)
+                throw new Exception("Não é possível inserir um Critério de Restrição em um Plano de Classificação com vigência expirada.");
+
+            FundamentoLegalModel fundamentoLegalModel = await _fundamentosLegais.SearchAsync(criterioRestricaoModel.FundamentoLegal.Id);
+
+            if (!fundamentoLegalModel.Ativo)
+                throw new ScdException("Não é possível associar um Critério de Restrição a um Fundamento Legal inativo.");
         }
 
         internal async Task CanUpdate(CriterioRestricaoModel criterioRestricaoModel)
         {
-            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(criterioRestricaoModel.PlanoClassificacao.Id); ;
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(criterioRestricaoModel.PlanoClassificacao.Id);
 
-            _planoClassificacaoValidation.CanUpdate(planoClassificacaoModel);
+            DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day);
+
+            if (planoClassificacaoModel.FimVigencia.HasValue && planoClassificacaoModel.FimVigencia.Value < now)
+                throw new Exception("Não é possível alterar um Critério de Restrição de um Plano de Classificação com vigência expirada.");
+
+            FundamentoLegalModel fundamentoLegalModel = await _fundamentosLegais.SearchAsync(criterioRestricaoModel.FundamentoLegal.Id);
+
+            if (!fundamentoLegalModel.Ativo)
+                throw new ScdException("Não é possível associar um Critério de Restrição a um Fundamento Legal inativo.");
         }
 
         internal async Task CanDelete(CriterioRestricaoModel criterioRestricaoModel)
         {
-            await CanUpdate(criterioRestricaoModel);
+            PlanoClassificacaoModel planoClassificacaoModel = await _planosClassificacao.SearchAsync(criterioRestricaoModel.PlanoClassificacao.Id);
+
+            DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day);
+
+            if (planoClassificacaoModel.FimVigencia.HasValue && planoClassificacaoModel.FimVigencia.Value < now)
+                throw new Exception("Não é possível excluir um Critério de Restrição de um Plano de Classificação com vigência expirada.");
+
+            CriterioRestricaoModel criterioRestricaoOldModel = await _criteriosRestricao.SearchAsync(criterioRestricaoModel.Id);
+
+            if (criterioRestricaoOldModel.TermosClassificacaoInformacao != null && criterioRestricaoOldModel.TermosClassificacaoInformacao.Count > 0)
+                throw new Exception("Não é possível excluir um Critério de Restrição associado a um Termo de Classificação daInformação.");
+
+            if (criterioRestricaoOldModel.Documentos != null &&  criterioRestricaoOldModel.Documentos.Count > 0)
+                throw new Exception("Não é possível excluir um Critério de Restrição associado a um Tipo Documental.");
         }
     }
 }
