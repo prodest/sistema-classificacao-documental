@@ -21,8 +21,6 @@ namespace Prodest.Scd.Business
             _validation = validation;
         }
 
-
-
         public async Task<CriterioRestricaoModel> InsertAsync(CriterioRestricaoModel criterioRestricaoModel)
         {
             await _validation.BasicValid(criterioRestricaoModel);

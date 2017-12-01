@@ -4,6 +4,7 @@ using Prodest.Scd.Business.Repository;
 using Prodest.Scd.Business.Repository.Base;
 using Prodest.Scd.Business.Validation.Common;
 using System.Threading.Tasks;
+using System;
 
 namespace Prodest.Scd.Business.Validation
 {
@@ -37,6 +38,8 @@ namespace Prodest.Scd.Business.Validation
             Filled(criterioRestricaoModel);
 
             await PlanoClassificacaoExists(criterioRestricaoModel.PlanoClassificacao);
+
+            PrazoTerminoNotExceedLimit(criterioRestricaoModel);
         }
 
         private void NotNull(CriterioRestricaoModel criterioRestricaoModel)
@@ -58,7 +61,7 @@ namespace Prodest.Scd.Business.Validation
             DescricaoFilled(criterioRestricaoModel.Descricao);
             JustificativaFilled(criterioRestricaoModel.Justificativa);
             FundamentoLegalFilled(criterioRestricaoModel.FundamentoLegal);
-            PrazoTerminoOrEventoFimFilled(criterioRestricaoModel.PrazoTermino, criterioRestricaoModel.UnidadePrazoTermino, criterioRestricaoModel.EventoFim);
+            PrazoTerminoOrEventoFimFilled(criterioRestricaoModel);
             PlanoClassificacaoFilled(criterioRestricaoModel.PlanoClassificacao);
         }
 
@@ -74,19 +77,27 @@ namespace Prodest.Scd.Business.Validation
                 throw new ScdException("A descrição não pode ser vazia ou nula.");
         }
 
-        private void PrazoTerminoOrEventoFimFilled(int? prazoTermino, UnidadeTempo? unidadePrazoTerminoCriterioRestricao, string eventoFim)
+        private void PrazoTerminoOrEventoFimFilled(CriterioRestricaoModel criterioRestricaoModel)
         {
-            if (!prazoTermino.HasValue && string.IsNullOrWhiteSpace(eventoFim))
-                throw new ScdException("Ou Prazo de Término ou o Evento Fim deve ser preenchido.");
+            if (criterioRestricaoModel.Classificavel)
+            {
+                if (!criterioRestricaoModel.PrazoTermino.HasValue)
+                    throw new ScdException("O Prazo de Términio deve ser preenchido quando o Critério de Restrição é classificável.");
 
-            if (prazoTermino.HasValue && !string.IsNullOrWhiteSpace(eventoFim))
-                throw new ScdException("Ou Prazo de Término ou o Evento Fim deve ser preenchido.");
+                if (!criterioRestricaoModel.UnidadePrazoTermino.HasValue)
+                    throw new ScdException("A Unidade do Prazo de Términio deve ser preenchida quando o Critério de Restrição é classificável.");
+            }
+            else
+            {
+                if (criterioRestricaoModel.PrazoTermino.HasValue)
+                    throw new ScdException("O Prazo de Términio não deve ser preenchido quando o Critério de Restrição não é classificável.");
 
-            if (prazoTermino.HasValue && !unidadePrazoTerminoCriterioRestricao.HasValue)
-                throw new ScdException("A Unidade do Prazo Término deve ser preenchida quando o Prazo de Término é preenchido.");
+                if (criterioRestricaoModel.UnidadePrazoTermino.HasValue)
+                    throw new ScdException("A Unidade do Prazo de Términio não deve ser preenchida quando o Critério de Restrição não é classificável.");
 
-            if (!prazoTermino.HasValue && unidadePrazoTerminoCriterioRestricao.HasValue)
-                throw new ScdException("A Unidade do Prazo Término deve ser preenchida somente quando o Prazo de Término é preenchido.");
+                if (criterioRestricaoModel.EventoFim != null)
+                    throw new ScdException("Evento Fim não deve ser preenchido quando o Critério de Restrição não é classificável.");
+            }
         }
 
         private void FundamentoLegalFilled(string fundamentoLegal)
@@ -114,6 +125,26 @@ namespace Prodest.Scd.Business.Validation
 
             if (planoClassificacaoModel == null)
                 throw new ScdException("Plano de Classificação não encontrado.");
+        }
+
+        private void PrazoTerminoNotExceedLimit(CriterioRestricaoModel criterioRestricaoModel)
+        {
+            if (criterioRestricaoModel.Classificavel)
+            {
+                DateTime now = DateTime.Now;
+                DateTime limitDate = now.AddYears(25);
+                DateTime referenceDate = default(DateTime);
+
+                if (UnidadeTempo.Dias.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                    referenceDate = now.AddDays(criterioRestricaoModel.PrazoTermino.Value);
+                else if (UnidadeTempo.Meses.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                    referenceDate = now.AddMonths(criterioRestricaoModel.PrazoTermino.Value);
+                else if (UnidadeTempo.Anos.Equals(criterioRestricaoModel.UnidadePrazoTermino))
+                    referenceDate = now.AddYears(criterioRestricaoModel.PrazoTermino.Value);
+
+                if (referenceDate > limitDate)
+                    throw new ScdException("O Prazo de Términio não pode exceder 25 anos.");
+            }
         }
         #endregion
 
