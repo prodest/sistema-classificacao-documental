@@ -1,5 +1,4 @@
 ﻿@model  Prodest.Scd.Presentation.ViewModel.ItemPlanoClassificacaoViewModel
-
 <form asp-controller="ItemPlanoClassificacao" asp-action="@Model.Action" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#DivConteudo">
     <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid mdl-cell--top">
         <div class="mdl-card TelaCheia mdl-grid">
@@ -69,4 +68,6 @@
 </form>
 <script>
     _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+    $('#span_feature_title').html("Item do Plano de Classificação");
+
 </script>

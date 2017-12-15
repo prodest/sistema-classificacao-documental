@@ -26,5 +26,8 @@
     <ProjectReference Include="..\Integration\Integration.csproj" />
     <ProjectReference Include="..\Presentation\Presentation.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
 
 </Project>

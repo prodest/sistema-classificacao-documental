@@ -143,7 +143,7 @@
 </form>
 <script>
     _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
-
     document.querySelectorAll('.mdc-textfield').forEach(AdicionarMDCTextField);
+    $('#span_feature_title').html("Temporalidade");
 
 </script>

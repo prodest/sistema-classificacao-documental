@@ -21,8 +21,9 @@
                 <label class="mdc-typography--body1"><strong>Área: </strong></label>
                 <label class="mdc-typography--body1">@Model.plano.AreaFimDescricao</label>
             </aside>
-        </div>*@
+        </div>
         <br />
+          *@
         <ul class="mdc-list mdc-list--two-line">
             <li class="mdc-list-item mdc-list-item-BotoesAcoes">
                 <span class="mdc-list-item__text">
@@ -45,7 +46,6 @@
 </div>
 <script>
     _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
-
     document.querySelectorAll('#acoes-menu').forEach(AdicionarAcaoMenu);
-
+    $('#span_feature_title').html("Plano de Classificação");
 </script>

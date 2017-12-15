@@ -24,14 +24,14 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="~/node_modules/material-design-lite/material.min.css">
-    <link rel="stylesheet" href="~/css/site.css" />
-    
-    <script src="~/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="~/node_modules/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/node_modules/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="~/node_modules/material-components-web/dist/material-components-web.js"></script>
-    <script src="~/node_modules/material-design-lite/material.min.js"></script>
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    <script src="~/node_modules/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+
 
 
     @Html.Raw(JavaScriptSnippet.FullScript)
@@ -62,13 +62,25 @@
             </main>
         </div>
     </div>
+    <script src="~/node_modules/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/node_modules/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+    <script src="~/node_modules/material-components-web/dist/material-components-web.min.js" asp-append-version="true"></script>
+    <script src="~/node_modules/material-design-lite/material.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @*<script src="~/sw-register.js"></script>*@
+
+
+    <environment names="Development">
+        <script src="~/sw-register.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/sw-register.js" asp-append-version="true"></script>
+    </environment>
+
 
     <script>
         _messages = [];
     </script>
-    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

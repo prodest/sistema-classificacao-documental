@@ -4,7 +4,7 @@
         <button title="Novo" class="mdl-button BotaoGrande mdl-js-button mdl-button--fab mdl-color--blue BotaoFlutuante BotaoAjax" data-url="/NivelClassificacao/New">
             <i class="material-icons">add</i>
         </button>
-        <div class="mdl-card__actions ItemCardFormulario">
+        @*<div class="mdl-card__actions ItemCardFormulario">
             Níveis de Classificação
         </div>
         <div class="mdl-card__actions ItemCardFormulario">
@@ -17,7 +17,7 @@
                     <label class="mdl-textfield__label" for="search">Digite seu filtro...</label>
                 </div>
             </div>
-        </div>
+        </div>*@
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp TelaCheia">
             <thead>
                 <tr>
@@ -49,4 +49,6 @@
 </div>
 <script>
     _messages = @Html.Raw(Json.Serialize(Model.Result.Messages));
+    $('#span_feature_title').html("Nível de Classificação");
+
 </script>
