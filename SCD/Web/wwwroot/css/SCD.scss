@@ -1,4 +1,15 @@
-﻿.BotaoFlutuante {
+﻿#DivConteudo {
+    display: flex;
+}
+
+.div-card {
+    margin: 10px;
+    min-width: 280px;
+    max-width: 680px;
+    background-color: #fff;
+}
+
+.BotaoFlutuante {
     position: fixed !important;
     display: block !important;
     right: 50px !important;
